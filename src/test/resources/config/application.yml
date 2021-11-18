@@ -15,7 +15,7 @@
 
 mongock:
   change-logs-scan-package:
-    - com.experimental.research.er.config.dbmigrations
+    - com.mycompany.myapp.config.dbmigrations
   mongo-db:
     read-concern: local
     write-concern:

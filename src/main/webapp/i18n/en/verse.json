@@ -1,0 +1,25 @@
+{
+  "erApp": {
+    "verse": {
+      "home": {
+        "title": "Verses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Verse",
+        "createOrEditLabel": "Create or edit a Verse",
+        "notFound": "No Verses found"
+      },
+      "created": "A new Verse is created with identifier {{ param }}",
+      "updated": "A Verse is updated with identifier {{ param }}",
+      "deleted": "A Verse is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Verse {{ id }}?"
+      },
+      "detail": {
+        "title": "Verse"
+      },
+      "id": "Id",
+      "name": "Name",
+      "verses": "Verses"
+    }
+  }
+}

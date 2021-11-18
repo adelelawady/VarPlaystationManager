@@ -66,7 +66,7 @@ management:
 
 mongock:
   change-logs-scan-package:
-    - com.experimental.research.er.config.dbmigrations
+    - com.mycompany.myapp.config.dbmigrations
 
 spring:
   application:

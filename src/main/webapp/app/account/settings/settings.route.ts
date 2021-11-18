@@ -7,7 +7,7 @@ export const settingsRoute: Route = {
   path: 'settings',
   component: SettingsComponent,
   data: {
-    pageTitle: 'Settings',
+    pageTitle: 'global.menu.account.settings',
   },
   canActivate: [UserRouteAccessService],
 };

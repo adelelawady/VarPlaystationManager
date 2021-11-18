@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { EventManager } from 'app/core/util/event-manager.service';
 import { Alert, AlertService } from 'app/core/util/alert.service';
@@ -15,6 +16,7 @@ describe('Alert Error Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
+        imports: [TranslateModule.forRoot()],
         declarations: [AlertErrorComponent],
         providers: [EventManager, AlertService],
       })
@@ -42,7 +44,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: { status: 0 } });
       // THEN
       expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Server not reachable');
+      expect(comp.alerts[0].translationKey).toBe('error.server.not.reachable');
     });
 
     it('Should display an alert on status 404', () => {
@@ -50,7 +52,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: { status: 404 } });
       // THEN
       expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Not found');
+      expect(comp.alerts[0].translationKey).toBe('error.url.not.found');
     });
 
     it('Should display an alert on generic error', () => {
@@ -59,8 +61,8 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: { error: 'Second Error Message' } });
       // THEN
       expect(comp.alerts.length).toBe(2);
-      expect(comp.alerts[0].message).toBe('Error Message');
-      expect(comp.alerts[1].message).toBe('Second Error Message');
+      expect(comp.alerts[0].translationKey).toBe('Error Message');
+      expect(comp.alerts[1].translationKey).toBe('Second Error Message');
     });
 
     it('Should display an alert on status 400 for generic error', () => {
@@ -81,7 +83,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: response });
       // THEN
       expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('error.validation');
+      expect(comp.alerts[0].translationKey).toBe('error.validation');
     });
 
     it('Should display an alert on status 400 for generic error without message', () => {
@@ -95,7 +97,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: response });
       // THEN
       expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Bad Request');
+      expect(comp.alerts[0].translationKey).toBe('Bad Request');
     });
 
     it('Should display an alert on status 400 for invalid parameters', () => {
@@ -117,7 +119,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: response });
       // THEN
       expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Error on field "MinField"');
+      expect(comp.alerts[0].translationKey).toBe('error.Size');
     });
 
     it('Should display an alert on status 400 for error headers', () => {
@@ -135,7 +137,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: response });
       // THEN
       expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Error Message');
+      expect(comp.alerts[0].translationKey).toBe('Error Message');
     });
 
     it('Should display an alert on status 500 with detail', () => {
@@ -154,7 +156,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'erApp.httpError', content: response });
       // THEN
       expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Detailed error message');
+      expect(comp.alerts[0].translationKey).toBe('error.http.500');
     });
   });
 });
