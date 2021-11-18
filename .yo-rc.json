@@ -42,6 +42,9 @@
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
     "enableGradleEnterprise": false,
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "herokuAppName": "experimental-research",
+    "herokuDeployType": "git",
+    "herokuJavaVersion": "11"
   }
 }
