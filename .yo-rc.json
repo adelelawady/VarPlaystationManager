@@ -49,7 +49,7 @@
     "gradleEnterpriseHost": "",
     "packageFolder": "com/mycompany/myapp",
     "applicationIndex": 0,
-    "entities": ["Verse", "Verses"],
+    "entities": [],
     "lastLiquibaseTimestamp": 1637270166000
   }
 }
