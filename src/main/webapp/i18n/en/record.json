@@ -1,0 +1,28 @@
+{
+  "erApp": {
+    "record": {
+      "home": {
+        "title": "Records",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Record",
+        "createOrEditLabel": "Create or edit a Record",
+        "notFound": "No Records found"
+      },
+      "created": "A new Record is created with identifier {{ param }}",
+      "updated": "A Record is updated with identifier {{ param }}",
+      "deleted": "A Record is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Record {{ id }}?"
+      },
+      "detail": {
+        "title": "Record"
+      },
+      "id": "Id",
+      "start": "Start",
+      "end": "End",
+      "totalPrice": "Total Price",
+      "device": "Device",
+      "orders": "Orders"
+    }
+  }
+}

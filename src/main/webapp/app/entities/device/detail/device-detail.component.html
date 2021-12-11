@@ -1,0 +1,38 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="device">
+      <h2 data-cy="deviceDetailsHeading"><span jhiTranslate="erApp.device.detail.title">Device</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="erApp.device.id">Id</span></dt>
+        <dd>
+          <span>{{ device.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.device.name">Name</span></dt>
+        <dd>
+          <span>{{ device.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.device.type">Type</span></dt>
+        <dd>
+          <div *ngIf="device.type">
+            <a [routerLink]="['/device-type', device.type?.id, 'view']">{{ device.type?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/device', device.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

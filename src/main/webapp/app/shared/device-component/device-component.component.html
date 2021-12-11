@@ -1,0 +1,21 @@
+<div class="card" [ngClass]="{ 'border-success border-active': device.session, 'border-danger': !device.session }">
+  <div class="card-body">
+    <h5 class="card-title">{{ device.name }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ device.type }}</h6>
+
+    <button class="btn btn-primary" (click)="device.session ? endSession() : startSession()">
+      {{ device.session ? 'stop' : 'start' }}
+    </button>
+  </div>
+  <div *ngIf="device.session" class="card-footer">
+    <a href="#" class="card-link">
+      <label class="badge badge-success">{{ (device.session.start | countdowntimer | async) || '0 m' }}</label></a
+    >
+    <a href="#" class="card-link">{{ (device | devicePrice | async) || '0 LE' }}</a>
+  </div>
+  <div *ngIf="!device.session" class="card-footer">
+    <a href="#" class="card-link">
+      <label class="badge badge-danger">{{ 'متوقف' }}</label></a
+    >
+  </div>
+</div>

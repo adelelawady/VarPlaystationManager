@@ -1,0 +1,36 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="deviceType">
+      <h2 data-cy="deviceTypeDetailsHeading"><span jhiTranslate="erApp.deviceType.detail.title">Device Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="erApp.deviceType.id">Id</span></dt>
+        <dd>
+          <span>{{ deviceType.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.deviceType.name">Name</span></dt>
+        <dd>
+          <span>{{ deviceType.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.deviceType.pricePerHour">Price Per Hour</span></dt>
+        <dd>
+          <span>{{ deviceType.pricePerHour }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/device-type', deviceType.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

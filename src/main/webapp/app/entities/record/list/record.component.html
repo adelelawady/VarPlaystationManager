@@ -1,0 +1,98 @@
+<div>
+  <h2 id="page-heading" data-cy="RecordHeading">
+    <span jhiTranslate="erApp.record.home.title">Records</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="erApp.record.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-record"
+        [routerLink]="['/record/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="erApp.record.home.createLabel"> Create a new Record </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="records?.length === 0">
+    <span jhiTranslate="erApp.record.home.notFound">No records found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="records && records.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="erApp.record.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="start"><span jhiTranslate="erApp.record.start">Start</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="end"><span jhiTranslate="erApp.record.end">End</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="totalPrice">
+            <span jhiTranslate="erApp.record.totalPrice">Total Price</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="device.id"><span jhiTranslate="erApp.record.device">Device</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/record', record.id, 'view']">{{ record.id }}</a>
+          </td>
+          <td>{{ record.start | formatMediumDatetime }}</td>
+          <td>{{ record.end | formatMediumDatetime }}</td>
+          <td>{{ record.totalPrice }}</td>
+          <td>
+            <div *ngIf="record.device">
+              <a [routerLink]="['/device', record.device?.id, 'view']">{{ record.device?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/record', record.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/record', record.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(record)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="records && records.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-session-heading" data-cy="SessionCreateUpdateHeading" jhiTranslate="erApp.session.home.createOrEditLabel">
+        Create or edit a Session
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="erApp.session.id" for="field_id">Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="id"
+            id="field_id"
+            data-cy="id"
+            formControlName="id"
+            [readonly]="editForm.get('id')!.value != null"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="erApp.session.start" for="field_start">Start</label>
+          <div class="d-flex">
+            <input
+              id="field_start"
+              data-cy="start"
+              type="datetime-local"
+              class="form-control"
+              name="start"
+              formControlName="start"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="erApp.session.reserved" for="field_reserved">Reserved</label>
+          <input type="number" class="form-control" name="reserved" id="field_reserved" data-cy="reserved" formControlName="reserved" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="erApp.session.device" for="field_device">Device</label>
+          <select class="form-control" id="field_device" data-cy="device" name="device" formControlName="device">
+            <option *ngIf="editForm.get(['device'])!.value == null" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="deviceOption.id === editForm.get('device')!.value?.id ? editForm.get('device')!.value : deviceOption"
+              *ngFor="let deviceOption of devicesCollection; trackBy: trackDeviceById"
+            >
+              {{ deviceOption.id }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['device'])!.invalid && (editForm.get(['device'])!.dirty || editForm.get(['device'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['device'])?.errors?.required" jhiTranslate="entity.validation.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label jhiTranslate="erApp.session.orders" for="field_orders">Orders</label>
+          <select class="form-control" id="field_orders" data-cy="orders" multiple name="orders" formControlName="orders">
+            <option
+              [ngValue]="getSelectedProduct(productOption, editForm.get('orders')!.value)"
+              *ngFor="let productOption of productsSharedCollection; trackBy: trackProductById"
+            >
+              {{ productOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

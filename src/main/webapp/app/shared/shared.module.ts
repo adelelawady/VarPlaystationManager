@@ -12,6 +12,10 @@ import { FormatMediumDatePipe } from './date/format-medium-date.pipe';
 import { SortByDirective } from './sort/sort-by.directive';
 import { SortDirective } from './sort/sort.directive';
 import { ItemCountComponent } from './pagination/item-count.component';
+import { DeviceComponentComponent } from './device-component/device-component.component';
+import { CountdownPipe } from './device-component/countdown.pipe';
+import { DevicePricePipe } from './device-component/price.pipe';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -27,9 +31,13 @@ import { ItemCountComponent } from './pagination/item-count.component';
     SortByDirective,
     SortDirective,
     ItemCountComponent,
+    DeviceComponentComponent,
+    CountdownPipe,
+    DevicePricePipe,
   ],
   exports: [
     SharedLibsModule,
+    OverlayPanelModule,
     FindLanguageFromKeyPipe,
     TranslateDirective,
     AlertComponent,
@@ -41,6 +49,9 @@ import { ItemCountComponent } from './pagination/item-count.component';
     SortByDirective,
     SortDirective,
     ItemCountComponent,
+    DeviceComponentComponent,
+    CountdownPipe,
+    DevicePricePipe,
   ],
 })
 export class SharedModule {}

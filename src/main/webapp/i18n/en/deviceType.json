@@ -1,0 +1,25 @@
+{
+  "erApp": {
+    "deviceType": {
+      "home": {
+        "title": "Device Types",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Device Type",
+        "createOrEditLabel": "Create or edit a Device Type",
+        "notFound": "No Device Types found"
+      },
+      "created": "A new Device Type is created with identifier {{ param }}",
+      "updated": "A Device Type is updated with identifier {{ param }}",
+      "deleted": "A Device Type is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Device Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Device Type"
+      },
+      "id": "Id",
+      "name": "Name",
+      "pricePerHour": "Price Per Hour"
+    }
+  }
+}

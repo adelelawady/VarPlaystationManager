@@ -60,7 +60,15 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.collapseNavbar();
     this.loginService.logout();
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
+  }
+
+  isAdmin(): boolean {
+    return false;
+  }
+
+  isManager(): boolean {
+    return false;
   }
 
   toggleNavbar(): void {

@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="session">
+      <h2 data-cy="sessionDetailsHeading"><span jhiTranslate="erApp.session.detail.title">Session</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="erApp.session.id">Id</span></dt>
+        <dd>
+          <span>{{ session.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.session.start">Start</span></dt>
+        <dd>
+          <span>{{ session.start | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.session.reserved">Reserved</span></dt>
+        <dd>
+          <span>{{ session.reserved }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.session.device">Device</span></dt>
+        <dd>
+          <div *ngIf="session.device">
+            <a [routerLink]="['/device', session.device?.id, 'view']">{{ session.device?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="erApp.session.orders">Orders</span></dt>
+        <dd>
+          <span *ngFor="let orders of session.orders; let last = last">
+            <a [routerLink]="['/product', orders?.id, 'view']">{{ orders.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/session', session.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
