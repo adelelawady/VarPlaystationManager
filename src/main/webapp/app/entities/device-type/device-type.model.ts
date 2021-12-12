@@ -2,6 +2,7 @@ export interface IDeviceType {
   id?: string;
   name?: string | null;
   pricePerHour?: number | null;
+  pricePerHourMulti?: number | null;
 }
 
 export class DeviceType implements IDeviceType {

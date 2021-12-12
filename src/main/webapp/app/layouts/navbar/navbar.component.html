@@ -206,7 +206,7 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
-          <li *ngSwitchCase="true">
+          <!-- <li *ngSwitchCase="true">
             <a class="dropdown-item" routerLink="account/settings" routerLinkActive="active" (click)="collapseNavbar()" data-cy="settings">
               <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.account.settings">Settings</span>
@@ -223,7 +223,7 @@
               <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.account.password">Password</span>
             </a>
-          </li>
+          </li>-->
           <li *ngSwitchCase="true">
             <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
               <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>

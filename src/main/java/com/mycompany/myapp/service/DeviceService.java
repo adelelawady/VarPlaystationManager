@@ -2,6 +2,8 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.DeviceDTO;
 import com.mycompany.myapp.service.dto.DeviceSessionDTO;
+import com.mycompany.myapp.service.dto.SessionEndDTO;
+import com.mycompany.myapp.service.dto.SessionStartDTO;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -54,7 +56,7 @@ public interface DeviceService {
 
     DeviceSessionDTO deviceWithSession(String deviceId);
 
-    DeviceSessionDTO startSession(String deviceId);
+    DeviceSessionDTO startSession(String deviceId, SessionStartDTO sessionStart);
 
-    DeviceSessionDTO stopSession(String deviceId);
+    DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto);
 }

@@ -15,7 +15,6 @@ import { ItemCountComponent } from './pagination/item-count.component';
 import { DeviceComponentComponent } from './device-component/device-component.component';
 import { CountdownPipe } from './device-component/countdown.pipe';
 import { DevicePricePipe } from './device-component/price.pipe';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -37,7 +36,6 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
   ],
   exports: [
     SharedLibsModule,
-    OverlayPanelModule,
     FindLanguageFromKeyPipe,
     TranslateDirective,
     AlertComponent,

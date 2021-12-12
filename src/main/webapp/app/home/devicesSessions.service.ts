@@ -14,11 +14,11 @@ export class DevicesSessionsService {
     return this.http.get<any[]>(`${this.resourceUrl}/devices-sessions`, { observe: 'body' });
   }
 
-  stopDeviceSession(deviceId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.resourceUrl}/stop-session/${deviceId}`, { observe: 'body' });
+  stopDeviceSession(deviceId: string, sessionEnd: any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.resourceUrl}/stop-session/${deviceId}`, sessionEnd, { observe: 'body' });
   }
 
-  startDeviceSession(deviceId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.resourceUrl}/start-session/${deviceId}`, { observe: 'body' });
+  startDeviceSession(deviceId: string, sessionStart: any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.resourceUrl}/start-session/${deviceId}`, sessionStart, { observe: 'body' });
   }
 }

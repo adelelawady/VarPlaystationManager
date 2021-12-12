@@ -4,6 +4,8 @@ import com.mycompany.myapp.repository.DeviceRepository;
 import com.mycompany.myapp.service.DeviceService;
 import com.mycompany.myapp.service.dto.DeviceDTO;
 import com.mycompany.myapp.service.dto.DeviceSessionDTO;
+import com.mycompany.myapp.service.dto.SessionEndDTO;
+import com.mycompany.myapp.service.dto.SessionStartDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -193,15 +195,15 @@ public class DeviceResource {
         return ResponseEntity.ok(device);
     }
 
-    @GetMapping("/start-session/{deviceId}")
-    public ResponseEntity<DeviceSessionDTO> startDeviceSession(@PathVariable String deviceId) {
-        DeviceSessionDTO listDevices = deviceService.startSession(deviceId);
+    @PostMapping("/start-session/{deviceId}")
+    public ResponseEntity<DeviceSessionDTO> startDeviceSession(@PathVariable String deviceId, @RequestBody SessionStartDTO sessionstart) {
+        DeviceSessionDTO listDevices = deviceService.startSession(deviceId, sessionstart);
         return ResponseEntity.ok(listDevices);
     }
 
-    @GetMapping("/stop-session/{deviceId}")
-    public ResponseEntity<DeviceSessionDTO> stopDeviceSession(@PathVariable String deviceId) {
-        DeviceSessionDTO listDevices = deviceService.stopSession(deviceId);
+    @PostMapping("/stop-session/{deviceId}")
+    public ResponseEntity<DeviceSessionDTO> stopDeviceSession(@PathVariable String deviceId, @RequestBody SessionEndDTO sessionend) {
+        DeviceSessionDTO listDevices = deviceService.stopSession(deviceId, sessionend);
         return ResponseEntity.ok(listDevices);
     }
 }

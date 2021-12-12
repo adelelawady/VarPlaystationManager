@@ -32,7 +32,10 @@ public class Session implements Serializable {
     private boolean active;
 
     @Field("multi")
-    private boolean multi;
+    private boolean multi = false;
+
+    @Field("discount")
+    private Double discount = 0.0;
 
     public boolean isMulti() {
         return multi;
@@ -55,6 +58,14 @@ public class Session implements Serializable {
 
     public String getId() {
         return this.id;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public Session id(String id) {

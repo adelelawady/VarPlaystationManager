@@ -1,11 +1,36 @@
 <div class="row" *ngIf="devices">
-  <div class="col-md-3 my-2" *ngFor="let device of devices">
-    <jhi-device-component [device]="device"> </jhi-device-component>
+  <div class="col-8">
+    <div class="card-body px-1">
+      <h5 class="card-title">DEVICES</h5>
+      <h6 class="card-subtitle mb-2 text-muted">all devices</h6>
+      <div class="card jh-card m-2 p-4">
+        <div class="row">
+          <div class="col-md-3 p-1" *ngFor="let device of devices">
+            <jhi-device-component [device]="device"> </jhi-device-component>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="card-body">
+      <h5 class="card-title">
+        ORDERS <i style="cursor: pointer" class="fa fa-plus text-success border border-primary shadow-sm rounded p-1 float-right"></i>
+      </h5>
+      <h6 class="card-subtitle mb-2 text-muted">takeaway</h6>
+      <div class="card jh-card my-2">
+        <ul class="list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
+          <li class="list-group-item">
+            <div class="d-inline p-2 bg-dark text-white float-right">٥٠ LE</div>
+            <div class="d-inline p-2 text-black">الطلب</div>
+          </li>
+          <li class="list-group-item">A second item</li>
+          <li class="list-group-item">A third item</li>
+          <li class="list-group-item">A fourth item</li>
+          <li class="list-group-item">And a fifth one</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
-
-<button type="text" pButton label="Custom Target" (click)="op.show($event, actualTarget)">test</button>
-<div #actualTarget></div>
-<p-overlayPanel #op>
-  <ng-template pTemplate> Content </ng-template>
-</p-overlayPanel>

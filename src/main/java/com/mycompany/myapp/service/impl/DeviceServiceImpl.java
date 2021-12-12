@@ -10,19 +10,24 @@ import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.SessionService;
 import com.mycompany.myapp.service.dto.DeviceDTO;
 import com.mycompany.myapp.service.dto.DeviceSessionDTO;
+import com.mycompany.myapp.service.dto.SessionEndDTO;
+import com.mycompany.myapp.service.dto.SessionStartDTO;
 import com.mycompany.myapp.service.mapper.DeviceMapper;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Service Implementation for managing {@link Device}.
@@ -120,7 +125,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceSessionDTO startSession(String deviceId) {
+    public DeviceSessionDTO startSession(String deviceId, SessionStartDTO sessionStart) {
         Optional<Device> dev = deviceRepository.findById(deviceId);
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
@@ -131,6 +136,8 @@ public class DeviceServiceImpl implements DeviceService {
             session.setActive(true);
             session.setDevice(dev.get());
             session.setStart(Instant.now());
+            session.setMulti(sessionStart.isMulti());
+            session.reserved(sessionStart.getReserved());
             sessionService.save(session);
         }
 
@@ -138,7 +145,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceSessionDTO stopSession(String deviceId) {
+    public DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto) {
         Optional<Device> dev = deviceRepository.findById(deviceId);
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
@@ -151,6 +158,25 @@ public class DeviceServiceImpl implements DeviceService {
             Record rec = new Record();
             rec.setDevice(dev.get());
             rec.setEnd(Instant.now());
+            rec.setTotalPriceUser(sessionEndDto.getTotalPrice());
+
+            Double totalPriceCalculated;
+
+            Duration d = Duration.between(currentActiveSession.getStart(), Instant.now());
+
+            int minutes = (int) d.toMinutes();
+            Double houres = Double.valueOf((double) minutes / 60.0);
+
+            if (currentActiveSession.isMulti()) {
+                totalPriceCalculated = houres * currentActiveSession.getDevice().getType().getPricePerHourMulti();
+            } else {
+                totalPriceCalculated = houres * currentActiveSession.getDevice().getType().getPricePerHour();
+            }
+
+            totalPriceCalculated = (double) Math.round(totalPriceCalculated);
+
+            rec.setTotalPrice(totalPriceCalculated);
+            rec.setDuration(d);
             if (currentActiveSession.getOrders() != null && !currentActiveSession.getOrders().isEmpty()) {
                 rec.setOrders(currentActiveSession.getOrders());
             }

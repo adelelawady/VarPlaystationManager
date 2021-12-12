@@ -20,10 +20,10 @@ public class DeviceType implements Serializable {
     private String name;
 
     @Field("price_per_hour")
-    private Double pricePerHour;
+    private Double pricePerHour = 0.0;
 
     @Field("price_per_hour_multi")
-    private Double pricePerHourMulti;
+    private Double pricePerHourMulti = 0.0;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

@@ -37,6 +37,7 @@
           <th scope="col" jhiSortBy="pricePerHour">
             <span jhiTranslate="erApp.deviceType.pricePerHour">Price Per Hour</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="pricePerHourMulti"><span>Price Per Hour Multi</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -47,6 +48,7 @@
           </td>
           <td>{{ deviceType.name }}</td>
           <td>{{ deviceType.pricePerHour }}</td>
+          <td>{{ deviceType.pricePerHourMulti }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

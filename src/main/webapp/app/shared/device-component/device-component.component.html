@@ -1,21 +1,113 @@
 <div class="card" [ngClass]="{ 'border-success border-active': device.session, 'border-danger': !device.session }">
   <div class="card-body">
-    <h5 class="card-title">{{ device.name }}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ device.type }}</h6>
-
-    <button class="btn btn-primary" (click)="device.session ? endSession() : startSession()">
-      {{ device.session ? 'stop' : 'start' }}
-    </button>
+    <h5 class="card-title">
+      <span style="cursor: pointer" data-toggle="modal" [attr.data-target]="'#modal' + device.id">
+        <a href="#" class="card-link"> {{ device.name }}</a></span
+      >
+      <i
+        *ngIf="device.session"
+        style="cursor: pointer"
+        (click)="device.name = 'tests'"
+        class="float-right"
+        class="fa fa-plus text-success float-right border shadow-sm rounded p-1 border-primary"
+      ></i>
+    </h5>
+    <h6 class="card-subtitle mb-2 text-muted my-3">{{ device.type }}</h6>
+    <span *ngIf="device.session && device.session.multi">
+      <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
+    </span>
   </div>
   <div *ngIf="device.session" class="card-footer">
     <a href="#" class="card-link">
       <label class="badge badge-success">{{ (device.session.start | countdowntimer | async) || '0 m' }}</label></a
     >
-    <a href="#" class="card-link">{{ (device | devicePrice | async) || '0 LE' }}</a>
+    <a href="#" class="card-link">{{ (device | devicePrice: false | async) || '0 LE' }}</a>
   </div>
   <div *ngIf="!device.session" class="card-footer">
     <a href="#" class="card-link">
       <label class="badge badge-danger">{{ 'متوقف' }}</label></a
     >
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal{{ device.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog rounded-lg border">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-body">
+          <h5 class="card-title">
+            <span style="cursor: pointer" data-toggle="modal" [attr.data-target]="'#modal' + device.id">
+              <a href="#" class="card-link"> {{ device.name }}</a></span
+            >
+          </h5>
+          <h6 class="card-subtitle mb-2 text-muted my-3">
+            {{ device.type }}
+
+            <span *ngIf="device.session && device.session.multi">
+              -
+              <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
+            </span>
+          </h6>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div *ngIf="device.session" class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">الوقت</label>
+            <div class="col-sm-10" style="text-align: right">
+              <label class="badge badge-success">{{ (device.session.start | countdowntimer | async) || '0 m' }}</label>
+            </div>
+          </div>
+          <div *ngIf="device.session" class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">السعر</label>
+            <div class="col-sm-10" style="text-align: right">
+              <a href="#" class="card-link">{{ (device | devicePrice: false | async) || '0 LE' }}</a>
+            </div>
+          </div>
+
+          <div *ngIf="!device.session" class="form-group row">
+            <div class="col-sm-10 offset-sm-0">
+              <div class="form-check">
+                <input
+                  [(ngModel)]="isMulti"
+                  [ngModelOptions]="{ standalone: true }"
+                  class="form-check-input"
+                  type="checkbox"
+                  id="gridCheck1"
+                />
+                <label class="form-check-label" for="gridCheck1"> multi </label>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <div *ngIf="device.session" class="form-group row">
+            <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">السعر الكلي</label>
+            <div class="col-sm-8">
+              <input
+                type="email"
+                [(ngModel)]="totalPriceUser"
+                [ngModelOptions]="{ standalone: true }"
+                [value]="device | devicePrice: true | async"
+                class="form-control form-control-lg"
+                id="colFormLabelLg"
+                placeholder=""
+              />
+            </div>
+          </div>
+        </form>
+
+        <button
+          data-dismiss="modal"
+          aria-label="Close"
+          class="btn btn-primary col"
+          (click)="device.session ? endSession() : startSession()"
+        >
+          {{ device.session ? 'ايقاف التشغيل' : 'بدا التشغيل' }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>

@@ -2,6 +2,7 @@ package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,14 @@ public class Record implements Serializable {
 
     @Field("total_price")
     private Double totalPrice;
+
+    @Field("total_price_user")
+    private Double totalPriceUser;
+
+    @Field("duration")
+    private Duration duration;
+
+    //Duration
 
     @DBRef
     @Field("device")
@@ -132,6 +141,14 @@ public class Record implements Serializable {
         return this;
     }
 
+    public Double getTotalPriceUser() {
+        return totalPriceUser;
+    }
+
+    public void setTotalPriceUser(Double totalPriceUser) {
+        this.totalPriceUser = totalPriceUser;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -143,6 +160,14 @@ public class Record implements Serializable {
             return false;
         }
         return id != null && id.equals(((Record) o).id);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     @Override

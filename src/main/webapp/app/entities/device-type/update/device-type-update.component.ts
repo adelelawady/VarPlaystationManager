@@ -19,6 +19,7 @@ export class DeviceTypeUpdateComponent implements OnInit {
     id: [],
     name: [],
     pricePerHour: [],
+    pricePerHourMulti: [],
   });
 
   constructor(protected deviceTypeService: DeviceTypeService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -67,6 +68,7 @@ export class DeviceTypeUpdateComponent implements OnInit {
       id: deviceType.id,
       name: deviceType.name,
       pricePerHour: deviceType.pricePerHour,
+      pricePerHourMulti: deviceType.pricePerHourMulti,
     });
   }
 
@@ -76,6 +78,7 @@ export class DeviceTypeUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       pricePerHour: this.editForm.get(['pricePerHour'])!.value,
+      pricePerHourMulti: this.editForm.get(['pricePerHourMulti'])!.value,
     };
   }
 }

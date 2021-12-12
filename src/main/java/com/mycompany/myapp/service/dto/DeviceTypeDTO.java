@@ -12,7 +12,9 @@ public class DeviceTypeDTO implements Serializable {
 
     private String name;
 
-    private Double pricePerHour;
+    private Double pricePerHour = 0.0;
+
+    private Double pricePerHourMulti = 0.0;
 
     public String getId() {
         return id;
@@ -57,6 +59,14 @@ public class DeviceTypeDTO implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(this.id);
+    }
+
+    public Double getPricePerHourMulti() {
+        return pricePerHourMulti;
+    }
+
+    public void setPricePerHourMulti(Double pricePerHourMulti) {
+        this.pricePerHourMulti = pricePerHourMulti;
     }
 
     // prettier-ignore
