@@ -6,6 +6,7 @@ import com.mycompany.myapp.domain.Record;
 import com.mycompany.myapp.domain.Session;
 import com.mycompany.myapp.repository.DeviceRepository;
 import com.mycompany.myapp.service.DeviceService;
+import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.SessionService;
 import com.mycompany.myapp.service.dto.DeviceDTO;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javax.websocket.RemoteEndpoint.Async;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -45,16 +47,20 @@ public class DeviceServiceImpl implements DeviceService {
 
     private final RecordService recordService;
 
+    private final ProductService productService;
+
     public DeviceServiceImpl(
         DeviceRepository deviceRepository,
         DeviceMapper deviceMapper,
         SessionService sessionService,
-        RecordService recordService
+        RecordService recordService,
+        ProductService productService
     ) {
         this.deviceRepository = deviceRepository;
         this.deviceMapper = deviceMapper;
         this.sessionService = sessionService;
         this.recordService = recordService;
+        this.productService = productService;
     }
 
     @Override
@@ -108,7 +114,9 @@ public class DeviceServiceImpl implements DeviceService {
         Device device = deviceOp.get();
         DeviceSessionDTO dev = new DeviceSessionDTO();
         dev.setId(device.getId());
-        dev.setType(device.getType().getName());
+        if (device.getType() != null) {
+            dev.setType(device.getType().getName());
+        }
         dev.setName(device.getName());
 
         Session sess = sessionService.getDeviceActiveSession(device.getId());
@@ -125,7 +133,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceSessionDTO startSession(String deviceId, SessionStartDTO sessionStart) {
+    public synchronized DeviceSessionDTO startSession(String deviceId, SessionStartDTO sessionStart) {
         Optional<Device> dev = deviceRepository.findById(deviceId);
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
@@ -145,7 +153,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto) {
+    public synchronized DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto) {
         Optional<Device> dev = deviceRepository.findById(deviceId);
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
@@ -185,11 +193,36 @@ public class DeviceServiceImpl implements DeviceService {
             recordService.save(rec);
         }
 
+        this.sessionService.stopAllDeviceActiveSessions(deviceId);
+
         return this.toDeviceSession(deviceId);
     }
 
     @Override
     public DeviceSessionDTO deviceWithSession(String deviceId) {
+        return this.toDeviceSession(deviceId);
+    }
+
+    @Override
+    public synchronized DeviceSessionDTO addProductToDeviceSession(String deviceId, String productId) {
+        Optional<Device> dev = deviceRepository.findById(deviceId);
+        if (!dev.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+        Session sess = sessionService.getDeviceActiveSession(deviceId);
+
+        if (sess != null) {
+            Optional<Product> product = productService.findOneDomain(productId);
+            if (product.isPresent()) {
+                sessionService.addProductOrderToDeviceSession(sess, product.get());
+
+                Session savedSession = sessionService.getDeviceActiveSession(deviceId);
+                savedSession.addOrders(product.get());
+                Session savedSession2 = sessionService.save(savedSession);
+                sessionService.calculateDeviceSessionOrderesPrice(savedSession2);
+            }
+        }
+
         return this.toDeviceSession(deviceId);
     }
 }

@@ -1,7 +1,9 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Session;
 import com.mycompany.myapp.service.dto.SessionDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,4 +61,10 @@ public interface SessionService {
     void delete(String id);
 
     Session getDeviceActiveSession(String deviceId);
+
+    void stopAllDeviceActiveSessions(String deviceId);
+
+    void calculateDeviceSessionOrderesPrice(Session session);
+
+    void addProductOrderToDeviceSession(Session session, Product product);
 }

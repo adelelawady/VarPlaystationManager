@@ -1,36 +1,126 @@
-<div class="row" *ngIf="devices">
-  <div class="col-8">
-    <div class="card-body px-1">
-      <h5 class="card-title">DEVICES</h5>
-      <h6 class="card-subtitle mb-2 text-muted">all devices</h6>
-      <div class="card jh-card m-2 p-4">
-        <div class="row">
-          <div class="col-md-3 p-1" *ngFor="let device of devices">
-            <jhi-device-component [device]="device"> </jhi-device-component>
+<ng-sidebar-accordion #accordion style="left: 0; bottom: unset" class="ng-sidebar-accordion__bottom-pane_over">
+  <!-- A sidebar -->
+  <ng-sidebar class="classtest" sidebarResizable="true" position="bottom" mode="over" [opened]="true">
+    <ng-sidebar-header>
+      <div>
+        <div>ORDERS</div>
+      </div>
+    </ng-sidebar-header>
+
+    <ng-sidebar-content class="classtest">
+      <div class="row">
+        <div class="col-6" [ngClass]="{ 'col-5': selectedDevice, 'd-none': !selectedDevice }">
+          <div class="row" *ngIf="selectedDevice">
+            <div class="col">
+              <ul
+                style="max-height: 300px !important; margin-bottom: 10px !important; overflow: scroll !important"
+                class="list-group list-group-flush overflow-auto border m-2 p-1"
+              >
+                <li *ngFor="let prod of selectedDevice.session.orders" class="list-group-item">
+                  {{ prod.name }}
+
+                  <span style="font-size: large" *ngIf="!selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary"
+                    >1
+
+                    <small class="text-muted">* {{ prod.price }}LE</small>
+                  </span>
+
+                  <span style="font-size: large" *ngIf="selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary"
+                    >{{ selectedDevice.session.ordersQuantity[prod.id] }}
+
+                    <small class="text-muted">* {{ prod.price }}LE</small>
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div class="col">
+              <jhi-device-component *ngIf="selectedDevice" [device]="selectedDevice"> </jhi-device-component>
+
+              <div class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm">
+                <small
+                  class="d-block"
+                  *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.ordersPrice"
+                  for="staticEmail"
+                  class="row"
+                  >{{ selectedDevice.session.ordersPrice + ' LE' }} : حساب الطلبات</small
+                >
+
+                <small class="d-block" *ngIf="selectedDevice && selectedDevice.session" for="staticEmail" class="row">
+                  {{ (selectedDevice | devicePriceTimeOnly: false | async) || '0 LE' }} :حساب الوقت</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" [ngClass]="{ 'col-7': selectedDevice, 'col-12': !selectedDevice }">
+          <div class="btn-group btn-group- mx-1" role="group" aria-label="...">
+            <button
+              *ngFor="let cat of categories"
+              (click)="getAllProductsByCategory(cat.id)"
+              style="padding: 25px"
+              type="button"
+              class="btn btn-primary"
+            >
+              {{ cat.name }}
+            </button>
+          </div>
+          <hr />
+
+          <div *ngIf="products" class="row mx-1" style="overflow: scroll; max-height: 200px">
+            <div
+              *ngFor="let prod of products"
+              (click)="addProductToSelectedDevice(prod.id)"
+              style="padding: 25px; cursor: pointer"
+              type="button"
+              class="col-auto border rounded m-1 text-center"
+            >
+              {{ prod.name }}
+              <small class="d-block badge badge-warning text-center">{{ prod.price }} LE</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-sidebar-content>
+  </ng-sidebar>
+
+  <!-- Page content -->
+  <ng-sidebar-accordion-content>
+    <div class="row" *ngIf="devices">
+      <div class="col-8">
+        <div class="card-body px-1">
+          <h5 class="card-title">DEVICES</h5>
+          <h6 class="card-subtitle mb-2 text-muted">all devices</h6>
+          <div class="card jh-card m-2 p-4">
+            <div class="row">
+              <div class="col-md-3 p-1" *ngFor="let device of devices">
+                <jhi-device-component (deviceSelected)="selectedDevice = $event; openOrdersPanle()" [device]="device">
+                </jhi-device-component>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="card-body">
+          <h5 class="card-title">
+            ORDERS <i style="cursor: pointer" class="fa fa-plus text-success border border-primary shadow-sm rounded p-1 float-right"></i>
+          </h5>
+          <h6 class="card-subtitle mb-2 text-muted">takeaway</h6>
+          <div class="card jh-card my-2">
+            <ul class="mx-3 list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
+              <li class="list-group-item">
+                <div class="d-inline p-2 bg-dark text-white float-right">٥٠ LE</div>
+                <div class="d-inline p-2 text-black">الطلب</div>
+              </li>
+              <li (click)="openOrdersPanle()" class="list-group-item">A second item</li>
+              <li class="list-group-item">A third item</li>
+              <li class="list-group-item">A fourth item</li>
+              <li class="list-group-item">And a fifth one</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="col-4">
-    <div class="card-body">
-      <h5 class="card-title">
-        ORDERS <i style="cursor: pointer" class="fa fa-plus text-success border border-primary shadow-sm rounded p-1 float-right"></i>
-      </h5>
-      <h6 class="card-subtitle mb-2 text-muted">takeaway</h6>
-      <div class="card jh-card my-2">
-        <ul class="list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
-          <li class="list-group-item">
-            <div class="d-inline p-2 bg-dark text-white float-right">٥٠ LE</div>
-            <div class="d-inline p-2 text-black">الطلب</div>
-          </li>
-          <li class="list-group-item">A second item</li>
-          <li class="list-group-item">A third item</li>
-          <li class="list-group-item">A fourth item</li>
-          <li class="list-group-item">And a fifth one</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+  </ng-sidebar-accordion-content>
+</ng-sidebar-accordion>

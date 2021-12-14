@@ -61,4 +61,11 @@ public class InitialSetupMigration {
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }
+
+    @ChangeSet(order = "03", author = "initiator", id = "03-addManagerAuthoritie")
+    public void addManagerAuthorities(MongockTemplate mongoTemplate) {
+        Authority managerAuthority = new Authority();
+        managerAuthority.setName(AuthoritiesConstants.MANAGER);
+        mongoTemplate.save(managerAuthority);
+    }
 }

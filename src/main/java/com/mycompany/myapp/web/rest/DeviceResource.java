@@ -206,4 +206,10 @@ public class DeviceResource {
         DeviceSessionDTO listDevices = deviceService.stopSession(deviceId, sessionend);
         return ResponseEntity.ok(listDevices);
     }
+
+    @GetMapping("/device/{deviceId}/session/product/{productId}/add")
+    public ResponseEntity<DeviceSessionDTO> addProductToDeviceSession(@PathVariable String deviceId, @PathVariable String productId) {
+        DeviceSessionDTO listDevices = deviceService.addProductToDeviceSession(deviceId, productId);
+        return ResponseEntity.ok(listDevices);
+    }
 }

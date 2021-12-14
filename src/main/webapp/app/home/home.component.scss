@@ -21,3 +21,14 @@ Main page styles
     background-size: contain;
   }
 }
+::ndg-deep ng-sidebar-header {
+  display: none;
+}
+
+::ng-deep .ng-sidebar-accordion__bottom-pane {
+  bottom: 50px !important;
+}
+
+::ng-deep .modal-backdrop.fade.show {
+  display: none;
+}

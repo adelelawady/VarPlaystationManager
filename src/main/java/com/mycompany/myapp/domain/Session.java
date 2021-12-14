@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.*;
@@ -37,6 +38,17 @@ public class Session implements Serializable {
     @Field("discount")
     private Double discount = 0.0;
 
+    @Field("ordersPrice")
+    private Double ordersPrice = 0.0;
+
+    public Double getOrdersPrice() {
+        return ordersPrice;
+    }
+
+    public void setOrdersPrice(Double ordersPrice) {
+        this.ordersPrice = ordersPrice;
+    }
+
     public boolean isMulti() {
         return multi;
     }
@@ -54,7 +66,18 @@ public class Session implements Serializable {
     @JsonIgnoreProperties(value = { "category", "sessions", "records" }, allowSetters = true)
     private Set<Product> orders = new HashSet<>();
 
+    @Field("ordersQuantity")
+    private HashMap<String, Integer> ordersQuantity = new HashMap<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public HashMap<String, Integer> getOrdersQuantity() {
+        return ordersQuantity;
+    }
+
+    public void setOrdersQuantity(HashMap<String, Integer> ordersQuantity) {
+        this.ordersQuantity = ordersQuantity;
+    }
 
     public String getId() {
         return this.id;

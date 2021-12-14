@@ -37,6 +37,10 @@ export class ProductService {
     return this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  queryByCategoryId(categoryId: string): Observable<EntityArrayResponseType> {
+    return this.http.get<IProduct[]>(`${this.resourceUrl}/category/${categoryId}`, { observe: 'response' });
+  }
+
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

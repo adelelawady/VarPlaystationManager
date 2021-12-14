@@ -21,4 +21,8 @@ export class DevicesSessionsService {
   startDeviceSession(deviceId: string, sessionStart: any): Observable<any[]> {
     return this.http.post<any[]>(`${this.resourceUrl}/start-session/${deviceId}`, sessionStart, { observe: 'body' });
   }
+
+  addProductToDeviceSession(deviceId: string, productid: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/device/${deviceId}/session/product/${productid}/add`, { observe: 'body' });
+  }
 }

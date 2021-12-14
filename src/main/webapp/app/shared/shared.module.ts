@@ -15,6 +15,9 @@ import { ItemCountComponent } from './pagination/item-count.component';
 import { DeviceComponentComponent } from './device-component/device-component.component';
 import { CountdownPipe } from './device-component/countdown.pipe';
 import { DevicePricePipe } from './device-component/price.pipe';
+import { SidebarModule } from 'ng-sidebar';
+import { SidebarAccordionModule } from 'ng-sidebar-accordion';
+import { DevicePricePipeTimeOnly } from './device-component/priceTimeOnly.pipe';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -33,6 +36,7 @@ import { DevicePricePipe } from './device-component/price.pipe';
     DeviceComponentComponent,
     CountdownPipe,
     DevicePricePipe,
+    DevicePricePipeTimeOnly,
   ],
   exports: [
     SharedLibsModule,
@@ -50,6 +54,8 @@ import { DevicePricePipe } from './device-component/price.pipe';
     DeviceComponentComponent,
     CountdownPipe,
     DevicePricePipe,
+    SidebarAccordionModule,
+    DevicePricePipeTimeOnly,
   ],
 })
 export class SharedModule {}

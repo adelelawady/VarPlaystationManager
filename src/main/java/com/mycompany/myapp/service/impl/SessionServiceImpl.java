@@ -1,10 +1,12 @@
 package com.mycompany.myapp.service.impl;
 
+import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Session;
 import com.mycompany.myapp.repository.SessionRepository;
 import com.mycompany.myapp.service.SessionService;
 import com.mycompany.myapp.service.dto.SessionDTO;
 import com.mycompany.myapp.service.mapper.SessionMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,10 +84,61 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public Session getDeviceActiveSession(String deviceId) {
-        Optional<Session> session = this.sessionRepository.findByDeviceIdAndActive(deviceId, true);
-        if (session.isPresent()) {
-            return session.get();
+        List<Session> session = this.sessionRepository.findByDeviceIdAndActive(deviceId, true);
+        Optional<Session> first = session.stream().findFirst();
+        if (first.isPresent()) {
+            return first.get();
         }
         return null;
+    }
+
+    public void stopAllDeviceActiveSessions(String deviceId) {
+        List<Session> session = this.sessionRepository.findByDeviceIdAndActive(deviceId, true);
+        if (!session.isEmpty()) {
+            session
+                .stream()
+                .forEach(sess -> {
+                    sess.setActive(false);
+                    sessionRepository.save(sess);
+                });
+        }
+    }
+
+    @Override
+    public void addProductOrderToDeviceSession(Session session, Product product) {
+        Optional<Session> sessOPt = sessionRepository.findById(session.getId());
+        if (!sessOPt.isPresent()) {
+            return;
+        }
+        Session sess = sessOPt.get();
+        boolean sessionHasItem = sess.getOrdersQuantity().containsKey(product.getId());
+        if (sessionHasItem) {
+            int currentvalue = sess.getOrdersQuantity().get(product.getId());
+            sess.getOrdersQuantity().put(product.getId(), currentvalue + 1);
+        } else {
+            sess.getOrdersQuantity().put(product.getId(), 1);
+        }
+        Session savedSession = sessionRepository.save(sess);
+
+        calculateDeviceSessionOrderesPrice(savedSession);
+    }
+
+    @Override
+    public void calculateDeviceSessionOrderesPrice(Session session) {
+        Double totalCalculationsOfOrders = 0.0;
+        for (Product order : session.getOrders()) {
+            int prodValue;
+            if (session.getOrdersQuantity().containsKey(order.getId())) {
+                prodValue = session.getOrdersQuantity().get(order.getId());
+            } else {
+                prodValue = 1;
+            }
+
+            Double prodPrice = order.getPrice();
+            Double totalProdPrice = Double.valueOf(prodValue) * prodPrice;
+            totalCalculationsOfOrders += totalProdPrice;
+        }
+        session.setOrdersPrice(totalCalculationsOfOrders);
+        sessionRepository.save(session);
     }
 }

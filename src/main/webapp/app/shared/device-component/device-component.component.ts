@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, OnInit, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { DevicesSessionsService } from 'app/home/devicesSessions.service';
 
 declare const $: any;
@@ -13,12 +13,16 @@ export class DeviceComponentComponent implements OnInit {
   isMulti = false;
   totalPriceUser = 0;
   @Input() device: any;
+  @Output() deviceSelected = new EventEmitter();
   constructor(private cd: ChangeDetectorRef, private devicesSessionsService: DevicesSessionsService) {}
   ngOnInit(): void {
     // throw new Error('Method not implemented.');
     null;
   }
 
+  selectDevice(device: any): void {
+    this.deviceSelected.emit(device);
+  }
   startSession(): void {
     const sessionStart = {
       multi: this.isMulti,

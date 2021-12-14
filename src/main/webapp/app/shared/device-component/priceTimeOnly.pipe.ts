@@ -4,9 +4,9 @@ import { interval } from 'rxjs/internal/observable/interval';
 import { map } from 'rxjs/operators';
 
 @Pipe({
-  name: 'devicePrice',
+  name: 'devicePriceTimeOnly',
 })
-export class DevicePricePipe implements PipeTransform {
+export class DevicePricePipeTimeOnly implements PipeTransform {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   transform(device: any, int: boolean) {
     return interval(10).pipe(
@@ -23,14 +23,13 @@ export class DevicePricePipe implements PipeTransform {
           pricePerHour = device.session.device.type.pricePerHour;
         }
 
-        const totalOrderprice = device.session.ordersPrice ? device.session.ordersPrice : 0;
         if (int) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-          return Math.round((diffMin / 60) * pricePerHour) + totalOrderprice;
+          return Math.round((diffMin / 60) * pricePerHour);
         } else {
           // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-          return Math.round((diffMin / 60) * pricePerHour) + totalOrderprice + ' LE';
+          return Math.round((diffMin / 60) * pricePerHour) + ' LE';
         }
       })
     );

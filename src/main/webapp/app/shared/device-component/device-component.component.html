@@ -1,4 +1,4 @@
-<div class="card" [ngClass]="{ 'border-success border-active': device.session, 'border-danger': !device.session }">
+<div class="card border" [ngClass]="{ 'border-success border-active': device.session, 'border-danger': !device.session }">
   <div class="card-body">
     <h5 class="card-title">
       <span style="cursor: pointer" data-toggle="modal" [attr.data-target]="'#modal' + device.id">
@@ -7,7 +7,7 @@
       <i
         *ngIf="device.session"
         style="cursor: pointer"
-        (click)="device.name = 'tests'"
+        (click)="selectDevice(device)"
         class="float-right"
         class="fa fa-plus text-success float-right border shadow-sm rounded p-1 border-primary"
       ></i>

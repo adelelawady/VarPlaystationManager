@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.Device}.
@@ -59,4 +61,6 @@ public interface DeviceService {
     DeviceSessionDTO startSession(String deviceId, SessionStartDTO sessionStart);
 
     DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto);
+
+    DeviceSessionDTO addProductToDeviceSession(String deviceId, String productId);
 }
