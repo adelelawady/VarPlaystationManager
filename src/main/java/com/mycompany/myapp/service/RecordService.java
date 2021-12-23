@@ -1,6 +1,8 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.RecordDTO;
+import com.mycompany.myapp.service.dto.RecordsFilterDTO;
+import com.mycompany.myapp.service.dto.RecordsFilterRequestDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +59,6 @@ public interface RecordService {
      * @param id the id of the entity.
      */
     void delete(String id);
+
+    RecordsFilterDTO findAllFilterd(Pageable pageable, RecordsFilterRequestDTO filterRequestDTO);
 }

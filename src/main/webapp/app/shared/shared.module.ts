@@ -57,5 +57,6 @@ import { DevicePricePipeTimeOnly } from './device-component/priceTimeOnly.pipe';
     SidebarAccordionModule,
     DevicePricePipeTimeOnly,
   ],
+  providers: [DevicePricePipe],
 })
 export class SharedModule {}

@@ -25,6 +25,57 @@
           </span>
         </a>
       </li>
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+        <a
+          class="nav-link"
+          routerLink="device-type"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="collapseNavbar()"
+        >
+          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+          <span jhiTranslate="global.menu.entities.deviceType">Device Type</span>
+        </a>
+      </li>
+
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+        <a
+          class="nav-link"
+          routerLink="device"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="collapseNavbar()"
+        >
+          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+          <span>الاجهزة</span>
+        </a>
+      </li>
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+        <a
+          class="nav-link"
+          routerLink="product"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="collapseNavbar()"
+        >
+          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+          <span>الطلبات</span>
+        </a>
+      </li>
+
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+        <a
+          class="nav-link"
+          routerLink="category"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="collapseNavbar()"
+        >
+          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+          <span>اصناف الطلبات</span>
+        </a>
+      </li>
+
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         *jhiHasAnyAuthority="'ROLE_ADMIN'"
@@ -41,7 +92,7 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-          <li>
+          <!-- <li>
             <a
               class="dropdown-item"
               routerLink="device-type"
@@ -53,7 +104,7 @@
               <span jhiTranslate="global.menu.entities.deviceType">Device Type</span>
             </a>
           </li>
-          <li>
+       <!--   <li>
             <a
               class="dropdown-item"
               routerLink="device"
@@ -101,7 +152,8 @@
               <span jhiTranslate="global.menu.entities.record">Record</span>
             </a>
           </li>
-          <li>
+
+         <li>
             <a
               class="dropdown-item"
               routerLink="session"
@@ -111,6 +163,19 @@
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.entities.session">Session</span>
+            </a>
+          </li>
+             -->
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="record"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>السجلات</span>
             </a>
           </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

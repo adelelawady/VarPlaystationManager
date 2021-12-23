@@ -183,12 +183,16 @@ public class DeviceServiceImpl implements DeviceService {
 
             totalPriceCalculated = (double) Math.round(totalPriceCalculated);
 
-            rec.setTotalPrice(totalPriceCalculated);
+            rec.setTotalPriceOrders(currentActiveSession.getOrdersPrice());
+
+            rec.setTotalPriceTime(totalPriceCalculated);
+
+            rec.setTotalPrice(rec.getTotalPriceOrders() + rec.getTotalPriceTime());
             rec.setDuration(d);
             if (currentActiveSession.getOrders() != null && !currentActiveSession.getOrders().isEmpty()) {
-                rec.setOrders(currentActiveSession.getOrders());
+                rec.setOrdersQuantity(currentActiveSession.getOrdersQuantity());
+                rec.setOrdersData(currentActiveSession.getOrders());
             }
-
             rec.setStart(currentActiveSession.getStart());
             recordService.save(rec);
         }
@@ -204,7 +208,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public synchronized DeviceSessionDTO addProductToDeviceSession(String deviceId, String productId) {
+    public DeviceSessionDTO addProductToDeviceSession(String deviceId, String productId) {
         Optional<Device> dev = deviceRepository.findById(deviceId);
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
@@ -218,6 +222,40 @@ public class DeviceServiceImpl implements DeviceService {
 
                 Session savedSession = sessionService.getDeviceActiveSession(deviceId);
                 savedSession.addOrders(product.get());
+                Session savedSession2 = sessionService.save(savedSession);
+                sessionService.calculateDeviceSessionOrderesPrice(savedSession2);
+            }
+        }
+
+        return this.toDeviceSession(deviceId);
+    }
+
+    @Override
+    public DeviceSessionDTO deleteProductFromDeviceSession(String deviceId, String productId) {
+        Optional<Device> dev = deviceRepository.findById(deviceId);
+        if (!dev.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+        Session sess = sessionService.getDeviceActiveSession(deviceId);
+
+        if (sess != null) {
+            Optional<Product> product = productService.findOneDomain(productId);
+            if (product.isPresent()) {
+                sessionService.deleteProductOrderFromDeviceSession(sess, product.get());
+
+                Session savedSession = sessionService.getDeviceActiveSession(deviceId);
+                try {
+                    boolean sessionHasItem = savedSession.getOrdersQuantity().containsKey(productId);
+                    if (sessionHasItem) {
+                        int currentvalue = savedSession.getOrdersQuantity().get(productId);
+                        if (currentvalue == 0) {
+                            savedSession.removeOrders(product.get());
+                        }
+                    } else {
+                        savedSession.removeOrders(product.get());
+                    }
+                } catch (Exception e) {}
+
                 Session savedSession2 = sessionService.save(savedSession);
                 sessionService.calculateDeviceSessionOrderesPrice(savedSession2);
             }

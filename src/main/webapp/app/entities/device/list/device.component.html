@@ -32,21 +32,17 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="erApp.device.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="name"><span jhiTranslate="erApp.device.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="type.id"><span jhiTranslate="erApp.device.type">Type</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="name"><span>الاسم</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="type.id"><span> النوع</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let device of devices; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/device', device.id, 'view']">{{ device.id }}</a>
-          </td>
           <td>{{ device.name }}</td>
           <td>
             <div *ngIf="device.type">
-              <a [routerLink]="['/device-type', device.type?.id, 'view']">{{ device.type?.id }}</a>
+              <a [routerLink]="['/device-type', device.type?.id, 'view']">{{ device.type?.name }}</a>
             </div>
           </td>
           <td class="text-right">

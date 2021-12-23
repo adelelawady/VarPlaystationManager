@@ -4,7 +4,16 @@ import com.mycompany.myapp.domain.Record;
 import com.mycompany.myapp.repository.RecordRepository;
 import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.dto.RecordDTO;
+import com.mycompany.myapp.service.dto.RecordsFilterDTO;
+import com.mycompany.myapp.service.dto.RecordsFilterRequestDTO;
 import com.mycompany.myapp.service.mapper.RecordMapper;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,5 +86,136 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public com.mycompany.myapp.domain.Record save(com.mycompany.myapp.domain.Record record) {
         return this.recordRepository.save(record);
+    }
+
+    @Override
+    public RecordsFilterDTO findAllFilterd(Pageable pageable, RecordsFilterRequestDTO filterRequestDTO) {
+        Page<Record> result = null;
+
+        List<Record> allrecords = null;
+
+        RecordsFilterDTO res = new RecordsFilterDTO();
+        switch (filterRequestDTO.getQueryType()) {
+            case "today":
+                LocalDate localDate = LocalDate.now();
+
+                LocalDateTime EndOfDay = localDate.atTime(LocalTime.MAX);
+
+                LocalDateTime StartOfDay = localDate.atTime(LocalTime.MIN);
+
+                System.out.println(EndOfDay);
+                System.out.println(StartOfDay);
+
+                result =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            pageable,
+                            StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDay.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDay.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                allrecords =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDay.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDay.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                break;
+            case "yesterday":
+                LocalDate localDateyesterday = LocalDate.now().minusDays(1);
+
+                LocalDateTime EndOfDayyesterday = localDateyesterday.atTime(LocalTime.MAX);
+
+                LocalDateTime StartOfDayyesterday = localDateyesterday.atTime(LocalTime.MIN);
+
+                result =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            pageable,
+                            StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                allrecords =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                break;
+            case "lastweek":
+                LocalDate localDateyesterdayx = LocalDate.now().minusWeeks(1);
+
+                LocalDateTime EndOfDayyesterdayx = localDateyesterdayx.atTime(LocalTime.MAX);
+
+                LocalDateTime StartOfDayyesterdayx = localDateyesterdayx.atTime(LocalTime.MIN);
+
+                result =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            pageable,
+                            StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                allrecords =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                break;
+            case "lastmonth":
+                LocalDate localDatemonth = LocalDate.now().minusWeeks(1);
+
+                LocalDateTime EndOfDaymonth = localDatemonth.atTime(LocalTime.MAX);
+
+                LocalDateTime StartOfDayMonth = localDatemonth.atTime(LocalTime.MIN);
+
+                result =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            pageable,
+                            StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                allrecords =
+                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                            StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant(),
+                            StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
+                            EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant()
+                        );
+
+                break;
+            default:
+                break;
+        }
+
+        for (Record reco : allrecords) {
+            res.setTotalPriceUser(res.getTotalPriceUser() + reco.getTotalPriceUser());
+            res.setTotalPrice(res.getTotalPrice() + reco.getTotalPrice());
+            res.setTotalPriceOrders(res.getTotalPriceOrders() + reco.getTotalPriceOrders());
+
+            res.setTotalPriceTime(res.getTotalPriceTime() + reco.getTotalPriceTime());
+            res.setTotalHours(res.getTotalHours() + reco.getDuration().toHoursPart());
+            res.setTotalMinutes(res.getTotalMinutes() + reco.getDuration().toMinutesPart());
+        }
+
+        res.setResultList(result.map(recordMapper::toDto));
+
+        // TODO Auto-generated method stub
+        return res;
     }
 }

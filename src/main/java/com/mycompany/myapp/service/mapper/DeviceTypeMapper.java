@@ -10,7 +10,5 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface DeviceTypeMapper extends EntityMapper<DeviceTypeDTO, DeviceType> {
     @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
     DeviceTypeDTO toDtoId(DeviceType deviceType);
 }

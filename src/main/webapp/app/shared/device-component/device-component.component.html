@@ -2,14 +2,14 @@
   <div class="card-body">
     <h5 class="card-title">
       <span style="cursor: pointer" data-toggle="modal" [attr.data-target]="'#modal' + device.id">
-        <a href="#" class="card-link"> {{ device.name }}</a></span
+        <a (click)="OnDeviceClicked()" href="#" class="card-link"> {{ device.name }}</a></span
       >
       <i
         *ngIf="device.session"
         style="cursor: pointer"
         (click)="selectDevice(device)"
         class="float-right"
-        class="fa fa-plus text-success float-right border shadow-sm rounded p-1 border-primary"
+        class="fa fa-cart-arrow-down text-success float-right rounded p-1"
       ></i>
     </h5>
     <h6 class="card-subtitle mb-2 text-muted my-3">{{ device.type }}</h6>
@@ -90,7 +90,7 @@
                 type="email"
                 [(ngModel)]="totalPriceUser"
                 [ngModelOptions]="{ standalone: true }"
-                [value]="device | devicePrice: true | async"
+                [value]="totalPriceUser"
                 class="form-control form-control-lg"
                 id="colFormLabelLg"
                 placeholder=""

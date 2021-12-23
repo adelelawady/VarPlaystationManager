@@ -34,7 +34,7 @@
               [ngValue]="deviceTypeOption.id === editForm.get('type')!.value?.id ? editForm.get('type')!.value : deviceTypeOption"
               *ngFor="let deviceTypeOption of typesCollection; trackBy: trackDeviceTypeById"
             >
-              {{ deviceTypeOption.id }}
+              {{ deviceTypeOption.name }}
             </option>
           </select>
         </div>

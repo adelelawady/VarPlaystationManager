@@ -15,5 +15,6 @@ public interface DeviceMapper extends EntityMapper<DeviceDTO, Device> {
     @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
     DeviceDTO toDtoId(Device device);
 }

@@ -63,4 +63,6 @@ public interface DeviceService {
     DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto);
 
     DeviceSessionDTO addProductToDeviceSession(String deviceId, String productId);
+
+    DeviceSessionDTO deleteProductFromDeviceSession(String deviceId, String productId);
 }

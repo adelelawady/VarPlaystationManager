@@ -2,7 +2,7 @@
   "erApp": {
     "deviceType": {
       "home": {
-        "title": "Device Types",
+        "title": "انواع الاجهزة",
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Device Type",
         "createOrEditLabel": "Create or edit a Device Type",
@@ -15,7 +15,7 @@
         "question": "Are you sure you want to delete Device Type {{ id }}?"
       },
       "detail": {
-        "title": "Device Type"
+        "title": "انواع الاجهزة"
       },
       "id": "Id",
       "name": "Name",

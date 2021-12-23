@@ -3,6 +3,8 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.repository.RecordRepository;
 import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.dto.RecordDTO;
+import com.mycompany.myapp.service.dto.RecordsFilterDTO;
+import com.mycompany.myapp.service.dto.RecordsFilterRequestDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -185,5 +187,18 @@ public class RecordResource {
         log.debug("REST request to delete Record : {}", id);
         recordService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
+    }
+
+    @PostMapping("/records/filter")
+    public ResponseEntity<RecordsFilterDTO> getAllRecordsFilterd(Pageable pageable, @RequestBody RecordsFilterRequestDTO filterRequestDTO) {
+        log.debug("REST request to get a page of Records");
+        System.out.println(pageable);
+
+        RecordsFilterDTO rec = this.recordService.findAllFilterd(pageable, filterRequestDTO);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(),
+            rec.getResultList()
+        );
+        return ResponseEntity.ok().headers(headers).body(rec);
     }
 }

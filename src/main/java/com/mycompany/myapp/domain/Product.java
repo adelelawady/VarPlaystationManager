@@ -30,16 +30,6 @@ public class Product implements Serializable {
     @Field("category")
     private Category category;
 
-    @DBRef
-    @Field("sessions")
-    @JsonIgnoreProperties(value = { "device", "orders" }, allowSetters = true)
-    private Set<Session> sessions = new HashSet<>();
-
-    @DBRef
-    @Field("records")
-    @JsonIgnoreProperties(value = { "device", "orders" }, allowSetters = true)
-    private Set<Record> records = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getId() {
@@ -91,68 +81,6 @@ public class Product implements Serializable {
 
     public Product category(Category category) {
         this.setCategory(category);
-        return this;
-    }
-
-    public Set<Session> getSessions() {
-        return this.sessions;
-    }
-
-    public void setSessions(Set<Session> sessions) {
-        if (this.sessions != null) {
-            this.sessions.forEach(i -> i.removeOrders(this));
-        }
-        if (sessions != null) {
-            sessions.forEach(i -> i.addOrders(this));
-        }
-        this.sessions = sessions;
-    }
-
-    public Product sessions(Set<Session> sessions) {
-        this.setSessions(sessions);
-        return this;
-    }
-
-    public Product addSession(Session session) {
-        this.sessions.add(session);
-        session.getOrders().add(this);
-        return this;
-    }
-
-    public Product removeSession(Session session) {
-        this.sessions.remove(session);
-        session.getOrders().remove(this);
-        return this;
-    }
-
-    public Set<Record> getRecords() {
-        return this.records;
-    }
-
-    public void setRecords(Set<Record> records) {
-        if (this.records != null) {
-            this.records.forEach(i -> i.removeOrders(this));
-        }
-        if (records != null) {
-            records.forEach(i -> i.addOrders(this));
-        }
-        this.records = records;
-    }
-
-    public Product records(Set<Record> records) {
-        this.setRecords(records);
-        return this;
-    }
-
-    public Product addRecord(Record record) {
-        this.records.add(record);
-        record.getOrders().add(this);
-        return this;
-    }
-
-    public Product removeRecord(Record record) {
-        this.records.remove(record);
-        record.getOrders().remove(this);
         return this;
     }
 

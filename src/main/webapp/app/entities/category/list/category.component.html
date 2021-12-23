@@ -32,16 +32,12 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="erApp.category.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="name"><span jhiTranslate="erApp.category.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let category of categories; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/category', category.id, 'view']">{{ category.id }}</a>
-          </td>
           <td>{{ category.name }}</td>
           <td class="text-right">
             <div class="btn-group">

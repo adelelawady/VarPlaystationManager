@@ -154,13 +154,11 @@ public class Session implements Serializable {
 
     public Session addOrders(Product product) {
         this.orders.add(product);
-        product.getSessions().add(this);
         return this;
     }
 
     public Session removeOrders(Product product) {
         this.orders.remove(product);
-        product.getSessions().remove(this);
         return this;
     }
 

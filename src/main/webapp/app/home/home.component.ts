@@ -85,8 +85,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   addProductToSelectedDevice(productId: string): void {
     this.devicesSessionService.addProductToDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
-      this.loadAllDevices();
       this.selectedDevice = deivce;
+      this.loadAllDevices();
+    });
+  }
+
+  deleteProductFromSelectedDevice(productId: string): void {
+    this.devicesSessionService.deleteProductFromDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
+      this.selectedDevice = deivce;
+      this.loadAllDevices();
     });
   }
 }

@@ -1,11 +1,15 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.Product;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.*;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Record} entity.
@@ -22,7 +26,53 @@ public class RecordDTO implements Serializable {
 
     private DeviceDTO device;
 
-    private Set<ProductDTO> orders = new HashSet<>();
+    private Double totalPriceUser;
+
+    private Duration duration;
+
+    private Double totalPriceTime;
+
+    public Double getTotalPriceTime() {
+        return totalPriceTime;
+    }
+
+    public void setTotalPriceTime(Double totalPriceTime) {
+        this.totalPriceTime = totalPriceTime;
+    }
+
+    public Double getTotalPriceOrders() {
+        return totalPriceOrders;
+    }
+
+    public void setTotalPriceOrders(Double totalPriceOrders) {
+        this.totalPriceOrders = totalPriceOrders;
+    }
+
+    private Double totalPriceOrders;
+
+    private int minutes;
+
+    public int getMinutes() {
+        return this.duration.toMinutesPart();
+    }
+
+    public int getHours() {
+        return this.duration.toHoursPart();
+    }
+
+    private int hours;
+
+    private Set<Product> ordersData = new HashSet<>();
+
+    private HashMap<String, Integer> ordersQuantity = new HashMap<>();
+
+    public HashMap<String, Integer> getOrdersQuantity() {
+        return ordersQuantity;
+    }
+
+    public void setOrdersQuantity(HashMap<String, Integer> ordersQuantity) {
+        this.ordersQuantity = ordersQuantity;
+    }
 
     public String getId() {
         return id;
@@ -64,14 +114,6 @@ public class RecordDTO implements Serializable {
         this.device = device;
     }
 
-    public Set<ProductDTO> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<ProductDTO> orders) {
-        this.orders = orders;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -93,6 +135,30 @@ public class RecordDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
+    public Double getTotalPriceUser() {
+        return totalPriceUser;
+    }
+
+    public void setTotalPriceUser(Double totalPriceUser) {
+        this.totalPriceUser = totalPriceUser;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public Set<Product> getOrdersData() {
+        return ordersData;
+    }
+
+    public void setOrdersData(Set<Product> ordersData) {
+        this.ordersData = ordersData;
+    }
+
     // prettier-ignore
     @Override
     public String toString() {
@@ -102,7 +168,6 @@ public class RecordDTO implements Serializable {
             ", end='" + getEnd() + "'" +
             ", totalPrice=" + getTotalPrice() +
             ", device=" + getDevice() +
-            ", orders=" + getOrders() +
             "}";
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.*;
@@ -32,6 +33,12 @@ public class Record implements Serializable {
     @Field("total_price")
     private Double totalPrice;
 
+    @Field("total_price_time")
+    private Double totalPriceTime;
+
+    @Field("total_price_orders")
+    private Double totalPriceOrders;
+
     @Field("total_price_user")
     private Double totalPriceUser;
 
@@ -40,16 +47,25 @@ public class Record implements Serializable {
 
     //Duration
 
-    @DBRef
     @Field("device")
     private Device device;
 
-    @DBRef
-    @Field("orders")
-    @JsonIgnoreProperties(value = { "category", "sessions", "records" }, allowSetters = true)
-    private Set<Product> orders = new HashSet<>();
+    @Field("ordersData")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private Set<Product> ordersData = new HashSet<>();
+
+    @Field("ordersQuantity")
+    private HashMap<String, Integer> ordersQuantity = new HashMap<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public HashMap<String, Integer> getOrdersQuantity() {
+        return ordersQuantity;
+    }
+
+    public void setOrdersQuantity(HashMap<String, Integer> ordersQuantity) {
+        this.ordersQuantity = ordersQuantity;
+    }
 
     public String getId() {
         return this.id;
@@ -116,31 +132,6 @@ public class Record implements Serializable {
         return this;
     }
 
-    public Set<Product> getOrders() {
-        return this.orders;
-    }
-
-    public void setOrders(Set<Product> products) {
-        this.orders = products;
-    }
-
-    public Record orders(Set<Product> products) {
-        this.setOrders(products);
-        return this;
-    }
-
-    public Record addOrders(Product product) {
-        this.orders.add(product);
-        product.getRecords().add(this);
-        return this;
-    }
-
-    public Record removeOrders(Product product) {
-        this.orders.remove(product);
-        product.getRecords().remove(this);
-        return this;
-    }
-
     public Double getTotalPriceUser() {
         return totalPriceUser;
     }
@@ -174,6 +165,30 @@ public class Record implements Serializable {
     public int hashCode() {
         // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
+    }
+
+    public Double getTotalPriceTime() {
+        return totalPriceTime;
+    }
+
+    public void setTotalPriceTime(Double totalPriceTime) {
+        this.totalPriceTime = totalPriceTime;
+    }
+
+    public Double getTotalPriceOrders() {
+        return totalPriceOrders;
+    }
+
+    public void setTotalPriceOrders(Double totalPriceOrders) {
+        this.totalPriceOrders = totalPriceOrders;
+    }
+
+    public Set<Product> getOrdersData() {
+        return ordersData;
+    }
+
+    public void setOrdersData(Set<Product> ordersData) {
+        this.ordersData = ordersData;
     }
 
     // prettier-ignore

@@ -15,7 +15,7 @@ import { RecordDeleteDialogComponent } from '../delete/record-delete-dialog.comp
   templateUrl: './record.component.html',
 })
 export class RecordComponent implements OnInit {
-  records?: IRecord[];
+  records?: any;
   isLoading = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
@@ -24,6 +24,8 @@ export class RecordComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
+  selectedPeriod = 'today';
+  recordsFiltered?: any;
   constructor(
     protected recordService: RecordService,
     protected activatedRoute: ActivatedRoute,
@@ -35,22 +37,47 @@ export class RecordComponent implements OnInit {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
 
+    /* this.recordService
+       .query({
+         page: pageToLoad - 1,
+         size: this.itemsPerPage,
+         sort: this.sort(),
+       })
+       .subscribe(
+         (res: HttpResponse<IRecord[]>) => {
+           this.isLoading = false;
+           this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+         },
+         () => {
+           this.isLoading = false;
+           this.onError();
+         }
+       );*/
+
     this.recordService
-      .query({
-        page: pageToLoad - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
+      .queryFilterd(
+        {
+          page: pageToLoad - 1,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+        },
+        this.selectedPeriod
+      )
       .subscribe(
-        (res: HttpResponse<IRecord[]>) => {
+        (recF: any) => {
           this.isLoading = false;
-          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+          this.recordsFiltered = recF.body;
+          // this.records=recF.body.resultList.content;
+          this.onSuccess(recF.body.resultList.content, recF.headers, pageToLoad, !dontNavigate);
         },
         () => {
           this.isLoading = false;
           this.onError();
         }
       );
+  }
+  loadPeriod(): void {
+    this.loadPage(1, true);
   }
 
   ngOnInit(): void {
@@ -60,7 +87,9 @@ export class RecordComponent implements OnInit {
   trackId(index: number, item: IRecord): string {
     return item.id!;
   }
-
+  fix(h: any): any {
+    return Math.floor(h);
+  }
   delete(record: IRecord): void {
     const modalRef = this.modalService.open(RecordDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.record = record;
@@ -72,7 +101,7 @@ export class RecordComponent implements OnInit {
     });
   }
 
-  protected sort(): string[] {
+  sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {
       result.push('id');
@@ -80,7 +109,7 @@ export class RecordComponent implements OnInit {
     return result;
   }
 
-  protected handleNavigation(): void {
+  handleNavigation(): void {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
       const page = params.get('page');
       const pageNumber = +(page ?? 1);

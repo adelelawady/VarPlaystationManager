@@ -17,6 +17,9 @@
                 class="list-group list-group-flush overflow-auto border m-2 p-1"
               >
                 <li *ngFor="let prod of selectedDevice.session.orders" class="list-group-item">
+                  <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
+                    <i class="fa fa-minus"></i>
+                  </button>
                   {{ prod.name }}
 
                   <span style="font-size: large" *ngIf="!selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary"
@@ -34,7 +37,12 @@
               </ul>
             </div>
             <div class="col">
-              <jhi-device-component *ngIf="selectedDevice" [device]="selectedDevice"> </jhi-device-component>
+              <jhi-device-component
+                (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
+                *ngIf="selectedDevice"
+                [device]="selectedDevice"
+              >
+              </jhi-device-component>
 
               <div class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm">
                 <small
@@ -67,7 +75,7 @@
           <hr />
 
           <div *ngIf="products" class="row mx-1" style="overflow: scroll; max-height: 200px">
-            <div
+            <button
               *ngFor="let prod of products"
               (click)="addProductToSelectedDevice(prod.id)"
               style="padding: 25px; cursor: pointer"
@@ -76,7 +84,7 @@
             >
               {{ prod.name }}
               <small class="d-block badge badge-warning text-center">{{ prod.price }} LE</small>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -93,7 +101,11 @@
           <div class="card jh-card m-2 p-4">
             <div class="row">
               <div class="col-md-3 p-1" *ngFor="let device of devices">
-                <jhi-device-component (deviceSelected)="selectedDevice = $event; openOrdersPanle()" [device]="device">
+                <jhi-device-component
+                  (deviceClicked)="selectedDevice = $event"
+                  (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
+                  [device]="device"
+                >
                 </jhi-device-component>
               </div>
             </div>

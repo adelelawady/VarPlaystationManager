@@ -45,6 +45,17 @@ export class RecordService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  queryFilterd(req?: any, per?: any): Observable<EntityResponseType> {
+    const options = createRequestOption(req);
+
+    const ii = {
+      queryType: per,
+    };
+    return this.http
+      .post<any>(`${this.resourceUrl}/filter`, ii, { params: options, observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

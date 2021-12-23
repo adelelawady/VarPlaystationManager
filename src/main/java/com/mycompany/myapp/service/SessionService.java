@@ -67,4 +67,6 @@ public interface SessionService {
     void calculateDeviceSessionOrderesPrice(Session session);
 
     void addProductOrderToDeviceSession(Session session, Product product);
+
+    void deleteProductOrderFromDeviceSession(Session session, Product product);
 }

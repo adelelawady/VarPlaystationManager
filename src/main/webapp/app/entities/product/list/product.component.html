@@ -32,7 +32,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="erApp.product.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="name"><span jhiTranslate="erApp.product.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="price"><span jhiTranslate="erApp.product.price">Price</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="category.id">
@@ -43,14 +42,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let product of products; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/product', product.id, 'view']">{{ product.id }}</a>
-          </td>
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
           <td>
             <div *ngIf="product.category">
-              <a [routerLink]="['/category', product.category?.id, 'view']">{{ product.category?.id }}</a>
+              <a [routerLink]="['/category', product.category?.id, 'view']">{{ product.category?.name }}</a>
             </div>
           </td>
           <td class="text-right">

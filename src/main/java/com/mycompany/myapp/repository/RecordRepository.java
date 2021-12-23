@@ -1,6 +1,8 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Record;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -22,4 +24,14 @@ public interface RecordRepository extends MongoRepository<Record, String> {
 
     @Query("{'id': ?0}")
     Optional<Record> findOneWithEagerRelationships(String id);
+
+    Page<Record> findAllByStartBetweenOrEndBetween(
+        Pageable pageable,
+        Instant startDate,
+        Instant endDate,
+        Instant startDatex,
+        Instant endDatex
+    );
+
+    List<Record> findAllByStartBetweenOrEndBetween(Instant startDate, Instant endDate, Instant startDatex, Instant endDatex);
 }

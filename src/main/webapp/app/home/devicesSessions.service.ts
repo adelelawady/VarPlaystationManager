@@ -25,4 +25,8 @@ export class DevicesSessionsService {
   addProductToDeviceSession(deviceId: string, productid: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.resourceUrl}/device/${deviceId}/session/product/${productid}/add`, { observe: 'body' });
   }
+
+  deleteProductFromDeviceSession(deviceId: string, productid: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/device/${deviceId}/session/product/${productid}/delete`, { observe: 'body' });
+  }
 }

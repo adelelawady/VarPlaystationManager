@@ -124,6 +124,27 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    public void deleteProductOrderFromDeviceSession(Session session, Product product) {
+        Optional<Session> sessOPt = sessionRepository.findById(session.getId());
+        if (!sessOPt.isPresent()) {
+            return;
+        }
+        Session sess = sessOPt.get();
+        boolean sessionHasItem = sess.getOrdersQuantity().containsKey(product.getId());
+        if (sessionHasItem) {
+            int currentvalue = sess.getOrdersQuantity().get(product.getId());
+            if (currentvalue > 1) {
+                sess.getOrdersQuantity().put(product.getId(), currentvalue - 1);
+            } else {
+                sess.getOrdersQuantity().remove(product.getId());
+            }
+        }
+        Session savedSession = sessionRepository.save(sess);
+
+        calculateDeviceSessionOrderesPrice(savedSession);
+    }
+
+    @Override
     public void calculateDeviceSessionOrderesPrice(Session session) {
         Double totalCalculationsOfOrders = 0.0;
         for (Product order : session.getOrders()) {

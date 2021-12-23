@@ -1,14 +1,105 @@
-<div>
-  <h2 id="page-heading" data-cy="RecordHeading">
-    <span jhiTranslate="erApp.record.home.title">Records</span>
+<div class="row card p-3 rounded">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>التفاصيل</h2>
+    </div>
+  </div>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="erApp.record.home.refreshListLabel">Refresh List</span>
-      </button>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="bs-component">
+        <ul *ngIf="recordsFiltered" class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            سعر الوقت الكلي
+            <span class="badge bg-primary rounded-pill">{{ recordsFiltered.totalPriceTime }} LE</span>
+          </li>
 
-      <button
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            سعر الاوردرات الكلي
+            <span class="badge bg-primary rounded-pill">{{ recordsFiltered.totalPriceOrders }} LE</span>
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            كل عدد الساعات
+            <span class="badge bg-primary rounded-pill">{{ fix(recordsFiltered.totalHours + recordsFiltered.totalMinutes / 60) }}</span>
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            السعر الكلي صافي
+            <span class="badge bg-secondary rounded-pill">{{ recordsFiltered.totalPrice }} LE</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            السعر الكلي المدخل
+            <span class="badge bg-secondary rounded-pill">{{ recordsFiltered.totalPriceUser }} LE</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+      <div class="bs-component">
+        <div class="list-group">
+          <button
+            [ngClass]="{ active: selectedPeriod == 'today' }"
+            (click)="selectedPeriod = 'today'; loadPeriod()"
+            class="list-group-item"
+          >
+            اليوم
+          </button>
+          <button
+            [ngClass]="{ active: selectedPeriod == 'yesterday' }"
+            (click)="selectedPeriod = 'yesterday'; loadPeriod()"
+            href="#"
+            class="list-group-item"
+          >
+            امس
+          </button>
+          <button
+            onclick="return;"
+            href="#"
+            [ngClass]="{ active: selectedPeriod == 'lastweek' }"
+            (click)="selectedPeriod = 'lastweek'; loadPeriod()"
+            href="#"
+            class="list-group-item"
+          >
+            الاسبوع الماضي
+          </button>
+          <button
+            onclick="return;"
+            href="#"
+            [ngClass]="{ active: selectedPeriod == 'lastmonth' }"
+            (click)="selectedPeriod = 'lastmonth'; loadPeriod()"
+            href="#"
+            class="list-group-item"
+          >
+            الشهر الماضي
+          </button>
+          <button
+            onclick="return;"
+            href="#"
+            [ngClass]="{ active: selectedPeriod == 'custom' }"
+            (click)="selectedPeriod = 'custom'; loadPeriod()"
+            href="#"
+            class="list-group-item"
+          >
+            من الي
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-2">
+    <h2 id="page-heading" data-cy="RecordHeading">
+      <span>السجلات</span>
+
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="erApp.record.home.refreshListLabel">Refresh List</span>
+        </button>
+
+        <!--   <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-record"
@@ -16,83 +107,94 @@
       >
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="erApp.record.home.createLabel"> Create a new Record </span>
-      </button>
+      </button>-->
+      </div>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="records?.length === 0">
+      <span jhiTranslate="erApp.record.home.notFound">No records found</span>
     </div>
-  </h2>
 
-  <jhi-alert-error></jhi-alert-error>
+    <div class="table-responsive" id="entities" *ngIf="records && records.length > 0">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+            <th scope="col" jhiSortBy="name"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
 
-  <jhi-alert></jhi-alert>
+            <th scope="col" jhiSortBy="duration"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="records?.length === 0">
-    <span jhiTranslate="erApp.record.home.notFound">No records found</span>
-  </div>
+            <th scope="col" jhiSortBy="totalPriceTime"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
 
-  <div class="table-responsive" id="entities" *ngIf="records && records.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="erApp.record.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="start"><span jhiTranslate="erApp.record.start">Start</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="end"><span jhiTranslate="erApp.record.end">End</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="totalPrice">
-            <span jhiTranslate="erApp.record.totalPrice">Total Price</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="device.id"><span jhiTranslate="erApp.record.device">Device</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let record of records; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/record', record.id, 'view']">{{ record.id }}</a>
-          </td>
-          <td>{{ record.start | formatMediumDatetime }}</td>
-          <td>{{ record.end | formatMediumDatetime }}</td>
-          <td>{{ record.totalPrice }}</td>
-          <td>
-            <div *ngIf="record.device">
-              <a [routerLink]="['/device', record.device?.id, 'view']">{{ record.device?.id }}</a>
-            </div>
-          </td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button type="submit" [routerLink]="['/record', record.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
+            <th scope="col" jhiSortBy="totalPriceOrders"><span>سعر الطلبات</span> <fa-icon icon="sort"></fa-icon></th>
 
-              <button type="submit" [routerLink]="['/record', record.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+            <th scope="col" jhiSortBy="totalPrice"><span>السعر الكلي</span> <fa-icon icon="sort"></fa-icon></th>
+
+            <th scope="col" jhiSortBy="totalPriceUser"><span> السعر الكلي المدخل</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of records; trackBy: trackId" data-cy="entityTable">
+            <td>
+              <a [routerLink]="['/device', record.device?.id, 'view']">{{ record.device?.name }}</a>
+            </td>
+
+            <td>{{ record.hours === 0 ? record.minutes + ' m' : record.hours + ' h : ' + record.minutes + ' m' }}</td>
+
+            <td>{{ record.totalPriceTime + ' LE' }}</td>
+            <td>{{ record.totalPriceOrders + ' LE' }}</td>
+            <td>{{ record.totalPrice + ' LE' }}</td>
+
+            <td>{{ record.totalPriceUser + ' LE' }}</td>
+
+            <td class="text-right">
+              <div class="btn-group">
+                <button
+                  type="submit"
+                  [routerLink]="['/record', record.id, 'view']"
+                  class="btn btn-info btn-sm"
+                  data-cy="entityDetailsButton"
+                >
+                  <fa-icon icon="eye"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                </button>
+
+                <!--  <button type="submit" [routerLink]="['/record', record.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
+              </button>-->
 
-              <button type="submit" (click)="delete(record)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div *ngIf="records && records.length > 0">
-    <div class="row justify-content-center">
-      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+                <button type="submit" (click)="delete(record)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <fa-icon icon="times"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="row justify-content-center">
-      <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
-        [pageSize]="itemsPerPage"
-        [maxSize]="5"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
-      ></ngb-pagination>
+    <div *ngIf="records && records.length > 0">
+      <div class="row justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="row justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [(page)]="ngbPaginationPage"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="loadPage($event)"
+        ></ngb-pagination>
+      </div>
     </div>
   </div>
 </div>

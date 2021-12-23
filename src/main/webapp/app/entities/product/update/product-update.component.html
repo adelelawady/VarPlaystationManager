@@ -39,7 +39,7 @@
               [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption"
               *ngFor="let categoryOption of categoriesCollection; trackBy: trackCategoryById"
             >
-              {{ categoryOption.id }}
+              {{ categoryOption.name }}
             </option>
           </select>
         </div>
