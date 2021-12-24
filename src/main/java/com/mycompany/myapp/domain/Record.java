@@ -50,6 +50,12 @@ public class Record implements Serializable {
     @Field("device")
     private Device device;
 
+    @Field("multi")
+    private boolean multi = false;
+
+    @Field("discount")
+    private Double discount;
+
     @Field("ordersData")
     @JsonIgnoreProperties(ignoreUnknown = true)
     private Set<Product> ordersData = new HashSet<>();
@@ -138,6 +144,22 @@ public class Record implements Serializable {
 
     public void setTotalPriceUser(Double totalPriceUser) {
         this.totalPriceUser = totalPriceUser;
+    }
+
+    public boolean isMulti() {
+        return multi;
+    }
+
+    public void setMulti(boolean multi) {
+        this.multi = multi;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

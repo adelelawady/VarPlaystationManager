@@ -9,11 +9,24 @@
 
     <ng-sidebar-content class="classtest">
       <div class="row">
-        <div class="col-6" [ngClass]="{ 'col-5': selectedDevice, 'd-none': !selectedDevice }">
+        <div class="col-4" [ngClass]="{ 'col-4': selectedDevice, 'd-none': !selectedDevice }">
           <div class="row" *ngIf="selectedDevice">
-            <div class="col">
+            <div class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm">
+              <small
+                class="d-block"
+                *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.ordersPrice"
+                for="staticEmail"
+                class="row"
+                >{{ selectedDevice.session.ordersPrice + ' LE' }} : حساب الطلبات</small
+              >
+
+              <small class="d-block" *ngIf="selectedDevice && selectedDevice.session" for="staticEmail" class="row">
+                {{ (selectedDevice | devicePriceTimeOnly: false | async) || '0 LE' }} :حساب الوقت</small
+              >
+            </div>
+            <div class="col-12">
               <ul
-                style="max-height: 300px !important; margin-bottom: 10px !important; overflow: scroll !important"
+                style="max-height: 200px !important; margin-bottom: 10px !important; overflow: scroll !important"
                 class="list-group list-group-flush overflow-auto border m-2 p-1"
               >
                 <li *ngFor="let prod of selectedDevice.session.orders" class="list-group-item">
@@ -37,30 +50,17 @@
               </ul>
             </div>
             <div class="col">
-              <jhi-device-component
+              <!--
+             <jhi-device-component
                 (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
                 *ngIf="selectedDevice"
                 [device]="selectedDevice"
               >
-              </jhi-device-component>
-
-              <div class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm">
-                <small
-                  class="d-block"
-                  *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.ordersPrice"
-                  for="staticEmail"
-                  class="row"
-                  >{{ selectedDevice.session.ordersPrice + ' LE' }} : حساب الطلبات</small
-                >
-
-                <small class="d-block" *ngIf="selectedDevice && selectedDevice.session" for="staticEmail" class="row">
-                  {{ (selectedDevice | devicePriceTimeOnly: false | async) || '0 LE' }} :حساب الوقت</small
-                >
-              </div>
+              </jhi-device-component> -->
             </div>
           </div>
         </div>
-        <div class="col-md-6" [ngClass]="{ 'col-7': selectedDevice, 'col-12': !selectedDevice }">
+        <div class="col-md-8" [ngClass]="{ 'col-8': selectedDevice, 'col-12': !selectedDevice }">
           <div class="btn-group btn-group- mx-1" role="group" aria-label="...">
             <button
               *ngFor="let cat of categories"
@@ -105,6 +105,7 @@
                   (deviceClicked)="selectedDevice = $event"
                   (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
                   [device]="device"
+                  [isSelected]="selectedDevice && selectedDevice.id == device.id"
                 >
                 </jhi-device-component>
               </div>
@@ -121,10 +122,6 @@
           <h6 class="card-subtitle mb-2 text-muted">takeaway</h6>
           <div class="card jh-card my-2">
             <ul class="mx-3 list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
-              <li class="list-group-item">
-                <div class="d-inline p-2 bg-dark text-white float-right">٥٠ LE</div>
-                <div class="d-inline p-2 text-black">الطلب</div>
-              </li>
               <li (click)="openOrdersPanle()" class="list-group-item">A second item</li>
               <li class="list-group-item">A third item</li>
               <li class="list-group-item">A fourth item</li>

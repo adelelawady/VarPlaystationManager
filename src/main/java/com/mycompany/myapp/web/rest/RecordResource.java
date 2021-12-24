@@ -1,16 +1,23 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.RecordRepository;
+import com.mycompany.myapp.service.PrinterSupport;
+import com.mycompany.myapp.service.ReceiptPrint;
 import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.dto.RecordDTO;
 import com.mycompany.myapp.service.dto.RecordsFilterDTO;
 import com.mycompany.myapp.service.dto.RecordsFilterRequestDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -54,7 +61,9 @@ public class RecordResource {
      * {@code POST  /records} : Create a new record.
      *
      * @param recordDTO the recordDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new recordDTO, or with status {@code 400 (Bad Request)} if the record has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new recordDTO, or with status {@code 400 (Bad Request)} if
+     *         the record has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/records")
@@ -73,11 +82,13 @@ public class RecordResource {
     /**
      * {@code PUT  /records/:id} : Updates an existing record.
      *
-     * @param id the id of the recordDTO to save.
+     * @param id        the id of the recordDTO to save.
      * @param recordDTO the recordDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated recordDTO,
-     * or with status {@code 400 (Bad Request)} if the recordDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the recordDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated recordDTO, or with status {@code 400 (Bad Request)} if
+     *         the recordDTO is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the recordDTO couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/records/{id}")
@@ -105,14 +116,17 @@ public class RecordResource {
     }
 
     /**
-     * {@code PATCH  /records/:id} : Partial updates given fields of an existing record, field will ignore if it is null
+     * {@code PATCH  /records/:id} : Partial updates given fields of an existing
+     * record, field will ignore if it is null
      *
-     * @param id the id of the recordDTO to save.
+     * @param id        the id of the recordDTO to save.
      * @param recordDTO the recordDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated recordDTO,
-     * or with status {@code 400 (Bad Request)} if the recordDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the recordDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the recordDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated recordDTO, or with status {@code 400 (Bad Request)} if
+     *         the recordDTO is not valid, or with status {@code 404 (Not Found)} if
+     *         the recordDTO is not found, or with status
+     *         {@code 500 (Internal Server Error)} if the recordDTO couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/records/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -143,9 +157,11 @@ public class RecordResource {
     /**
      * {@code GET  /records} : get all the records.
      *
-     * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of records in body.
+     * @param pageable  the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is
+     *                  applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of records in body.
      */
     @GetMapping("/records")
     public ResponseEntity<List<RecordDTO>> getAllRecords(
@@ -167,7 +183,8 @@ public class RecordResource {
      * {@code GET  /records/:id} : get the "id" record.
      *
      * @param id the id of the recordDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the recordDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the recordDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/records/{id}")
     public ResponseEntity<RecordDTO> getRecord(@PathVariable String id) {
@@ -200,5 +217,11 @@ public class RecordResource {
             rec.getResultList()
         );
         return ResponseEntity.ok().headers(headers).body(rec);
+    }
+
+    @GetMapping("/records/print/{recId}")
+    public ResponseEntity<Void> printRecord(@PathVariable String recId) {
+        this.recordService.printRecord(recId);
+        return ResponseEntity.ok().build();
     }
 }

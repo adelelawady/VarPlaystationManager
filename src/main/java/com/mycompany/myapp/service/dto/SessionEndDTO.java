@@ -12,7 +12,19 @@ import javax.validation.constraints.*;
  */
 public class SessionEndDTO implements Serializable {
 
-    private Double totalPrice;
+    private Double totalPrice = 0.0;
+
+    private Double discount = 0.0;
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    private boolean print = true;
 
     public Double getTotalPrice() {
         return totalPrice;
@@ -20,5 +32,13 @@ public class SessionEndDTO implements Serializable {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public boolean isPrint() {
+        return print;
+    }
+
+    public void setPrint(boolean print) {
+        this.print = print;
     }
 }

@@ -56,6 +56,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   openOrdersPanle(): void {
+    // eslint-disable-next-line no-console
+    console.log(this.selectedDevice);
     if (!this.isOrdersOpened()) {
       $('.ng-sidebar-header').click();
     }

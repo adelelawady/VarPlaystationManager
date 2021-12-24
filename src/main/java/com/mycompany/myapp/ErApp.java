@@ -1,15 +1,29 @@
 package com.mycompany.myapp;
 
 import com.mycompany.myapp.config.ApplicationProperties;
+import com.mycompany.myapp.repository.RecordRepository;
+import com.mycompany.myapp.service.PrinterSupport;
+import com.mycompany.myapp.service.ReceiptPrint;
+import com.mycompany.myapp.service.TestPrinter;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -67,6 +81,31 @@ public class ErApp {
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
+        /*    
+        String s = String.format("Item Qty Price", "%-15s %5s %10s\n");
+        String s1 = String.format("---- --- -----","%-15s %5s %10s\n");
+        String output = s + s1;
+        JTextPane jTextPane1= new JTextPane();
+        jTextPane1.setText(output);
+
+        PrinterJob printerJob = PrinterJob.getPrinterJob();
+        PageFormat pageFormat = printerJob.defaultPage();
+        Paper paper = new Paper();
+        paper.setSize(180.0, (double) (paper.getHeight() + 5 * 10.0));
+        paper.setImageableArea(5, 5, paper.getWidth() - 5 * 2, paper.getHeight() - 5 * 2);
+        pageFormat.setPaper(paper);
+        pageFormat.setOrientation(PageFormat.PORTRAIT);
+        printerJob.setPrintable(jTextPane1.getPrintable(null, null), pageFormat);
+        try {
+			printerJob.print();
+		} catch (PrinterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
+        */
+
     }
 
     private static void logApplicationStartup(Environment env) {

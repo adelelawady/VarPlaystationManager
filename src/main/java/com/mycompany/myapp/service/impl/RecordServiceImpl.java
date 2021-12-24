@@ -2,11 +2,16 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Record;
 import com.mycompany.myapp.repository.RecordRepository;
+import com.mycompany.myapp.service.PrinterSupport;
+import com.mycompany.myapp.service.ReceiptPrint;
 import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.dto.RecordDTO;
 import com.mycompany.myapp.service.dto.RecordsFilterDTO;
 import com.mycompany.myapp.service.dto.RecordsFilterRequestDTO;
 import com.mycompany.myapp.service.mapper.RecordMapper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * Service Implementation for managing {@link Record}.
@@ -217,5 +224,29 @@ public class RecordServiceImpl implements RecordService {
 
         // TODO Auto-generated method stub
         return res;
+    }
+
+    @Override
+    public Optional<Record> findOneDomain(String id) {
+        return recordRepository.findById(id);
+    }
+
+    public void printRecord(String recId) {
+        Optional<com.mycompany.myapp.domain.Record> record = findOneDomain(recId);
+
+        if (!record.isPresent()) {
+            return;
+        }
+        Printable printable = new ReceiptPrint(record.get());
+
+        PrinterSupport ps = new PrinterSupport();
+
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setPrintable(printable, ps.getPageFormat(pj));
+        try {
+            pj.print();
+        } catch (PrinterException ex) {
+            ex.printStackTrace();
+        }
     }
 }

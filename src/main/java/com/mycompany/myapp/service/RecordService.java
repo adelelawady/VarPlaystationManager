@@ -53,6 +53,7 @@ public interface RecordService {
      */
     Optional<RecordDTO> findOne(String id);
 
+    Optional<com.mycompany.myapp.domain.Record> findOneDomain(String id);
     /**
      * Delete the "id" record.
      *
@@ -61,4 +62,6 @@ public interface RecordService {
     void delete(String id);
 
     RecordsFilterDTO findAllFilterd(Pageable pageable, RecordsFilterRequestDTO filterRequestDTO);
+
+    void printRecord(String recId);
 }

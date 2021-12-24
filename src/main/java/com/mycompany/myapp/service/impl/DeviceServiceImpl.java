@@ -158,6 +158,7 @@ public class DeviceServiceImpl implements DeviceService {
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
         }
+        Record savedRecId = null;
         Session currentActiveSession = sessionService.getDeviceActiveSession(deviceId);
         if (currentActiveSession != null) {
             currentActiveSession.setActive(false);
@@ -168,7 +169,7 @@ public class DeviceServiceImpl implements DeviceService {
             rec.setEnd(Instant.now());
             rec.setTotalPriceUser(sessionEndDto.getTotalPrice());
 
-            Double totalPriceCalculated;
+            Double totalPriceCalculatedTime;
 
             Duration d = Duration.between(currentActiveSession.getStart(), Instant.now());
 
@@ -176,29 +177,46 @@ public class DeviceServiceImpl implements DeviceService {
             Double houres = Double.valueOf((double) minutes / 60.0);
 
             if (currentActiveSession.isMulti()) {
-                totalPriceCalculated = houres * currentActiveSession.getDevice().getType().getPricePerHourMulti();
+                totalPriceCalculatedTime = houres * currentActiveSession.getDevice().getType().getPricePerHourMulti();
             } else {
-                totalPriceCalculated = houres * currentActiveSession.getDevice().getType().getPricePerHour();
+                totalPriceCalculatedTime = houres * currentActiveSession.getDevice().getType().getPricePerHour();
             }
 
-            totalPriceCalculated = (double) Math.round(totalPriceCalculated);
+            totalPriceCalculatedTime = (double) Math.round(totalPriceCalculatedTime);
 
             rec.setTotalPriceOrders(currentActiveSession.getOrdersPrice());
 
-            rec.setTotalPriceTime(totalPriceCalculated);
+            rec.setTotalPriceTime(totalPriceCalculatedTime);
+            rec.setMulti(currentActiveSession.isMulti());
 
-            rec.setTotalPrice(rec.getTotalPriceOrders() + rec.getTotalPriceTime());
+            Double totalPriceCalculated = rec.getTotalPriceOrders() + rec.getTotalPriceTime();
+
+            if (sessionEndDto.getDiscount() > 0) {
+                totalPriceCalculated = ((100 - sessionEndDto.getDiscount()) * totalPriceCalculated / 100);
+                rec.setDiscount(sessionEndDto.getDiscount());
+            } else {
+                rec.setDiscount(0.0);
+            }
+
+            rec.setTotalPrice(totalPriceCalculated);
             rec.setDuration(d);
             if (currentActiveSession.getOrders() != null && !currentActiveSession.getOrders().isEmpty()) {
                 rec.setOrdersQuantity(currentActiveSession.getOrdersQuantity());
                 rec.setOrdersData(currentActiveSession.getOrders());
             }
             rec.setStart(currentActiveSession.getStart());
-            recordService.save(rec);
+            savedRecId = recordService.save(rec);
         }
 
         this.sessionService.stopAllDeviceActiveSessions(deviceId);
 
+        try {
+            if (sessionEndDto.isPrint() && savedRecId != null) {
+                recordService.printRecord(savedRecId.getId());
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
         return this.toDeviceSession(deviceId);
     }
 

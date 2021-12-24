@@ -13,7 +13,10 @@ declare const $: any;
 })
 export class DeviceComponentComponent implements OnInit {
   isMulti = false;
+  print = true;
+  discount = 0.0;
   totalPriceUser = 0;
+  @Input() isSelected = false;
   @Input() device: any;
   @Output() deviceSelected = new EventEmitter();
   @Output() deviceClicked = new EventEmitter();
@@ -26,7 +29,6 @@ export class DeviceComponentComponent implements OnInit {
     // throw new Error('Method not implemented.');
     null;
   }
-
   OnDeviceClicked(): void {
     this.totalPriceUser = this.getDevicePrice();
     this.deviceClicked.emit(this.device);
@@ -66,13 +68,32 @@ export class DeviceComponentComponent implements OnInit {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    return Math.round((diffMin / 60) * pricePerHour) + totalOrderprice;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    const res = Math.round((diffMin / 60) * pricePerHour) + totalOrderprice;
+    if (res > 0) {
+      if (this.discount && this.discount <= 100 && this.discount > 0) {
+        const resdis = ((100 - this.discount) * res) / 100;
+        this.totalPriceUser = resdis;
+        this.cd.markForCheck();
+        return resdis;
+      } else {
+        this.totalPriceUser = res;
+        this.cd.markForCheck();
+        return res;
+      }
+    } else {
+      return 0;
+    }
   }
 
   endSession(): void {
     this.isMulti = false;
     const sessionEnd = {
       totalPrice: this.totalPriceUser,
+      print: this.print,
+      discount: this.discount,
     };
     this.devicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(dev => {
       this.device = dev;
