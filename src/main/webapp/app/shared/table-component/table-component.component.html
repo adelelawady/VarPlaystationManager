@@ -1,0 +1,97 @@
+<div
+  class="card border"
+  style="cursor: pointer"
+  [ngClass]="{
+    'border-3': isSelected,
+    'border-success border-active': table.active,
+    'border-danger': !table.active
+  }"
+>
+  <div class="card-body">
+    <h5 class="card-title">
+      <span>
+        <a
+          *ngIf="table.active"
+          data-toggle="modal"
+          [attr.data-target]="'#modal' + table.id"
+          (click)="deviceClicked()"
+          href="#"
+          class="card-link"
+        >
+          {{ table.name }}</a
+        >
+        <a *ngIf="!table.active" (click)="deviceClicked()" href="#" class="card-link"> {{ table.name }}</a></span
+      >
+      <i
+        (click)="deviceClicked()"
+        *ngIf="table.active"
+        style="cursor: pointer"
+        class="float-right"
+        class="fa fa-check text-success float-right rounded p-1 border"
+      ></i>
+    </h5>
+  </div>
+  <div *ngIf="table.active" class="card-footer p-2">
+    <a href="#" class="card-link float-right m-0 pr-2">{{ formateMoney(table.totalPrice) || 'EGP 0' }}</a>
+  </div>
+  <div *ngIf="!table.active" class="card-footer p-2">
+    <a href="#" class="card-link float-left">
+      <label class="badge badge-danger">{{ 'متوقف' }}</label></a
+    >
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal{{ table.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog rounded-lg border">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-body">
+          <h5 class="card-title">
+            <span style="cursor: pointer" data-toggle="modal" [attr.data-target]="'#modal' + table.id">
+              <a href="#" class="card-link"> {{ table.name }}</a></span
+            >
+          </h5>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="table.active" class="form-group row">
+          <label for="staticEmail" class="col-sm-2 col-form-label">السعر</label>
+          <div class="col-sm-10" style="text-align: right">
+            <a href="#" class="card-link">{{ formateMoney(totalPrice) }}</a>
+          </div>
+        </div>
+        <hr />
+
+        <form>
+          <div *ngIf="table.active" class="form-group row">
+            <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">الخصم</label>
+            <div class="col-sm-8">
+              <div class="input-group mb-3">
+                <input
+                  type="email"
+                  (ngModelChange)="discount = $event; getDevicePrice()"
+                  [(ngModel)]="discount"
+                  [ngModelOptions]="{ standalone: true }"
+                  [value]="discount"
+                  class="form-control form-control-lg"
+                  id="colFormLabelLg"
+                  placeholder=""
+                />
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="table.active" class="form-group row">
+          <div class="col-sm-10 offset-sm-0">
+            <div class="form-check">
+              <input [(ngModel)]="print" [ngModelOptions]="{ standalone: true }" class="form-check-input" type="checkbox" id="printBox" />
+              <label class="form-check-label" for="printBox"> طباعة بعد الحفظ </label>
+            </div>
+          </div>
+        </div>
+        <button data-dismiss="modal" aria-label="Close" class="btn btn-primary col" (click)="endSession()">انهاء</button>
+      </div>
+    </div>
+  </div>
+</div>

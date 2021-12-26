@@ -49,7 +49,7 @@
     "gradleEnterpriseHost": "",
     "packageFolder": "com/mycompany/myapp",
     "applicationIndex": 0,
-    "entities": ["DeviceType", "Device", "Product", "Category", "Record", "Session"],
-    "lastLiquibaseTimestamp": 1639158708000
+    "entities": ["DeviceType", "Device", "Product", "Category", "Record", "Session", "Table", "Takeaway", "ShopsOrders"],
+    "lastLiquibaseTimestamp": 1640519101000
   }
 }

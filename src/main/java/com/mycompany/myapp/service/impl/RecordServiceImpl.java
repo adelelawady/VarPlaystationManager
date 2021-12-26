@@ -159,10 +159,14 @@ public class RecordServiceImpl implements RecordService {
             case "lastweek":
                 LocalDate localDateyesterdayx = LocalDate.now().minusWeeks(1);
 
-                LocalDateTime EndOfDayyesterdayx = localDateyesterdayx.atTime(LocalTime.MAX);
+                LocalDate localDateyesterdayx1 = LocalDate.now();
+
+                LocalDateTime EndOfDayyesterdayx = localDateyesterdayx1.atTime(LocalTime.MAX);
 
                 LocalDateTime StartOfDayyesterdayx = localDateyesterdayx.atTime(LocalTime.MIN);
 
+                System.out.println(EndOfDayyesterdayx);
+                System.out.println(StartOfDayyesterdayx);
                 result =
                     this.recordRepository.findAllByStartBetweenOrEndBetween(
                             pageable,
@@ -182,9 +186,11 @@ public class RecordServiceImpl implements RecordService {
 
                 break;
             case "lastmonth":
-                LocalDate localDatemonth = LocalDate.now().minusWeeks(1);
+                LocalDate localDatemonth = LocalDate.now().minusMonths(1);
 
-                LocalDateTime EndOfDaymonth = localDatemonth.atTime(LocalTime.MAX);
+                LocalDate localDatemonth1 = LocalDate.now();
+
+                LocalDateTime EndOfDaymonth = localDatemonth1.atTime(LocalTime.MAX);
 
                 LocalDateTime StartOfDayMonth = localDatemonth.atTime(LocalTime.MIN);
 

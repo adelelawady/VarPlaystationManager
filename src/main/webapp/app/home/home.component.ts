@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -8,13 +8,14 @@ import { Account } from 'app/core/auth/account.model';
 import { DevicesSessionsService } from './devicesSessions.service';
 import { CategoryService } from 'app/entities/category/service/category.service';
 import { ProductService } from 'app/entities/product/service/product.service';
+import { TableService } from 'app/entities/table/service/table.service';
 declare const $: any;
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'EGP',
@@ -26,17 +27,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   opend = true;
   account: Account | null = null;
   devices: any[] | null = null;
+  tables: any[] | null = null;
   categories: any = [];
   products: any = [];
   selectedDevice: any;
+  selectedTable: any;
+
+  tapDevices = true;
+  tapTables = false;
+  tapTakeaway = false;
+  tapShops = false;
+
   private readonly destroy$ = new Subject<void>();
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private accountService: AccountService,
     private router: Router,
+    private tableService: TableService,
     private devicesSessionService: DevicesSessionsService
   ) {}
+  ngAfterViewInit(): void {
+    this.closeOrdersPanle();
+  }
 
   ngOnInit(): void {
     this.accountService
@@ -48,9 +61,50 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getAllCategories();
   }
 
+  selectTap(tabname: any): void {
+    this.selectedDevice = null;
+    this.selectedTable = null;
+    switch (tabname) {
+      case 'tapDevices':
+        this.tapDevices = true;
+        this.tapTables = false;
+        this.tapTakeaway = false;
+        this.tapShops = false;
+        this.loadAllDevices();
+        break;
+      case 'tapTables':
+        this.tapDevices = false;
+        this.tapTables = true;
+        this.tapTakeaway = false;
+        this.tapShops = false;
+        this.loadAllTables();
+        break;
+      case 'tapTakeaway':
+        this.tapDevices = false;
+        this.tapTables = false;
+        this.tapTakeaway = true;
+        this.tapShops = false;
+        break;
+
+      case 'tapShops':
+        this.tapDevices = false;
+        this.tapTables = false;
+        this.tapTakeaway = false;
+        this.tapShops = true;
+        break;
+      default:
+        break;
+    }
+  }
   loadAllDevices(): void {
     this.devicesSessionService.getDevicesSessions().subscribe(devicesFound => {
       this.devices = devicesFound;
+    });
+  }
+
+  loadAllTables(): void {
+    this.tableService.query().subscribe(tables => {
+      this.tables = tables.body;
     });
   }
 
@@ -82,6 +136,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getAllProductsByCategory(categoryId: string): void {
+    this.products = [];
     this.productService.queryByCategoryId(categoryId).subscribe(products => {
       this.products = products.body;
     });
@@ -97,16 +152,32 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   addProductToSelectedDevice(productId: string): void {
-    this.devicesSessionService.addProductToDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
-      this.selectedDevice = deivce;
-      this.loadAllDevices();
-    });
+    if (this.selectedDevice) {
+      this.devicesSessionService.addProductToDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
+        this.selectedDevice = deivce;
+        this.loadAllDevices();
+      });
+    }
+    if (this.selectedTable) {
+      this.tableService.addProductToTable(this.selectedTable.id, productId).subscribe(table => {
+        this.selectedTable = table;
+        this.loadAllTables();
+      });
+    }
   }
 
   deleteProductFromSelectedDevice(productId: string): void {
-    this.devicesSessionService.deleteProductFromDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
-      this.selectedDevice = deivce;
-      this.loadAllDevices();
-    });
+    if (this.selectedDevice) {
+      this.devicesSessionService.deleteProductFromDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
+        this.selectedDevice = deivce;
+        this.loadAllDevices();
+      });
+    }
+    if (this.selectedTable) {
+      this.tableService.deleteProductFromTable(this.selectedTable.id, productId).subscribe(table => {
+        this.selectedTable = table;
+        this.loadAllTables();
+      });
+    }
   }
 }

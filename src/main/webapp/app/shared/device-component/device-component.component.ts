@@ -20,6 +20,7 @@ export class DeviceComponentComponent implements OnInit {
   @Input() device: any;
   @Output() deviceSelected = new EventEmitter();
   @Output() deviceClicked = new EventEmitter();
+  @Output() deviceStopped = new EventEmitter();
   constructor(
     private devicePricePipe: DevicePricePipe,
     private cd: ChangeDetectorRef,
@@ -52,6 +53,9 @@ export class DeviceComponentComponent implements OnInit {
   }
 
   getDevicePrice(): any {
+    if (!this.device || !this.device.session) {
+      return 0;
+    }
     let diff = (new Date(this.device.session.start).getTime() - new Date().getTime()) / 1000;
     diff /= 60;
     const diffMin = Math.abs(Math.round(diff));
@@ -101,6 +105,7 @@ export class DeviceComponentComponent implements OnInit {
     this.devicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(dev => {
       this.device = dev;
       this.cd.markForCheck();
+      this.deviceStopped.emit(this);
     });
   }
 }

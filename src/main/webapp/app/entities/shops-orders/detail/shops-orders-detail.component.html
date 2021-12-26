@@ -1,0 +1,36 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="shopsOrders">
+      <h2 data-cy="shopsOrdersDetailsHeading"><span jhiTranslate="erApp.shopsOrders.detail.title">Shops Orders</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="erApp.shopsOrders.id">Id</span></dt>
+        <dd>
+          <span>{{ shopsOrders.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.shopsOrders.name">Name</span></dt>
+        <dd>
+          <span>{{ shopsOrders.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="erApp.shopsOrders.totalPrice">Total Price</span></dt>
+        <dd>
+          <span>{{ shopsOrders.totalPrice }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/shops-orders', shopsOrders.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

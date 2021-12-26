@@ -1,0 +1,25 @@
+{
+  "erApp": {
+    "shopsOrders": {
+      "home": {
+        "title": "Shops Orders",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Shops Orders",
+        "createOrEditLabel": "Create or edit a Shops Orders",
+        "notFound": "No Shops Orders found"
+      },
+      "created": "A new Shops Orders is created with identifier {{ param }}",
+      "updated": "A Shops Orders is updated with identifier {{ param }}",
+      "deleted": "A Shops Orders is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Shops Orders {{ id }}?"
+      },
+      "detail": {
+        "title": "Shops Orders"
+      },
+      "id": "Id",
+      "name": "Name",
+      "totalPrice": "Total Price"
+    }
+  }
+}

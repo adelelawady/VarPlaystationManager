@@ -1,0 +1,24 @@
+{
+  "name": "Takeaway",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "totalPrice",
+      "fieldType": "Double"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "takeaway",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211226114500"
+}

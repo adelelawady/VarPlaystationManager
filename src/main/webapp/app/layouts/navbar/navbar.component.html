@@ -75,7 +75,18 @@
           <span>اصناف الطلبات</span>
         </a>
       </li>
-
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+        <a
+          class="nav-link"
+          routerLink="table"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="collapseNavbar()"
+        >
+          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+          <span>الصالات</span>
+        </a>
+      </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         *jhiHasAnyAuthority="'ROLE_ADMIN'"
@@ -178,6 +189,33 @@
               <span>السجلات</span>
             </a>
           </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="shops-orders"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>1</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="takeaway"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>3</span>
+            </a>
+          </li>
+
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>
