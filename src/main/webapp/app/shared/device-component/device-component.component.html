@@ -24,14 +24,14 @@
       <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
     </span>
   </div>
-  <div *ngIf="device.session" class="card-footer">
+  <div *ngIf="device.session" class="card-footer p-2">
     <a href="#" class="card-link">
       <label class="badge badge-success">{{ (device.session.start | countdowntimer | async) || '0 m' }}</label></a
     >
-    <a href="#" class="card-link">{{ (device | devicePrice: false | async) || '0 LE' }}</a>
+    <a href="#" class="card-link float-right m-0 pr-2">{{ (device | devicePrice | async) || 'EGP 0' }}</a>
   </div>
-  <div *ngIf="!device.session" class="card-footer">
-    <a href="#" class="card-link">
+  <div *ngIf="!device.session" class="card-footer p-2">
+    <a href="#" class="card-link float-left">
       <label class="badge badge-danger">{{ 'متوقف' }}</label></a
     >
   </div>
@@ -69,14 +69,14 @@
           <div *ngIf="device.session" class="form-group row">
             <label for="staticEmail" class="col-sm-2 col-form-label">السعر</label>
             <div class="col-sm-10" style="text-align: right">
-              <a href="#" class="card-link">{{ (device | devicePrice: false:discount | async) || '0 LE' }}</a>
+              <a href="#" class="card-link">{{ (device | devicePrice: discount | async) || '0 LE' }}</a>
             </div>
           </div>
 
           <div *ngIf="device.session" class="form-group row">
             <label for="staticEmail" class="col-sm-2 col-form-label">وقت البدا</label>
             <div class="col-sm-10" style="text-align: right">
-              <a href="#" class="card-link">{{ device.session.start | date: 'short' }}</a>
+              <a href="#" class="card-link">{{ device.session.start | date: 'shortTime' }}</a>
             </div>
           </div>
 
@@ -85,11 +85,11 @@
             class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm"
           >
             <small class="d-block" *ngIf="device && device.session && device.session.ordersPrice" for="staticEmail" class="row"
-              >{{ device.session.ordersPrice + ' LE' }} : حساب الطلبات</small
+              >{{ formateMoney(device.session.ordersPrice) }} : حساب الطلبات</small
             >
 
             <small class="d-block" *ngIf="device && device.session" for="staticEmail" class="row">
-              {{ (device | devicePriceTimeOnly: false | async) || '0 LE' }} :حساب الوقت</small
+              {{ (device | devicePriceTimeOnly | async) || 'EGP 0' }} :حساب الوقت</small
             >
           </div>
 

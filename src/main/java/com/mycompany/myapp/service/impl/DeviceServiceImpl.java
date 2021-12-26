@@ -192,7 +192,7 @@ public class DeviceServiceImpl implements DeviceService {
             Double totalPriceCalculated = rec.getTotalPriceOrders() + rec.getTotalPriceTime();
 
             if (sessionEndDto.getDiscount() > 0) {
-                totalPriceCalculated = ((100 - sessionEndDto.getDiscount()) * totalPriceCalculated / 100);
+                totalPriceCalculated = (double) Math.round((100 - sessionEndDto.getDiscount()) * totalPriceCalculated / 100);
                 rec.setDiscount(sessionEndDto.getDiscount());
             } else {
                 rec.setDiscount(0.0);

@@ -11,26 +11,30 @@
         <ul *ngIf="recordsFiltered" class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
             سعر الوقت الكلي
-            <span class="badge bg-primary rounded-pill">{{ recordsFiltered.totalPriceTime }} LE</span>
+            <h6 class="rounded-pill">{{ formateMoney(recordsFiltered.totalPriceTime) }}</h6>
           </li>
 
           <li class="list-group-item d-flex justify-content-between align-items-center">
             سعر الاوردرات الكلي
-            <span class="badge bg-primary rounded-pill">{{ recordsFiltered.totalPriceOrders }} LE</span>
+            <h6 class="rounded-pill">{{ formateMoney(recordsFiltered.totalPriceOrders) }}</h6>
           </li>
 
           <li class="list-group-item d-flex justify-content-between align-items-center">
             كل عدد الساعات
-            <span class="badge bg-primary rounded-pill">{{ fix(recordsFiltered.totalHours + recordsFiltered.totalMinutes / 60) }}</span>
+            <h6 class="rounded-pill">{{ fix(recordsFiltered.totalHours + recordsFiltered.totalMinutes / 60) }}</h6>
           </li>
 
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            السعر الكلي صافي
-            <span class="badge bg-secondary rounded-pill">{{ recordsFiltered.totalPrice }} LE</span>
+            السعر الكلي محسوب
+            <span style="font-size: small" class="badge bg-rounded-pill badge-secondary"
+              >{{ formateMoney(recordsFiltered.totalPrice) }}
+            </span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            السعر الكلي المدخل
-            <span class="badge bg-secondary rounded-pill">{{ recordsFiltered.totalPriceUser }} LE</span>
+            السعر الكلي الاساسي
+            <span style="font-size: medium" class="badge bg-rounded-pill badge-primary"
+              >{{ formateMoney(recordsFiltered.totalPriceUser) }}
+            </span>
           </li>
         </ul>
       </div>
@@ -145,11 +149,11 @@
 
             <td>{{ record.hours === 0 ? record.minutes + ' m' : record.hours + ' h : ' + record.minutes + ' m' }}</td>
 
-            <td>{{ record.totalPriceTime + ' LE' }}</td>
-            <td>{{ record.totalPriceOrders + ' LE' }}</td>
-            <td>{{ record.totalPrice + ' LE' }}</td>
+            <td>{{ formateMoney(record.totalPriceTime) }}</td>
+            <td>{{ formateMoney(record.totalPriceOrders) }}</td>
+            <td>{{ formateMoney(record.totalPrice) }}</td>
 
-            <td>{{ record.totalPriceUser + ' LE' }}</td>
+            <td>{{ formateMoney(record.totalPriceUser) }}</td>
 
             <td class="text-right">
               <div class="btn-group">

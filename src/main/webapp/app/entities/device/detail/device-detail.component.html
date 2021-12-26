@@ -10,10 +10,6 @@
       <jhi-alert></jhi-alert>
 
       <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="erApp.device.id">Id</span></dt>
-        <dd>
-          <span>{{ device.id }}</span>
-        </dd>
         <dt><span jhiTranslate="erApp.device.name">Name</span></dt>
         <dd>
           <span>{{ device.name }}</span>
@@ -21,7 +17,7 @@
         <dt><span jhiTranslate="erApp.device.type">Type</span></dt>
         <dd>
           <div *ngIf="device.type">
-            <a [routerLink]="['/device-type', device.type?.id, 'view']">{{ device.type?.id }}</a>
+            <a [routerLink]="['/device-type', device.type?.id, 'view']">{{ device.type?.name }}</a>
           </div>
         </dd>
       </dl>

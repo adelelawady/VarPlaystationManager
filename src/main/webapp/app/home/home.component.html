@@ -9,58 +9,7 @@
 
     <ng-sidebar-content class="classtest">
       <div class="row">
-        <div class="col-4" [ngClass]="{ 'col-4': selectedDevice, 'd-none': !selectedDevice }">
-          <div class="row" *ngIf="selectedDevice">
-            <div class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm">
-              <small
-                class="d-block"
-                *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.ordersPrice"
-                for="staticEmail"
-                class="row"
-                >{{ selectedDevice.session.ordersPrice + ' LE' }} : حساب الطلبات</small
-              >
-
-              <small class="d-block" *ngIf="selectedDevice && selectedDevice.session" for="staticEmail" class="row">
-                {{ (selectedDevice | devicePriceTimeOnly: false | async) || '0 LE' }} :حساب الوقت</small
-              >
-            </div>
-            <div class="col-12">
-              <ul
-                style="max-height: 200px !important; margin-bottom: 10px !important; overflow: scroll !important"
-                class="list-group list-group-flush overflow-auto border m-2 p-1"
-              >
-                <li *ngFor="let prod of selectedDevice.session.orders" class="list-group-item">
-                  <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
-                    <i class="fa fa-minus"></i>
-                  </button>
-                  {{ prod.name }}
-
-                  <span style="font-size: large" *ngIf="!selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary"
-                    >1
-
-                    <small class="text-muted">* {{ prod.price }}LE</small>
-                  </span>
-
-                  <span style="font-size: large" *ngIf="selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary"
-                    >{{ selectedDevice.session.ordersQuantity[prod.id] }}
-
-                    <small class="text-muted">* {{ prod.price }}LE</small>
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div class="col">
-              <!--
-             <jhi-device-component
-                (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
-                *ngIf="selectedDevice"
-                [device]="selectedDevice"
-              >
-              </jhi-device-component> -->
-            </div>
-          </div>
-        </div>
-        <div class="col-md-8" [ngClass]="{ 'col-8': selectedDevice, 'col-12': !selectedDevice }">
+        <div class="col-md-12">
           <div class="btn-group btn-group- mx-1" role="group" aria-label="...">
             <button
               *ngFor="let cat of categories"
@@ -93,11 +42,27 @@
 
   <!-- Page content -->
   <ng-sidebar-accordion-content>
+    <div class="">
+      <ul class="nav nav-pills nav-fill border px-3 py-2">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">الاجهزة</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">الصالات</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">اوردارت</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">محلات</a>
+        </li>
+      </ul>
+    </div>
+
     <div class="row" *ngIf="devices">
       <div class="col-8">
         <div class="card-body px-1">
-          <h5 class="card-title">DEVICES</h5>
-          <h6 class="card-subtitle mb-2 text-muted">all devices</h6>
+          <h5 class="card-title mx-4">الاجهزة</h5>
           <div class="card jh-card m-2 p-4">
             <div class="row">
               <div class="col-md-3 p-1" *ngFor="let device of devices">
@@ -114,19 +79,50 @@
         </div>
       </div>
 
-      <div class="col-4">
-        <div class="card-body">
+      <div class="col-4 py-5">
+        <div class="card p-3" *ngIf="selectedDevice">
           <h5 class="card-title">
-            ORDERS <i style="cursor: pointer" class="fa fa-plus text-success border border-primary shadow-sm rounded p-1 float-right"></i>
+            {{ selectedDevice.name }}
           </h5>
-          <h6 class="card-subtitle mb-2 text-muted">takeaway</h6>
-          <div class="card jh-card my-2">
-            <ul class="mx-3 list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
-              <li (click)="openOrdersPanle()" class="list-group-item">A second item</li>
-              <li class="list-group-item">A third item</li>
-              <li class="list-group-item">A fourth item</li>
-              <li class="list-group-item">And a fifth one</li>
-            </ul>
+
+          <div class="card-body">
+            <div class="row" *ngIf="selectedDevice">
+              <div class="text-center align-center justify-content-center card-subtitle rounded border border-2 shadow-sm">
+                <small
+                  class="d-block"
+                  *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.ordersPrice"
+                  for="staticEmail"
+                  class="row"
+                  >{{ formateMoney(selectedDevice.session.ordersPrice) }} : حساب الطلبات</small
+                >
+
+                <small class="d-block" *ngIf="selectedDevice && selectedDevice.session" for="staticEmail" class="row">
+                  {{ (selectedDevice | devicePriceTimeOnly | async) || 'EGP 0' }} :حساب الوقت</small
+                >
+              </div>
+              <h5 class="card-title my-2">الطلبات</h5>
+              <ul class="list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
+                <li *ngFor="let prod of selectedDevice.session.orders" class="list-group-item">
+                  <span class="float-left">
+                    {{ prod.name }}
+                    <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
+                      <i class="fa fa-minus"></i>
+                    </button>
+                  </span>
+                  <span style="font-size: large" *ngIf="!selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary"
+                    >1
+
+                    <small class="text-muted">* {{ prod.price }}LE</small>
+                  </span>
+
+                  <span style="font-size: large" *ngIf="selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary">
+                    <span class="badge badge-primary">{{ selectedDevice.session.ordersQuantity[prod.id] }}</span>
+
+                    <small class="text-muted">* {{ prod.price }}LE</small>
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

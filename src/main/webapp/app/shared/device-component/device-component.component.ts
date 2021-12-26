@@ -27,7 +27,7 @@ export class DeviceComponentComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     // throw new Error('Method not implemented.');
-    null;
+    this.getDevicePrice();
   }
   OnDeviceClicked(): void {
     this.totalPriceUser = this.getDevicePrice();
@@ -74,7 +74,7 @@ export class DeviceComponentComponent implements OnInit {
     const res = Math.round((diffMin / 60) * pricePerHour) + totalOrderprice;
     if (res > 0) {
       if (this.discount && this.discount <= 100 && this.discount > 0) {
-        const resdis = ((100 - this.discount) * res) / 100;
+        const resdis = Math.round(((100 - this.discount) * res) / 100);
         this.totalPriceUser = resdis;
         this.cd.markForCheck();
         return resdis;
@@ -87,7 +87,10 @@ export class DeviceComponentComponent implements OnInit {
       return 0;
     }
   }
-
+  formateMoney(r: any): any {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  }
   endSession(): void {
     this.isMulti = false;
     const sessionEnd = {

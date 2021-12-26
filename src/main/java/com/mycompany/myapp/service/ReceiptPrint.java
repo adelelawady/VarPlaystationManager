@@ -40,8 +40,8 @@ public class ReceiptPrint implements Printable {
             return Printable.NO_SUCH_PAGE;
         }
 
-        g2d.drawString(String.format("%-25s", "	-    		VAR			   -"), 1, line);
-        line += 10;
+        g2d.drawString(String.format("%-25s", "	-   VAR  -"), 1, line);
+        line += 13;
         int imagewidth = 160;
         int imageheight = 50;
         BufferedImage read;
