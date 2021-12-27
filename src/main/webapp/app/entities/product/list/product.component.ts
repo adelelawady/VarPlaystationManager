@@ -15,7 +15,7 @@ import { ProductDeleteDialogComponent } from '../delete/product-delete-dialog.co
   templateUrl: './product.component.html',
 })
 export class ProductComponent implements OnInit {
-  products?: IProduct[];
+  products?: any[];
   isLoading = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;

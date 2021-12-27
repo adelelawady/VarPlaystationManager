@@ -343,7 +343,7 @@ public class TableResource {
             totalCalculationsOfOrders += totalProdPrice;
         }
 
-        if (table.getDiscount() > 0 && table.getDiscount() < 100) {
+        if (table.getDiscount() != null && table.getDiscount() > 0 && table.getDiscount() < 100) {
             totalCalculationsOfOrders = (double) Math.round((100 - table.getDiscount()) * totalCalculationsOfOrders / 100);
         }
         table.setTotalPrice(totalCalculationsOfOrders);

@@ -1,6 +1,9 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.ShopsOrders;
+import com.mycompany.myapp.domain.Takeaway;
+import com.mycompany.myapp.repository.ProductRepository;
 import com.mycompany.myapp.repository.ShopsOrdersRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -10,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,9 @@ public class ShopsOrdersResource {
     private String applicationName;
 
     private final ShopsOrdersRepository shopsOrdersRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     public ShopsOrdersResource(ShopsOrdersRepository shopsOrdersRepository) {
         this.shopsOrdersRepository = shopsOrdersRepository;
@@ -146,7 +153,7 @@ public class ShopsOrdersResource {
     @GetMapping("/shops-orders")
     public List<ShopsOrders> getAllShopsOrders() {
         log.debug("REST request to get all ShopsOrders");
-        return shopsOrdersRepository.findAll();
+        return shopsOrdersRepository.findTop20ByOrderByCreatedDateDesc();
     }
 
     /**
@@ -173,5 +180,20 @@ public class ShopsOrdersResource {
         log.debug("REST request to delete ShopsOrders : {}", id);
         shopsOrdersRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
+    }
+
+    @GetMapping("/shops-orders/create/product/{productId}")
+    public ResponseEntity<ShopsOrders> createNewTakeAwayFromProduct(@PathVariable String productId) {
+        Optional<Product> prod = productRepository.findById(productId);
+
+        if (prod.isPresent()) {
+            ShopsOrders shopsOrders = new ShopsOrders();
+            shopsOrders.setProduct(prod.get());
+            shopsOrders.setTotalPrice(prod.get().getShopsPrice());
+            ShopsOrders saved = shopsOrdersRepository.save(shopsOrders);
+            return ResponseEntity.ok(saved);
+        }
+
+        return ResponseEntity.ok().build();
     }
 }

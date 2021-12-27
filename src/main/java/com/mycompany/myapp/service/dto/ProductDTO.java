@@ -2,6 +2,7 @@ package com.mycompany.myapp.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Product} entity.
@@ -13,6 +14,26 @@ public class ProductDTO implements Serializable {
     private String name;
 
     private Double price;
+
+    private Double takeawayPrice;
+
+    public Double getTakeawayPrice() {
+        return takeawayPrice;
+    }
+
+    public void setTakeawayPrice(Double takeawayPrice) {
+        this.takeawayPrice = takeawayPrice;
+    }
+
+    private Double shopsPrice;
+
+    public Double getShopsPrice() {
+        return shopsPrice;
+    }
+
+    public void setShopsPrice(Double shopsPrice) {
+        this.shopsPrice = shopsPrice;
+    }
 
     private CategoryDTO category;
 

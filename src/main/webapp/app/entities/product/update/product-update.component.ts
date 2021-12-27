@@ -24,6 +24,8 @@ export class ProductUpdateComponent implements OnInit {
     name: [],
     price: [],
     category: [],
+    takeawayPrice: [],
+    shopsPrice: [],
   });
 
   constructor(
@@ -78,12 +80,14 @@ export class ProductUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(product: IProduct): void {
+  protected updateForm(product: any): void {
     this.editForm.patchValue({
       id: product.id,
       name: product.name,
       price: product.price,
       category: product.category,
+      takeawayPrice: product.takeawayPrice,
+      shopsPrice: product.shopsPrice,
     });
 
     this.categoriesCollection = this.categoryService.addCategoryToCollectionIfMissing(this.categoriesCollection, product.category);
@@ -101,13 +105,15 @@ export class ProductUpdateComponent implements OnInit {
       .subscribe((categories: ICategory[]) => (this.categoriesCollection = categories));
   }
 
-  protected createFromForm(): IProduct {
+  protected createFromForm(): any {
     return {
       ...new Product(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       price: this.editForm.get(['price'])!.value,
       category: this.editForm.get(['category'])!.value,
+      takeawayPrice: this.editForm.get(['takeawayPrice'])!.value,
+      shopsPrice: this.editForm.get(['shopsPrice'])!.value,
     };
   }
 }

@@ -9,6 +9,8 @@ import { DevicesSessionsService } from './devicesSessions.service';
 import { CategoryService } from 'app/entities/category/service/category.service';
 import { ProductService } from 'app/entities/product/service/product.service';
 import { TableService } from 'app/entities/table/service/table.service';
+import { TakeawayService } from 'app/entities/takeaway/service/takeaway.service';
+import { ShopsOrdersService } from 'app/entities/shops-orders/service/shops-orders.service';
 declare const $: any;
 @Component({
   selector: 'jhi-home',
@@ -38,13 +40,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   tapTakeaway = false;
   tapShops = false;
 
+  takeawayOrders: any = [];
+
+  shopsOrders: any = [];
+
+  disablePanelClose = false;
+
   private readonly destroy$ = new Subject<void>();
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private accountService: AccountService,
     private router: Router,
+    private takeawayService: TakeawayService,
     private tableService: TableService,
+    private shopsOrdersService: ShopsOrdersService,
     private devicesSessionService: DevicesSessionsService
   ) {}
   ngAfterViewInit(): void {
@@ -84,6 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.tapTables = false;
         this.tapTakeaway = true;
         this.tapShops = false;
+        this.getAllTakeawayOrders();
         break;
 
       case 'tapShops':
@@ -91,6 +102,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.tapTables = false;
         this.tapTakeaway = false;
         this.tapShops = true;
+        this.getAllShopsOrders();
         break;
       default:
         break;
@@ -121,16 +133,32 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openOrdersPanle(): void {
-    // eslint-disable-next-line no-console
-    console.log(this.selectedDevice);
+    this.disablePanelClose = true;
     if (!this.isOrdersOpened()) {
       $('.ng-sidebar-header').click();
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const self = this;
+      setTimeout(() => {
+        self.disablePanelClose = false;
+      }, 500);
     }
+  }
+
+  getAllTakeawayOrders(): void {
+    this.takeawayService.query().subscribe(takeaways => {
+      this.takeawayOrders = takeaways.body;
+    });
+  }
+
+  getAllShopsOrders(): void {
+    this.shopsOrdersService.query().subscribe(shopsOrders => {
+      this.shopsOrders = shopsOrders.body;
+    });
   }
 
   getAllCategories(): void {
     this.products = [];
-    this.categoryService.query().subscribe(categories => {
+    this.categoryService.findAll().subscribe(categories => {
       this.categories = categories.body;
     });
   }
@@ -146,7 +174,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     return $('.ng-sidebar_opened').length;
   }
   closeOrdersPanle(): void {
-    if (this.isOrdersOpened()) {
+    if (this.isOrdersOpened() && !this.disablePanelClose) {
       $('.ng-sidebar-header').click();
     }
   }
@@ -164,6 +192,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loadAllTables();
       });
     }
+
+    if (this.tapTakeaway) {
+      this.takeawayService.createFromOrderProduct(productId).subscribe(takeaway => {
+        this.getAllTakeawayOrders();
+      });
+    }
+
+    if (this.tapShops) {
+      this.shopsOrdersService.createFromOrderProduct(productId).subscribe(takeaway => {
+        this.getAllShopsOrders();
+      });
+    }
   }
 
   deleteProductFromSelectedDevice(productId: string): void {
@@ -179,5 +219,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loadAllTables();
       });
     }
+  }
+
+  deleteTakeaway(id: any): void {
+    this.takeawayService.delete(id).subscribe(take => {
+      this.getAllTakeawayOrders();
+    });
+  }
+
+  deleteShopOrder(id: any): void {
+    this.shopsOrdersService.delete(id).subscribe(take => {
+      this.getAllShopsOrders();
+    });
   }
 }

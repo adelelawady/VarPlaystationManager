@@ -32,8 +32,11 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="name"><span jhiTranslate="erApp.product.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="price"><span jhiTranslate="erApp.product.price">Price</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="name"><span>اسم الطلب / المنتج</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="price"><span>سعر الاساسي</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="takeawayPrice"><span>take away السعر لل </span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="shopsPrice"><span> السعر للمطاعم / المحلات</span> <fa-icon icon="sort"></fa-icon></th>
+
           <th scope="col" jhiSortBy="category.id">
             <span jhiTranslate="erApp.product.category">Category</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -44,6 +47,8 @@
         <tr *ngFor="let product of products; trackBy: trackId" data-cy="entityTable">
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
+          <td>{{ product.takeawayPrice }}</td>
+          <td>{{ product.shopsPrice }}</td>
           <td>
             <div *ngIf="product.category">
               <a [routerLink]="['/category', product.category?.id, 'view']">{{ product.category?.name }}</a>

@@ -1,6 +1,10 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -9,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * A ShopsOrders.
  */
 @Document(collection = "shops_orders")
-public class ShopsOrders implements Serializable {
+public class ShopsOrders extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +22,9 @@ public class ShopsOrders implements Serializable {
 
     @Field("name")
     private String name;
+
+    @Field("product")
+    private Product product;
 
     @Field("total_price")
     private Double totalPrice;
@@ -74,6 +81,14 @@ public class ShopsOrders implements Serializable {
             return false;
         }
         return id != null && id.equals(((ShopsOrders) o).id);
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override

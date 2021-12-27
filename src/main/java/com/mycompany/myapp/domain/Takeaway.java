@@ -9,12 +9,15 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * A Takeaway.
  */
 @Document(collection = "takeaway")
-public class Takeaway implements Serializable {
+public class Takeaway extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
+
+    @Field("product")
+    private Product product;
 
     @Field("total_price")
     private Double totalPrice;
@@ -48,6 +51,14 @@ public class Takeaway implements Serializable {
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     @Override
     public boolean equals(Object o) {

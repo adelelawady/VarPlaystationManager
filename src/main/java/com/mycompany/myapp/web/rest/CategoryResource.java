@@ -151,6 +151,19 @@ public class CategoryResource {
     }
 
     /**
+     * {@code GET  /categories} : get all the categories.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
+     */
+    @GetMapping("/categories/all")
+    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
+        log.debug("REST request to get a page of Categories");
+        List<CategoryDTO> page = categoryService.findAll();
+        return ResponseEntity.ok().body(page);
+    }
+
+    /**
      * {@code GET  /categories/:id} : get the "id" category.
      *
      * @param id the id of the categoryDTO to retrieve.

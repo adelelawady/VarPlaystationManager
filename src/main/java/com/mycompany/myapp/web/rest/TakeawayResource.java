@@ -1,7 +1,12 @@
 package com.mycompany.myapp.web.rest;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+
+import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Takeaway;
+import com.mycompany.myapp.repository.ProductRepository;
 import com.mycompany.myapp.repository.TakeawayRepository;
+import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,7 +15,9 @@ import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -32,6 +39,9 @@ public class TakeawayResource {
 
     private final TakeawayRepository takeawayRepository;
 
+    @Autowired
+    ProductRepository productRepository;
+
     public TakeawayResource(TakeawayRepository takeawayRepository) {
         this.takeawayRepository = takeawayRepository;
     }
@@ -40,7 +50,9 @@ public class TakeawayResource {
      * {@code POST  /takeaways} : Create a new takeaway.
      *
      * @param takeaway the takeaway to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new takeaway, or with status {@code 400 (Bad Request)} if the takeaway has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new takeaway, or with status {@code 400 (Bad Request)} if
+     *         the takeaway has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/takeaways")
@@ -59,11 +71,13 @@ public class TakeawayResource {
     /**
      * {@code PUT  /takeaways/:id} : Updates an existing takeaway.
      *
-     * @param id the id of the takeaway to save.
+     * @param id       the id of the takeaway to save.
      * @param takeaway the takeaway to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated takeaway,
-     * or with status {@code 400 (Bad Request)} if the takeaway is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the takeaway couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated takeaway, or with status {@code 400 (Bad Request)} if the
+     *         takeaway is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the takeaway couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/takeaways/{id}")
@@ -91,14 +105,17 @@ public class TakeawayResource {
     }
 
     /**
-     * {@code PATCH  /takeaways/:id} : Partial updates given fields of an existing takeaway, field will ignore if it is null
+     * {@code PATCH  /takeaways/:id} : Partial updates given fields of an existing
+     * takeaway, field will ignore if it is null
      *
-     * @param id the id of the takeaway to save.
+     * @param id       the id of the takeaway to save.
      * @param takeaway the takeaway to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated takeaway,
-     * or with status {@code 400 (Bad Request)} if the takeaway is not valid,
-     * or with status {@code 404 (Not Found)} if the takeaway is not found,
-     * or with status {@code 500 (Internal Server Error)} if the takeaway couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated takeaway, or with status {@code 400 (Bad Request)} if the
+     *         takeaway is not valid, or with status {@code 404 (Not Found)} if the
+     *         takeaway is not found, or with status
+     *         {@code 500 (Internal Server Error)} if the takeaway couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/takeaways/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -138,19 +155,36 @@ public class TakeawayResource {
     /**
      * {@code GET  /takeaways} : get all the takeaways.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of takeaways in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of takeaways in body.
      */
     @GetMapping("/takeaways")
     public List<Takeaway> getAllTakeaways() {
         log.debug("REST request to get all Takeaways");
-        return takeawayRepository.findAll();
+        return takeawayRepository.findTop20ByOrderByCreatedDateDesc();
+    }
+
+    @GetMapping("/takeaways/create/product/{productId}")
+    public ResponseEntity<Takeaway> createNewTakeAwayFromProduct(@PathVariable String productId) {
+        Optional<Product> prod = productRepository.findById(productId);
+
+        if (prod.isPresent()) {
+            Takeaway takeaway = new Takeaway();
+            takeaway.setProduct(prod.get());
+            takeaway.setTotalPrice(prod.get().getTakeawayPrice());
+            Takeaway saved = takeawayRepository.save(takeaway);
+            return ResponseEntity.ok(saved);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     /**
      * {@code GET  /takeaways/:id} : get the "id" takeaway.
      *
      * @param id the id of the takeaway to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the takeaway, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the takeaway, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/takeaways/{id}")
     public ResponseEntity<Takeaway> getTakeaway(@PathVariable String id) {

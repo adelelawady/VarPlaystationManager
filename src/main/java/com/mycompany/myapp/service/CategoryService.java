@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.CategoryDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,8 @@ public interface CategoryService {
      * @return the list of entities.
      */
     Page<CategoryDTO> findAll(Pageable pageable);
+
+    List<CategoryDTO> findAll();
 
     /**
      * Get the "id" category.

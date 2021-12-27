@@ -24,7 +24,35 @@ public class Product implements Serializable {
     private String name;
 
     @Field("price")
-    private Double price;
+    private Double price = 0.0;
+
+    @Field("takeawayPrice")
+    private Double takeawayPrice = 0.0;
+
+    @Field("shopsPrice")
+    private Double shopsPrice = 0.0;
+
+    public Double getTakeawayPrice() {
+        if (shopsPrice <= 0) {
+            return price;
+        }
+        return takeawayPrice;
+    }
+
+    public void setTakeawayPrice(Double takeawayPrice) {
+        this.takeawayPrice = takeawayPrice;
+    }
+
+    public Double getShopsPrice() {
+        if (shopsPrice <= 0) {
+            return price;
+        }
+        return shopsPrice;
+    }
+
+    public void setShopsPrice(Double shopsPrice) {
+        this.shopsPrice = shopsPrice;
+    }
 
     @DBRef
     @Field("category")

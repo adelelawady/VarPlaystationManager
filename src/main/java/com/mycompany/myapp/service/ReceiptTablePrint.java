@@ -110,6 +110,16 @@ public class ReceiptTablePrint implements Printable {
                             cH
                         );
                         cH += 15;
+                        /*	g2d.drawString(lineDot, 1, cH);
+						cH += 20;
+						g2d.drawString(lineDot, 1, cH);
+						cH += 20;
+						g2d.drawString(lineDot, 1, cH);
+						cH += 20;
+						g2d.drawString(lineDot, 1, cH);
+						cH += 20;
+						g2d.drawString(lineDot, 1, cH); */
+
                     }
                 }
             } catch (Exception r) {

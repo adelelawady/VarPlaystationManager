@@ -18,14 +18,16 @@ export class TableUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [],
-    discount: [],
-    totalPrice: [],
   });
 
   constructor(protected tableService: TableService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ table }) => {
+      if (table.active) {
+        alert('لا يمكن تعديل الصالة وهي مفتوحة');
+        this.previousState();
+      }
       this.updateForm(table);
     });
   }

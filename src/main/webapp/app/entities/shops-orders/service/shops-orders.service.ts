@@ -7,8 +7,8 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IShopsOrders, getShopsOrdersIdentifier } from '../shops-orders.model';
 
-export type EntityResponseType = HttpResponse<IShopsOrders>;
-export type EntityArrayResponseType = HttpResponse<IShopsOrders[]>;
+export type EntityResponseType = HttpResponse<any>;
+export type EntityArrayResponseType = HttpResponse<any[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ShopsOrdersService {
@@ -34,6 +34,10 @@ export class ShopsOrdersService {
 
   find(id: string): Observable<EntityResponseType> {
     return this.http.get<IShopsOrders>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  createFromOrderProduct(orderId: string): Observable<EntityResponseType> {
+    return this.http.get<any>(`${this.resourceUrl}/create/product/${orderId}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

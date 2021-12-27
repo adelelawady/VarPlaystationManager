@@ -22,13 +22,23 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="erApp.product.name" for="field_name">Name</label>
+          <label class="form-control-label" for="field_name">اسم الطلب / المنتج</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="erApp.product.price" for="field_price">Price</label>
+          <label class="form-control-label" for="field_price">السعر الاساسي</label>
           <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_price"> take away سعر </label>
+          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="takeawayPrice" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_price">سعر المطاعم والمحلات</label>
+          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="shopsPrice" />
         </div>
 
         <div class="form-group">

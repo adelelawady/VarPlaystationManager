@@ -10,7 +10,13 @@
     <ng-sidebar-content class="classtest">
       <div class="row mx-1">
         <div class="col-md-5">
-          <div class="row p-1" role="group" aria-label="..." style="overflow: scroll; max-height: 300px">
+          <h5 class="card-title mx-4 text-center bg-info text-white rounded">الاصناف</h5>
+          <div
+            class="row border border-2 border-primary p-5 rounded"
+            role="group"
+            aria-label="..."
+            style="overflow: scroll; max-height: 250px"
+          >
             <button
               *ngFor="let cat of categories"
               (click)="getAllProductsByCategory(cat.id)"
@@ -20,10 +26,10 @@
               {{ cat.name }}
             </button>
           </div>
-          <hr />
         </div>
         <div class="col-md-7">
-          <div *ngIf="products" class="row mx-1" style="overflow: scroll; max-height: 300px">
+          <h5 class="card-title mx-4 text-center bg-info text-white rounded">الطلبات</h5>
+          <div *ngIf="products" class="row mx-1" style="overflow: scroll; max-height: 250px">
             <button
               *ngFor="let prod of products"
               (click)="addProductToSelectedDevice(prod.id)"
@@ -32,7 +38,17 @@
               class="col-auto border rounded m-1 text-center"
             >
               {{ prod.name }}
-              <small class="d-block badge badge-warning text-center">{{ prod.price }} LE</small>
+              <small *ngIf="tapDevices || (tapTables && !tapTakeaway)" class="d-block badge badge-warning text-center"
+                >{{ prod.price }} LE</small
+              >
+
+              <small *ngIf="!tapDevices && !tapTables && !tapShops && tapTakeaway" class="d-block badge badge-warning text-center"
+                >{{ prod.takeawayPrice }} LE</small
+              >
+
+              <small *ngIf="!tapDevices && !tapTables && !tapTakeaway && tapShops" class="d-block badge badge-warning text-center"
+                >{{ prod.shopsPrice }} LE</small
+              >
             </button>
           </div>
         </div>
@@ -41,7 +57,7 @@
   </ng-sidebar>
 
   <!-- Page content -->
-  <ng-sidebar-accordion-content>
+  <ng-sidebar-accordion-content (click)="closeOrdersPanle()">
     <div class="">
       <ul class="nav nav-pills nav-fill border px-3 py-2">
         <li class="nav-item">
@@ -51,16 +67,17 @@
           <a class="nav-link" (click)="selectTap('tapTables')" [ngClass]="{ active: tapTables }" href="#">الصالات</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="selectTap('tapTakeaway')" [ngClass]="{ active: tapTakeaway }" href="#">اوردارت</a>
+          <a class="nav-link" (click)="selectTap('tapTakeaway'); openOrdersPanle()" [ngClass]="{ active: tapTakeaway }" href="#">اوردارت</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" (click)="selectTap('tapShops')" [ngClass]="{ active: tapShops }" href="#">محلات</a>
+          <a class="nav-link" (click)="selectTap('tapShops'); openOrdersPanle()" [ngClass]="{ active: tapShops }" href="#">مطاعم</a>
         </li>
       </ul>
     </div>
 
     <div class="row" *ngIf="devices">
-      <div class="col-8">
+      <div class="col-8" [ngClass]="{ 'col-md-12': tapTakeaway || tapShops }">
         <div class="card-body px-1" *ngIf="tapDevices">
           <h5 class="card-title mx-4">الاجهزة</h5>
           <div class="card jh-card m-2 p-4">
@@ -95,6 +112,88 @@
             </div>
           </div>
         </div>
+
+        <div class="card-body px-1" *ngIf="tapTakeaway">
+          <span>
+            <h5 class="card-title mx-4">takeaway اوردرات</h5>
+          </span>
+          <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
+            <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
+              <table class="table table-striped" aria-describedby="page-heading">
+                <thead style="display: none">
+                  <tr>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let takeaway of takeawayOrders" data-cy="entityTable">
+                    <td>
+                      <h4>{{ takeaway.product.name }}</h4>
+                    </td>
+                    <td>{{ takeaway.product.category ? takeaway.product.category.name : '' }}</td>
+                    <td>{{ formateMoney(takeaway.product.takeawayPrice) }}</td>
+                    <td>{{ takeaway.createdDate | date: 'short' }}</td>
+                    <td>
+                      <button
+                        type="submit"
+                        (click)="deleteTakeaway(takeaway.id)"
+                        class="btn btn-danger btn-sm"
+                        data-cy="entityDeleteButton"
+                      >
+                        <fa-icon icon="times"></fa-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body px-1" *ngIf="tapShops">
+          <span>
+            <h5 class="card-title mx-4">اوردرات مطاعم</h5>
+          </span>
+          <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
+            <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
+              <table class="table table-striped" aria-describedby="page-heading">
+                <thead style="display: none">
+                  <tr>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                    <th scope="col"><span>Name</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let shopOrder of shopsOrders" data-cy="entityTable">
+                    <td>
+                      <h4>{{ shopOrder.product.name }}</h4>
+                    </td>
+                    <td>{{ shopOrder.product.category ? shopOrder.product.category.name : '' }}</td>
+                    <td>{{ formateMoney(shopOrder.totalPrice) }}</td>
+                    <td>{{ shopOrder.createdDate | date: 'short' }}</td>
+                    <td>
+                      <button
+                        type="submit"
+                        (click)="deleteShopOrder(shopOrder.id)"
+                        class="btn btn-danger btn-sm"
+                        data-cy="entityDeleteButton"
+                      >
+                        <fa-icon icon="times"></fa-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="col-4 py-5">
@@ -119,8 +218,12 @@
                 >
               </div>
               <h5 class="card-title my-2">الطلبات</h5>
-              <ul class="list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
-                <li *ngFor="let prod of selectedDevice.session.orders" class="list-group-item">
+              <ul
+                *ngIf="selectedDevice.session && selectedDevice.session.orders"
+                class="list-group list-group-flush border border-1 rounded-lg p-0"
+                style="direction: rtl"
+              >
+                <li *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" class="list-group-item">
                   <span class="float-left">
                     {{ prod.name }}
                     <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
@@ -153,7 +256,7 @@
             <div class="row" *ngIf="selectedTable">
               <h5 class="card-title my-2">الطلبات</h5>
               <ul class="list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
-                <li *ngFor="let prod of selectedTable.ordersData" class="list-group-item">
+                <li *ngFor="let prod of selectedTable.ordersData.slice().reverse()" class="list-group-item">
                   <span class="float-left">
                     {{ prod.name }}
                     <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">

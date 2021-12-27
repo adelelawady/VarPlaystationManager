@@ -1,6 +1,5 @@
 <div
   class="card border"
-  style="cursor: pointer"
   [ngClass]="{
     'border-3': isSelected,
     'border-success border-active': table.active,
@@ -31,7 +30,7 @@
       ></i>
     </h5>
   </div>
-  <div *ngIf="table.active" class="card-footer p-2">
+  <div *ngIf="table.active && table.totalPrice" class="card-footer p-2">
     <a href="#" class="card-link float-right m-0 pr-2">{{ formateMoney(table.totalPrice) || 'EGP 0' }}</a>
   </div>
   <div *ngIf="!table.active" class="card-footer p-2">
@@ -54,7 +53,7 @@
         </div>
       </div>
       <div class="modal-body">
-        <div *ngIf="table.active" class="form-group row">
+        <div *ngIf="table.active && totalPrice" class="form-group row">
           <label for="staticEmail" class="col-sm-2 col-form-label">السعر</label>
           <div class="col-sm-10" style="text-align: right">
             <a href="#" class="card-link">{{ formateMoney(totalPrice) }}</a>
