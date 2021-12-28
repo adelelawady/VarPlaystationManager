@@ -79,8 +79,6 @@ export class TableUpdateComponent implements OnInit {
       ...new Table(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      discount: this.editForm.get(['discount'])!.value,
-      totalPrice: this.editForm.get(['totalPrice'])!.value,
     };
   }
 }
