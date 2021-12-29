@@ -2,23 +2,23 @@
   "erApp": {
     "takeaway": {
       "home": {
-        "title": "Takeaways",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Takeaway",
-        "createOrEditLabel": "Create or edit a Takeaway",
-        "notFound": "No Takeaways found"
+        "title": "الوجبات الجاهزة",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "إنشاء الوجبات الجاهزة الجديدة",
+        "createOrEditLabel": "إنشاء أو تحرير الوجبات الجاهزة",
+        "notFound": "لم يتم العثور على الوجبات الجاهزة"
       },
-      "created": "A new Takeaway is created with identifier {{ param }}",
-      "updated": "A Takeaway is updated with identifier {{ param }}",
-      "deleted": "A Takeaway is deleted with identifier {{ param }}",
+      "created": "تم إنشاء الوجبات الجاهزة الجديدة بالمعرف {{param}}",
+      "updated": "يتم تحديث الوجبات الجاهزة بالمعرف {{param}}",
+      "deleted": "تم حذف الوجبات الجاهزة بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Takeaway {{ id }}?"
+        "question": "هل أنت متأكد أنك تريد حذف الوجبات الجاهزة {{id}}؟"
       },
       "detail": {
-        "title": "Takeaway"
+        "title": "يبعد"
       },
-      "id": "Id",
-      "totalPrice": "Total Price"
+      "id": "بطاقة تعريف",
+      "totalPrice": "السعر الكلي"
     }
   }
 }

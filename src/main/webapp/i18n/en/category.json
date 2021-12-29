@@ -2,23 +2,23 @@
   "erApp": {
     "category": {
       "home": {
-        "title": "Categories",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Category",
-        "createOrEditLabel": "Create or edit a Category",
-        "notFound": "No Categories found"
+        "title": "التصنيفات",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "قم بإنشاء فئة جديدة",
+        "createOrEditLabel": "إنشاء أو تحرير فئة",
+        "notFound": "لم يتم العثور على فئات"
       },
-      "created": "A new Category is created with identifier {{ param }}",
-      "updated": "A Category is updated with identifier {{ param }}",
-      "deleted": "A Category is deleted with identifier {{ param }}",
+      "created": "تم إنشاء فئة جديدة بالمعرف {{param}}",
+      "updated": "تم تحديث الفئة بالمعرف {{param}}",
+      "deleted": "تم حذف فئة بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Category {{ id }}?"
+        "question": "هل أنت متأكد أنك تريد حذف الفئة {{id}}؟"
       },
       "detail": {
-        "title": "Category"
+        "title": "فئة"
       },
-      "id": "Id",
-      "name": "Name"
+      "id": "بطاقة تعريف",
+      "name": "اسم"
     }
   }
 }

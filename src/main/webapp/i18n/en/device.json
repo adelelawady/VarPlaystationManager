@@ -2,24 +2,24 @@
   "erApp": {
     "device": {
       "home": {
-        "title": "Devices",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Device",
-        "createOrEditLabel": "Create or edit a Device",
-        "notFound": "No Devices found"
+        "title": "الأجهزة",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "قم بإنشاء جهاز جديد",
+        "createOrEditLabel": "إنشاء أو تحرير جهاز",
+        "notFound": "لم تجد الأجهزة"
       },
-      "created": "A new Device is created with identifier {{ param }}",
-      "updated": "A Device is updated with identifier {{ param }}",
-      "deleted": "A Device is deleted with identifier {{ param }}",
+      "created": "تم إنشاء جهاز جديد بالمعرف {{param}}",
+      "updated": "تم تحديث الجهاز بالمعرف {{param}}",
+      "deleted": "تم حذف جهاز بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Device {{ id }}?"
+        "question": "هل أنت متأكد من أنك تريد حذف الجهاز {{id}}؟"
       },
       "detail": {
-        "title": "Device"
+        "title": "جهاز"
       },
-      "id": "Id",
-      "name": "Name",
-      "type": "Type"
+      "id": "بطاقة تعريف",
+      "name": "اسم",
+      "type": "نوع"
     }
   }
 }

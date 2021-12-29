@@ -1,25 +1,25 @@
 {
   "reset": {
     "request": {
-      "title": "Reset your password",
+      "title": "اعد ضبط كلمه السر",
       "form": {
-        "button": "Reset password"
+        "button": "إعادة تعيين كلمة المرور"
       },
       "messages": {
-        "info": "Enter the email address you used to register",
-        "success": "Check your emails for details on how to reset your password."
+        "info": "أدخل عنوان البريد الإلكتروني الذي استخدمته للتسجيل",
+        "success": "تحقق من رسائل البريد الإلكتروني الخاصة بك للحصول على تفاصيل حول كيفية إعادة تعيين كلمة المرور الخاصة بك."
       }
     },
     "finish": {
-      "title": "Reset password",
+      "title": "إعادة تعيين كلمة المرور",
       "form": {
-        "button": "Validate new password"
+        "button": "تحقق من صحة كلمة المرور الجديدة"
       },
       "messages": {
-        "info": "Choose a new password",
-        "success": "<strong>Your password has been reset.</strong> Please ",
-        "keymissing": "The reset key is missing.",
-        "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+        "info": "اختر كلمة مرور جديدة",
+        "success": "<strong> تمت إعادة تعيين كلمة المرور الخاصة بك. </ strong> من فضلك",
+        "keymissing": "مفتاح إعادة التعيين مفقود.",
+        "error": "لا يمكن إعادة تعيين كلمة المرور الخاصة بك. تذكر أن طلب كلمة المرور صالح لمدة 24 ساعة فقط."
       }
     }
   }

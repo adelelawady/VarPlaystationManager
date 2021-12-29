@@ -1,14 +1,14 @@
 {
   "error": {
-    "title": "Error page!",
+    "title": "صفحة الخطأ!",
     "http": {
-      "400": "Bad request.",
-      "403": "You are not authorized to access this page.",
-      "404": "The page does not exist.",
-      "405": "The HTTP verb you used is not supported for this URL.",
-      "500": "Internal server error."
+      "400": "اقتراح غير جيد.",
+      "403": "أنت غير مفوض لدخول هذه الصفحة.",
+      "404": "الصفحة غير موجودة.",
+      "405": "فعل HTTP الذي استخدمته غير مدعوم لعنوان URL هذا.",
+      "500": "خطأ في الخادم الداخلي."
     },
-    "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-    "validation": "Validation error on the server."
+    "concurrencyFailure": "قام مستخدم آخر بتعديل هذه البيانات في نفس الوقت الذي قمت فيه. تم رفض التغييرات الخاصة بك.",
+    "validation": "خطأ في التحقق من الصحة على الخادم."
   }
 }

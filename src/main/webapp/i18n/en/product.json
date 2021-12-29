@@ -2,27 +2,27 @@
   "erApp": {
     "product": {
       "home": {
-        "title": "Products",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Product",
-        "createOrEditLabel": "Create or edit a Product",
-        "notFound": "No Products found"
+        "title": "منتجات",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "قم بإنشاء منتج جديد",
+        "createOrEditLabel": "إنشاء أو تحرير منتج",
+        "notFound": "لا توجد منتجات"
       },
-      "created": "A new Product is created with identifier {{ param }}",
-      "updated": "A Product is updated with identifier {{ param }}",
-      "deleted": "A Product is deleted with identifier {{ param }}",
+      "created": "تم إنشاء منتج جديد بالمعرف {{param}}",
+      "updated": "تم تحديث المنتج بالمعرف {{param}}",
+      "deleted": "تم حذف المنتج بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Product {{ id }}?"
+        "question": "هل أنت متأكد من أنك تريد حذف المنتج {{id}}؟"
       },
       "detail": {
-        "title": "Product"
+        "title": "منتج"
       },
-      "id": "Id",
-      "name": "Name",
-      "price": "Price",
-      "category": "Category",
-      "session": "Session",
-      "record": "Record"
+      "id": "بطاقة تعريف",
+      "name": "اسم",
+      "price": "السعر",
+      "category": "فئة",
+      "session": "حصة",
+      "record": "سجل"
     }
   }
 }

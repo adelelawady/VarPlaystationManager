@@ -1,149 +1,149 @@
 {
   "global": {
     "title": "VAR",
-    "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
+    "browsehappy": "أنت تستخدم متصفحًا <strong> قديمًا </ strong>. الرجاء <a href=\"http://browsehappy.com/؟locale=en\"> ترقية المتصفح </a> لتحسين تجربتك.",
     "menu": {
-      "home": "Home",
-      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "home": "الرئيسية",
+      "jhipster-needle-menu-add-element": "سيضيف JHipster إدخالات قائمة إضافية هنا (لا تترجم!)",
       "entities": {
-        "main": "Entities",
-        "verse": "Verse",
-        "verses": "Verses",
+        "main": "جهات",
+        "verse": "بيت شعر",
+        "verses": "آيات",
         "deviceType": "انواع الاجهزة",
-        "device": "Device",
-        "product": "Product",
-        "category": "Category",
-        "record": "Record",
-        "session": "Session",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "device": "جهاز",
+        "product": "منتج",
+        "category": "فئة",
+        "record": "سجل",
+        "session": "حصة",
+        "jhipster-needle-menu-add-entry": "سيضيف JHipster كيانات إضافية هنا (لا تترجم!)"
       },
       "account": {
-        "main": "Account",
-        "settings": "Settings",
-        "password": "Password",
-        "sessions": "Sessions",
-        "login": "Sign in",
-        "logout": "Sign out",
-        "register": "Register"
+        "main": "الحساب",
+        "settings": "إعدادات",
+        "password": "كلمة المرور",
+        "sessions": "الجلسات",
+        "login": "تسجيل الدخول",
+        "logout": "خروج",
+        "register": "يسجل"
       },
       "admin": {
-        "main": "Administration",
-        "userManagement": "User management",
-        "tracker": "User tracker",
-        "metrics": "Metrics",
-        "health": "Health",
-        "configuration": "Configuration",
-        "logs": "Logs",
+        "main": "الادارة",
+        "userManagement": "إدارةالمستخدم",
+        "tracker": "تعقب المستخدم",
+        "metrics": "المقاييس",
+        "health": "الصحة",
+        "configuration": "ترتيب",
+        "logs": "السجلات",
         "apidocs": "API",
-        "database": "Database",
-        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+        "database": "قاعدة البيانات",
+        "jhipster-needle-menu-add-admin-element": "سيضيف JHipster إدخالات قائمة إضافية هنا (لا تترجم!)"
       },
-      "language": "Language"
+      "language": "لغة"
     },
     "form": {
-      "username.label": "Username",
-      "username.placeholder": "Your username",
-      "currentpassword.label": "Current password",
-      "currentpassword.placeholder": "Current password",
-      "newpassword.label": "New password",
-      "newpassword.placeholder": "New password",
-      "confirmpassword.label": "New password confirmation",
-      "confirmpassword.placeholder": "Confirm the new password",
-      "email.label": "Email",
-      "email.placeholder": "Your email"
+      "username.label": "اسم المستخدم",
+      "username.placeholder": "اسم المستخدم الخاص بك",
+      "currentpassword.label": "كلمة المرور الحالية",
+      "currentpassword.placeholder": "كلمة المرور الحالية",
+      "newpassword.label": "كلمة السر الجديدة",
+      "newpassword.placeholder": "كلمة السر الجديدة",
+      "confirmpassword.label": "تأكيد كلمة السر الجديدة",
+      "confirmpassword.placeholder": "قم بتأكيد كلمة المرور الجديدة",
+      "email.label": "بريد الالكتروني",
+      "email.placeholder": "بريدك الالكتروني"
     },
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "If you want to ",
-          "link": "sign in",
-          "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+          "prefix": "أذا أردت",
+          "link": "تسجيل الدخول",
+          "suffix": "، يمكنك تجربة الحسابات الافتراضية: <br/> - المسؤول (تسجيل الدخول = \"المسؤول\" وكلمة المرور = \"المسؤول\") <br/> - المستخدم (تسجيل الدخول = \"المستخدم\" وكلمة المرور = \"المستخدم\")."
         },
         "register": {
-          "noaccount": "You don't have an account yet?",
-          "link": "Register a new account"
+          "noaccount": "ليس لديك حساب؟",
+          "link": "تسجيل حساب جديد"
         }
       },
       "error": {
-        "dontmatch": "The password and its confirmation do not match!"
+        "dontmatch": "كلمة المرور وتأكيدها غير متطابقين!"
       },
       "validate": {
         "newpassword": {
-          "required": "Your password is required.",
-          "minlength": "Your password is required to be at least 4 characters.",
-          "maxlength": "Your password cannot be longer than 50 characters.",
-          "strength": "Password strength:"
+          "required": "مطلوب كلمة المرور الخاصة بك.",
+          "minlength": "يجب ألا تقل كلمة المرور الخاصة بك عن 4 أحرف.",
+          "maxlength": "لا يمكن أن تكون كلمة مرورك أطول من 50 حرفًا.",
+          "strength": "قوة كلمة المرور:"
         },
         "confirmpassword": {
-          "required": "Your confirmation password is required.",
-          "minlength": "Your confirmation password is required to be at least 4 characters.",
-          "maxlength": "Your confirmation password cannot be longer than 50 characters."
+          "required": "مطلوب تأكيد كلمة المرور الخاصة بك.",
+          "minlength": "يجب ألا تقل كلمة المرور عن 4 أحرف.",
+          "maxlength": "لا يمكن أن تكون كلمة مرور التأكيد أطول من 50 حرفًا."
         },
         "email": {
-          "required": "Your email is required.",
-          "invalid": "Your email is invalid.",
-          "minlength": "Your email is required to be at least 5 characters.",
-          "maxlength": "Your email cannot be longer than 50 characters."
+          "required": "البريد الإلكتروني الخاص بك مطلوب.",
+          "invalid": "بريدك الالكتروني خاطئ.",
+          "minlength": "يجب ألا يقل بريدك الإلكتروني عن 5 أحرف.",
+          "maxlength": "لا يمكن أن يكون بريدك الإلكتروني أطول من 50 حرفًا."
         }
       }
     },
     "field": {
-      "id": "ID"
+      "id": "بطاقة تعريف"
     },
     "ribbon": {
-      "dev": "Development"
+      "dev": "تطوير"
     },
-    "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    "item-count": "إظهار {{first}} - {{second}} من {{total}} عنصر."
   },
   "entity": {
     "action": {
-      "addblob": "Add blob",
-      "addimage": "Add image",
-      "back": "Back",
-      "cancel": "Cancel",
-      "delete": "Delete",
-      "edit": "Edit",
-      "open": "Open",
-      "save": "Save",
-      "view": "View"
+      "addblob": "أضف النقطة",
+      "addimage": "إضافة صورة",
+      "back": "عودة",
+      "cancel": "يلغي",
+      "delete": "حذف",
+      "edit": "تعديل",
+      "open": "فتح",
+      "save": "يحفظ",
+      "view": "رأي"
     },
     "detail": {
-      "field": "Field",
-      "value": "Value"
+      "field": "حقل",
+      "value": "قيمة"
     },
     "delete": {
-      "title": "Confirm delete operation"
+      "title": "تأكيد عملية الحذف"
     },
     "validation": {
-      "required": "This field is required.",
-      "minlength": "This field is required to be at least {{ min }} characters.",
-      "maxlength": "This field cannot be longer than {{ max }} characters.",
-      "min": "This field should be at least {{ min }}.",
-      "max": "This field cannot be more than {{ max }}.",
-      "minbytes": "This field should be at least {{ min }} bytes.",
-      "maxbytes": "This field cannot be more than {{ max }} bytes.",
-      "pattern": "This field should follow pattern for {{ pattern }}.",
-      "number": "This field should be a number.",
-      "datetimelocal": "This field should be a date and time.",
-      "patternLogin": "This field can only contain letters, digits and e-mail addresses."
+      "required": "هذه الخانة مطلوبه.",
+      "minlength": "هذا الحقل مطلوب ألا يقل عن {{min}} حرف.",
+      "maxlength": "لا يمكن أن يكون هذا الحقل أطول من {{max}} حرفًا.",
+      "min": "يجب أن يكون هذا الحقل {{min}} على الأقل.",
+      "max": "لا يمكن أن يكون هذا الحقل أكثر من {{max}}.",
+      "minbytes": "يجب ألا يقل حجم هذا الحقل عن {{min}} بايت.",
+      "maxbytes": "لا يمكن أن يزيد هذا الحقل عن {{max}} بايت.",
+      "pattern": "يجب أن يتبع هذا الحقل نمط {{pattern}}.",
+      "number": "يجب أن يكون هذا الحقل رقمًا.",
+      "datetimelocal": "يجب أن يكون هذا الحقل التاريخ والوقت.",
+      "patternLogin": "يمكن أن يحتوي هذا الحقل على أحرف وأرقام وعناوين بريد إلكتروني فقط."
     }
   },
   "error": {
-    "internalServerError": "Internal server error",
-    "server.not.reachable": "Server not reachable",
-    "url.not.found": "Not found",
-    "NotNull": "Field {{ fieldName }} cannot be empty!",
-    "Size": "Field {{ fieldName }} does not meet min/max size requirements!",
-    "userexists": "Login name already used!",
-    "emailexists": "Email is already in use!",
-    "idexists": "A new {{ entityName }} cannot already have an ID",
-    "idnull": "Invalid ID",
-    "idinvalid": "Invalid ID",
-    "idnotfound": "ID cannot be found",
+    "internalServerError": "خطأ في الخادم الداخلي",
+    "server.not.reachable": "الخادم غير قابل للوصول",
+    "url.not.found": "لم يتم العثور على",
+    "NotNull": "لا يمكن أن يكون الحقل {{fieldName}} فارغًا!",
+    "Size": "الحقل {{fieldName}} لا يفي بمتطلبات الحد الأدنى / الأقصى للحجم!",
+    "userexists": "اسم تسجيل الدخول مستخدم بالفعل!",
+    "emailexists": "البريد الالكتروني قيد الاستخدام بالفعل!",
+    "idexists": "لا يمكن أن يكون لـ {{كينينام}} جديد معرف بالفعل",
+    "idnull": "بطاقة التعريف غير صالحة",
+    "idinvalid": "بطاقة التعريف غير صالحة",
+    "idnotfound": "لا يمكن العثور على المعرف",
     "file": {
-      "could.not.extract": "Could not extract file",
-      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+      "could.not.extract": "تعذر استخراج الملف",
+      "not.image": "كان من المتوقع أن يكون الملف صورة ولكن تم العثور عليه \"{{fileType}}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": "هذا هو التذييل الخاص بك"
 }

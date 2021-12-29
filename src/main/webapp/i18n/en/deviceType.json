@@ -3,23 +3,24 @@
     "deviceType": {
       "home": {
         "title": "انواع الاجهزة",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Device Type",
-        "createOrEditLabel": "Create or edit a Device Type",
-        "notFound": "No Device Types found"
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "قم بإنشاء نوع جهاز جديد",
+        "createOrEditLabel": "قم بإنشاء أو تحرير نوع الجهاز",
+        "notFound": "لم يتم العثور على أنواع الأجهزة"
       },
-      "created": "A new Device Type is created with identifier {{ param }}",
-      "updated": "A Device Type is updated with identifier {{ param }}",
-      "deleted": "A Device Type is deleted with identifier {{ param }}",
+      "created": "تم إنشاء نوع جهاز جديد بالمعرف {{param}}",
+      "updated": "تم تحديث نوع الجهاز بالمعرف {{param}}",
+      "deleted": "يتم حذف نوع الجهاز بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Device Type {{ id }}?"
+        "question": "هل تريد بالتأكيد حذف نوع الجهاز {{id}}؟"
       },
       "detail": {
         "title": "انواع الاجهزة"
       },
-      "id": "Id",
-      "name": "Name",
-      "pricePerHour": "Price Per Hour"
+      "id": "بطاقة تعريف",
+      "name": "اسم",
+      "pricePerHour": "السعر بالساعة",
+      "pricePerHourMulti": "السعر بالساعة multi"
     }
   }
 }

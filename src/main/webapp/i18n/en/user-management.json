@@ -1,31 +1,31 @@
 {
   "userManagement": {
     "home": {
-      "title": "Users",
-      "refreshListLabel": "Refresh list",
-      "createLabel": "Create a new user",
-      "createOrEditLabel": "Create or edit a user"
+      "title": "المستخدمون",
+      "refreshListLabel": "تحديث القائمة",
+      "createLabel": "قم بإنشاء مستخدم جديد",
+      "createOrEditLabel": "إنشاء أو تحرير مستخدم"
     },
-    "created": "A new user is created with identifier {{ param }}",
-    "updated": "A user is updated with identifier {{ param }}",
-    "deleted": "A user is deleted with identifier {{ param }}",
+    "created": "تم إنشاء مستخدم جديد بالمعرف {{param}}",
+    "updated": "تم تحديث المستخدم بالمعرف {{param}}",
+    "deleted": "تم حذف مستخدم بالمعرف {{param}}",
     "delete": {
-      "question": "Are you sure you want to delete user {{ login }}?"
+      "question": "هل أنت متأكد أنك تريد حذف المستخدم {{تسجيل الدخول}}؟"
     },
     "detail": {
-      "title": "User"
+      "title": "مستخدم"
     },
-    "login": "Login",
-    "firstName": "First name",
-    "lastName": "Last name",
-    "email": "Email",
-    "activated": "Activated",
-    "deactivated": "Deactivated",
-    "profiles": "Profiles",
-    "langKey": "Language",
-    "createdBy": "Created by",
-    "createdDate": "Created date",
-    "lastModifiedBy": "Modified by",
-    "lastModifiedDate": "Modified date"
+    "login": "تسجيل الدخول",
+    "firstName": "الاسم الاول",
+    "lastName": "الكنية",
+    "email": "بريد الالكتروني",
+    "activated": "مفعل",
+    "deactivated": "معطل",
+    "profiles": "مظهر",
+    "langKey": "لغة",
+    "createdBy": "انشأ من قبل",
+    "createdDate": "تاريخ الإنشاء",
+    "lastModifiedBy": "تم التعديل بواسطة",
+    "lastModifiedDate": "تاريخ معدل"
   }
 }

@@ -1,31 +1,31 @@
 {
   "health": {
-    "title": "Health Checks",
-    "refresh.button": "Refresh",
-    "stacktrace": "Stacktrace",
+    "title": "فحوصات طبية",
+    "refresh.button": "ينعش",
+    "stacktrace": "تتبع المكدس",
     "details": {
-      "details": "Details",
-      "properties": "Properties",
-      "name": "Name",
-      "value": "Value",
-      "error": "Error"
+      "details": "تفاصيل",
+      "properties": "الخصائص",
+      "name": "اسم",
+      "value": "قيمة",
+      "error": "خطأ"
     },
     "indicator": {
-      "diskSpace": "Disk space",
-      "mail": "Email",
-      "livenessState": "Liveness state",
-      "readinessState": "Readiness state",
-      "ping": "Application",
+      "diskSpace": "مساحة القرص",
+      "mail": "بريد الالكتروني",
+      "livenessState": "حالة الحياة",
+      "readinessState": "حالة الاستعداد",
+      "ping": "طلب",
       "mongo": "MongoDB"
     },
     "table": {
-      "service": "Service name",
-      "status": "Status"
+      "service": "اسم الخدمة",
+      "status": "حالة"
     },
     "status": {
-      "UNKNOWN": "UNKNOWN",
-      "UP": "UP",
-      "DOWN": "DOWN"
+      "UNKNOWN": "غير معروف",
+      "UP": "فوق",
+      "DOWN": "تحت"
     }
   }
 }

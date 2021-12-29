@@ -2,26 +2,26 @@
   "erApp": {
     "session": {
       "home": {
-        "title": "Sessions",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Session",
-        "createOrEditLabel": "Create or edit a Session",
-        "notFound": "No Sessions found"
+        "title": "الجلسات",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "أنشئ جلسة جديدة",
+        "createOrEditLabel": "إنشاء أو تحرير جلسة",
+        "notFound": "لم يتم العثور على جلسات"
       },
-      "created": "A new Session is created with identifier {{ param }}",
-      "updated": "A Session is updated with identifier {{ param }}",
-      "deleted": "A Session is deleted with identifier {{ param }}",
+      "created": "تم إنشاء جلسة جديدة بالمعرف {{param}}",
+      "updated": "تم تحديث الجلسة بالمعرف {{param}}",
+      "deleted": "تم حذف جلسة بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Session {{ id }}?"
+        "question": "هل أنت متأكد أنك تريد حذف الجلسة {{id}}؟"
       },
       "detail": {
-        "title": "Session"
+        "title": "حصة"
       },
-      "id": "Id",
-      "start": "Start",
-      "reserved": "Reserved",
-      "device": "Device",
-      "orders": "Orders"
+      "id": "بطاقة تعريف",
+      "start": "يبدأ",
+      "reserved": "محجوز",
+      "device": "جهاز",
+      "orders": "الطلب #٪ s"
     }
   }
 }

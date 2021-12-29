@@ -2,24 +2,24 @@
   "erApp": {
     "shopsOrders": {
       "home": {
-        "title": "Shops Orders",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Shops Orders",
-        "createOrEditLabel": "Create or edit a Shops Orders",
-        "notFound": "No Shops Orders found"
+        "title": "أوامر المحلات التجارية",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "إنشاء أوامر المحلات التجارية الجديدة",
+        "createOrEditLabel": "إنشاء أو تحرير أوامر المحلات التجارية",
+        "notFound": "لم يتم العثور على طلبات متاجر"
       },
-      "created": "A new Shops Orders is created with identifier {{ param }}",
-      "updated": "A Shops Orders is updated with identifier {{ param }}",
-      "deleted": "A Shops Orders is deleted with identifier {{ param }}",
+      "created": "يتم إنشاء طلبات متاجر جديدة بالمعرف {{param}}",
+      "updated": "A يتم تحديث طلبات المتاجر بالمعرف {{param}}",
+      "deleted": "A يتم حذف طلبات المحلات التجارية باستخدام المعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Shops Orders {{ id }}?"
+        "question": "هل أنت متأكد أنك تريد حذف طلبات المتاجر {{id}}؟"
       },
       "detail": {
-        "title": "Shops Orders"
+        "title": "أوامر المحلات التجارية"
       },
-      "id": "Id",
-      "name": "Name",
-      "totalPrice": "Total Price"
+      "id": "بطاقة تعريف",
+      "name": "اسم",
+      "totalPrice": "السعر الكلي"
     }
   }
 }

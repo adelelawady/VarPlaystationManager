@@ -1,11 +1,11 @@
 {
   "logs": {
-    "title": "Logs",
-    "nbloggers": "There are {{ total }} loggers.",
-    "filter": "Filter",
+    "title": "السجلات",
+    "nbloggers": "هناك {{total}} قطع الأشجار.",
+    "filter": "منقي",
     "table": {
-      "name": "Name",
-      "level": "Level"
+      "name": "اسم",
+      "level": "مستوى"
     }
   }
 }

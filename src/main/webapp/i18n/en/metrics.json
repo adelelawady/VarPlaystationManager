@@ -1,102 +1,102 @@
 {
   "metrics": {
-    "title": "Application Metrics",
-    "refresh.button": "Refresh",
-    "updating": "Updating...",
+    "title": "مقاييس التطبيق",
+    "refresh.button": "ينعش",
+    "updating": "جارٍ التحديث ...",
     "jvm": {
-      "title": "JVM Metrics",
+      "title": "مقاييس JVM",
       "memory": {
-        "title": "Memory",
-        "total": "Total Memory",
-        "heap": "Heap Memory",
-        "nonheap": "Non-Heap Memory"
+        "title": "ذاكرة",
+        "total": "الذاكرة الاجمالية",
+        "heap": "ذاكرة الكومة",
+        "nonheap": "ذاكرة غير كومة"
       },
       "threads": {
-        "title": "Threads",
-        "all": "All",
-        "runnable": "Runnable",
-        "timedwaiting": "Timed waiting",
-        "waiting": "Waiting",
-        "blocked": "Blocked",
+        "title": "الخيوط",
+        "all": "الجميع",
+        "runnable": "قابل للتشغيل",
+        "timedwaiting": "وقت الانتظار",
+        "waiting": "منتظر",
+        "blocked": "ممنوع",
         "dump": {
-          "title": "Threads dump",
-          "id": "Id: ",
-          "blockedtime": "Blocked Time",
-          "blockedcount": "Blocked Count",
-          "waitedtime": "Waited Time",
-          "waitedcount": "Waited Count",
-          "lockname": "Lock name",
-          "stacktrace": "Stacktrace",
-          "show": "Show Stacktrace",
-          "hide": "Hide Stacktrace"
+          "title": "خيوط تفريغ",
+          "id": "بطاقة تعريف:",
+          "blockedtime": "الوقت المحظور",
+          "blockedcount": "العد المحظور",
+          "waitedtime": "وقت الانتظار",
+          "waitedcount": "انتظر العد",
+          "lockname": "اسم القفل",
+          "stacktrace": "تتبع المكدس",
+          "show": "إظهار Stacktrace",
+          "hide": "إخفاء Stacktrace"
         }
       },
       "gc": {
-        "title": "Garbage collections",
-        "marksweepcount": "Mark Sweep count",
-        "marksweeptime": "Mark Sweep time",
-        "scavengecount": "Scavenge count",
-        "scavengetime": "Scavenge time"
+        "title": "مجموعات القمامة",
+        "marksweepcount": "علامة الاجتياح العد",
+        "marksweeptime": "حدد وقت الاجتياح",
+        "scavengecount": "عدد الكسح",
+        "scavengetime": "وقت التنظيف"
       },
       "http": {
-        "title": "HTTP requests (time in millisecond)",
-        "active": "Active requests:",
-        "total": "Total requests:",
+        "title": "طلبات HTTP (الوقت بالمللي ثانية)",
+        "active": "الطلبات النشطة:",
+        "total": "إجمالي الطلبات:",
         "table": {
-          "code": "Code",
-          "count": "Count",
-          "mean": "Mean",
-          "average": "Average",
-          "max": "Max"
+          "code": "رمز",
+          "count": "عدد",
+          "mean": "يعني",
+          "average": "متوسط",
+          "max": "الأعلى"
         },
         "code": {
-          "ok": "Ok",
-          "notfound": "Not found",
-          "servererror": "Server Error"
+          "ok": "موافق",
+          "notfound": "لم يتم العثور على",
+          "servererror": "خطأ في الخادم"
         }
       }
     },
     "servicesstats": {
-      "title": "Services statistics (time in millisecond)",
+      "title": "إحصائيات الخدمات (الوقت بالملي ثانية)",
       "table": {
-        "name": "Service name",
-        "count": "Count",
-        "mean": "Mean",
-        "min": "Min",
-        "max": "Max",
-        "p50": "p50",
-        "p75": "p75",
-        "p95": "p95",
-        "p99": "p99"
+        "name": "اسم الخدمة",
+        "count": "عدد",
+        "mean": "يعني",
+        "min": "دقيقة",
+        "max": "الأعلى",
+        "p50": "ص 50",
+        "p75": "ص 75",
+        "p95": "ص 95",
+        "p99": "ص 99"
       }
     },
     "cache": {
-      "title": "Cache statistics",
-      "cachename": "Cache name",
-      "hits": "Cache Hits",
-      "misses": "Cache Misses",
-      "gets": "Cache Gets",
-      "puts": "Cache Puts",
-      "removals": "Cache Removals",
-      "evictions": "Cache Evictions",
-      "hitPercent": "Cache Hit %",
-      "missPercent": "Cache Miss %",
-      "averageGetTime": "Average get time (µs)",
-      "averagePutTime": "Average put time (µs)",
-      "averageRemoveTime": "Average remove time (µs)"
+      "title": "إحصائيات ذاكرة التخزين المؤقت",
+      "cachename": "اسم ذاكرة التخزين المؤقت",
+      "hits": "عدد الزيارات المخبأة",
+      "misses": "مخبأ يخطئ",
+      "gets": "يحصل ذاكرة التخزين المؤقت",
+      "puts": "يضع مخبأ",
+      "removals": "عمليات إزالة ذاكرة التخزين المؤقت",
+      "evictions": "إخلاء مخبأ",
+      "hitPercent": "تم ضرب ذاكرة التخزين المؤقت ٪",
+      "missPercent": "ذاكرة التخزين المؤقت Miss٪",
+      "averageGetTime": "متوسط الوقت (s)",
+      "averagePutTime": "متوسط الوقت (s)",
+      "averageRemoveTime": "متوسط وقت الإزالة (s)"
     },
     "datasource": {
-      "usage": "Connection Pool Usage",
-      "title": "DataSource statistics (time in millisecond)",
-      "name": "Pool usage",
-      "count": "Count",
-      "mean": "Mean",
-      "min": "Min",
-      "max": "Max",
-      "p50": "p50",
-      "p75": "p75",
-      "p95": "p95",
-      "p99": "p99"
+      "usage": "استخدام تجمع الاتصال",
+      "title": "إحصائيات مصدر البيانات (الوقت بالمللي ثانية)",
+      "name": "استخدام المسبح",
+      "count": "عدد",
+      "mean": "يعني",
+      "min": "دقيقة",
+      "max": "الأعلى",
+      "p50": "ص 50",
+      "p75": "ص 75",
+      "p95": "ص 95",
+      "p99": "ص 99"
     }
   }
 }

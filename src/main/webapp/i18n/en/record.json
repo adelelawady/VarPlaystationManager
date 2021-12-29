@@ -2,27 +2,27 @@
   "erApp": {
     "record": {
       "home": {
-        "title": "Records",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Record",
-        "createOrEditLabel": "Create or edit a Record",
-        "notFound": "No Records found"
+        "title": "السجلات",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "قم بإنشاء سجل جديد",
+        "createOrEditLabel": "إنشاء أو تحرير سجل",
+        "notFound": "لا توجد سجلات"
       },
-      "created": "A new Record is created with identifier {{ param }}",
-      "updated": "A Record is updated with identifier {{ param }}",
-      "deleted": "A Record is deleted with identifier {{ param }}",
+      "created": "يتم إنشاء سجل جديد بالمعرف {{param}}",
+      "updated": "تم تحديث السجل بالمعرف {{param}}",
+      "deleted": "تم حذف السجل بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Record {{ id }}?"
+        "question": "هل أنت متأكد أنك تريد حذف السجل {{id}}؟"
       },
       "detail": {
-        "title": "Record"
+        "title": "سجل"
       },
-      "id": "Id",
-      "start": "Start",
-      "end": "End",
-      "totalPrice": "Total Price",
-      "device": "Device",
-      "orders": "Orders"
+      "id": "بطاقة تعريف",
+      "start": "يبدأ",
+      "end": "نهاية",
+      "totalPrice": "السعر الكلي",
+      "device": "جهاز",
+      "orders": "الطلب #٪ s"
     }
   }
 }

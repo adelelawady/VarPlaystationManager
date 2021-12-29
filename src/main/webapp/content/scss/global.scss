@@ -20,6 +20,19 @@ h3,
 h4 {
   font-weight: 300;
 }
+* {
+  font-family: 'Tajawal', sans-serif;
+}
+
+@font-face {
+  font-family: Tajawal;
+  src: url('/content/fonts/Tajawal/Tajawal-Regular.ttf') format('truetype'),
+    url('/content/fonts/Tajawal/Tajawal-Light.ttf') format('truetype'), url('/content/fonts/Tajawal/Tajawal-Medium.ttf') format('truetype'),
+    url('/content/fonts/Tajawal/Tajawal-Black.ttf') format('truetype'),
+    url('/content/fonts/Tajawal/Tajawal-ExtraBold.ttf') format('truetype'),
+    url('/content/fonts/Tajawal/Tajawal-Bold.ttf') format('truetype'),
+    url('/content/fonts/Tajawal/Tajawal-ExtraLight.ttf') format('truetype');
+}
 
 /* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {

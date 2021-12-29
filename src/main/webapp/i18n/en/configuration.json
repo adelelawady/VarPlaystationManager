@@ -1,10 +1,10 @@
 {
   "configuration": {
-    "title": "Configuration",
-    "filter": "Filter (by prefix)",
+    "title": "ترتيب",
+    "filter": "تصفية (حسب البادئة)",
     "table": {
-      "prefix": "Prefix",
-      "properties": "Properties"
+      "prefix": "اختصار",
+      "properties": "الخصائص"
     }
   }
 }

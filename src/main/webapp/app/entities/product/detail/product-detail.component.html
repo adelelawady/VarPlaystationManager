@@ -25,7 +25,7 @@
         <dt><span jhiTranslate="erApp.product.category">Category</span></dt>
         <dd>
           <div *ngIf="product.category">
-            <a [routerLink]="['/category', product.category?.id, 'view']">{{ product.category?.id }}</a>
+            <a [routerLink]="['/category', product.category?.id, 'view']">{{ product.category?.name }}</a>
           </div>
         </dd>
       </dl>

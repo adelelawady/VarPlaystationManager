@@ -1,15 +1,15 @@
 {
   "sessions": {
-    "title": "Active sessions for [<strong>{{username}}</strong>]",
+    "title": "جلسات نشطة لـ [<strong> {{اسم المستخدم}} </ strong>]",
     "table": {
-      "ipaddress": "IP address",
-      "useragent": "User Agent",
-      "date": "Date",
-      "button": "Invalidate"
+      "ipaddress": "عنوان IP",
+      "useragent": "وكيل المستخدم",
+      "date": "تاريخ",
+      "button": "باطل"
     },
     "messages": {
-      "success": "<strong>Session invalidated!</strong>",
-      "error": "<strong>An error has occurred!</strong> The session could not be invalidated."
+      "success": "<strong> الجلسة باطلة! </ strong>",
+      "error": "<strong> حدث خطأ! </ strong> لا يمكن إبطال الجلسة."
     }
   }
 }

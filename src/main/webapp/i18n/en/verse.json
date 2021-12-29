@@ -2,24 +2,24 @@
   "erApp": {
     "verse": {
       "home": {
-        "title": "Verses",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Verse",
-        "createOrEditLabel": "Create or edit a Verse",
-        "notFound": "No Verses found"
+        "title": "آيات",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "أنشئ آية جديدة",
+        "createOrEditLabel": "إنشاء أو تحرير آية",
+        "notFound": "لم يتم العثور على آيات"
       },
-      "created": "A new Verse is created with identifier {{ param }}",
-      "updated": "A Verse is updated with identifier {{ param }}",
-      "deleted": "A Verse is deleted with identifier {{ param }}",
+      "created": "يتم إنشاء آية جديدة بالمعرف {{param}}",
+      "updated": "يتم تحديث الآية بالمعرف {{param}}",
+      "deleted": "تم حذف الآية بالمعرف {{param}}",
       "delete": {
-        "question": "Are you sure you want to delete Verse {{ id }}?"
+        "question": "هل أنت متأكد أنك تريد حذف الآية {{id}}؟"
       },
       "detail": {
-        "title": "Verse"
+        "title": "بيت شعر"
       },
-      "id": "Id",
-      "name": "Name",
-      "verses": "Verses"
+      "id": "بطاقة تعريف",
+      "name": "اسم",
+      "verses": "آيات"
     }
   }
 }
