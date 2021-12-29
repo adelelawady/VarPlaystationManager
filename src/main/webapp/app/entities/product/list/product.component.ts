@@ -99,7 +99,7 @@ export class ProductComponent implements OnInit {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     if (navigate) {
-      this.router.navigate(['/product'], {
+      this.router.navigate(['/admin/entities/product'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

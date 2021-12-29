@@ -36,6 +36,16 @@ public class RecordsFilterDTO implements Serializable {
 
     private int totalHours = 0;
 
+    private Double discount = 0.0;
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
     private Page<RecordDTO> resultList;
 
     public Double getTotalPrice() {

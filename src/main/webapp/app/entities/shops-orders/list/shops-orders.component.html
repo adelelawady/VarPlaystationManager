@@ -32,41 +32,24 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="erApp.shopsOrders.id">Id</span></th>
-          <th scope="col"><span jhiTranslate="erApp.shopsOrders.name">Name</span></th>
-          <th scope="col"><span jhiTranslate="erApp.shopsOrders.totalPrice">Total Price</span></th>
-          <th scope="col"></th>
+          <th scope="col"><span> الطلب </span></th>
+          <th scope="col"><span>صنف الطلب </span></th>
+          <th scope="col"><span jhiTranslate="erApp.takeaway.totalPrice">Total Price</span></th>
+          <th scope="col"><span>تاريخ الطلب </span></th>
+          <th scope="col"><span> </span></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let shopsOrders of shopsOrders; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/shops-orders', shopsOrders.id, 'view']">{{ shopsOrders.id }}</a>
+            <h4>{{ shopsOrders.product.name }}</h4>
           </td>
-          <td>{{ shopsOrders.name }}</td>
-          <td>{{ shopsOrders.totalPrice }}</td>
+          <td>{{ shopsOrders.product.category ? shopsOrders.product.category.name : '' }}</td>
+          <td>{{ formateMoney(shopsOrders.totalPrice) }}</td>
+          <td>{{ shopsOrders.createdDate | date: 'short' }}</td>
+
           <td class="text-right">
             <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/shops-orders', shopsOrders.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
-
-              <button
-                type="submit"
-                [routerLink]="['/shops-orders', shopsOrders.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
-
               <button type="submit" (click)="delete(shopsOrders)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

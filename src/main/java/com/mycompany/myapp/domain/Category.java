@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * A Category.
  */
 @Document(collection = "category")
-public class Category implements Serializable {
+public class Category extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

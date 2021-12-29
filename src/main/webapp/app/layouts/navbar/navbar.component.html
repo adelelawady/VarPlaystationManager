@@ -18,6 +18,18 @@
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a
+          class="nav-link btn border btn-primary text-white text-center badge px-3"
+          (click)="!isFullScreen ? openFullscreen() : closeFullscreen()"
+        >
+          <span>
+            <i *ngIf="!isFullScreen" class="fa fa-expand"></i>
+            <i *ngIf="isFullScreen" class="fa fa-compress"></i>
+          </span>
+        </a>
+      </li>
+
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
           <span>
             <fa-icon icon="home"></fa-icon>
@@ -25,68 +37,113 @@
           </span>
         </a>
       </li>
-      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-        <a
-          class="nav-link"
-          routerLink="device-type"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (click)="collapseNavbar()"
-        >
-          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-          <span jhiTranslate="global.menu.entities.deviceType">Device Type</span>
+
+      <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+      <li
+        *jhiHasAnyAuthority="'ROLE_ADMIN'"
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+          <span>
+            <i class="fa fa-cog" aria-hidden="true"></i>
+            <span>التحكم</span>
+          </span>
         </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+          <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/device-type"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.deviceType">Device Type</span>
+            </a>
+          </li>
+
+          <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/device"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>الاجهزة</span>
+            </a>
+          </li>
+          <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/product"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>الطلبات</span>
+            </a>
+          </li>
+
+          <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/category"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>اصناف الطلبات</span>
+            </a>
+          </li>
+          <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/table"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>الصالات</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/shops-orders"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="erApp.shopsOrders.home.title">Shops Orders</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/takeaway"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="erApp.takeaway.home.title">Takeaways</span>
+            </a>
+          </li>
+        </ul>
       </li>
 
-      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-        <a
-          class="nav-link"
-          routerLink="device"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (click)="collapseNavbar()"
-        >
-          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-          <span>الاجهزة</span>
-        </a>
-      </li>
-      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-        <a
-          class="nav-link"
-          routerLink="product"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (click)="collapseNavbar()"
-        >
-          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-          <span>الطلبات</span>
-        </a>
-      </li>
-
-      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-        <a
-          class="nav-link"
-          routerLink="category"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (click)="collapseNavbar()"
-        >
-          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-          <span>اصناف الطلبات</span>
-        </a>
-      </li>
-      <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-        <a
-          class="nav-link"
-          routerLink="table"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (click)="collapseNavbar()"
-        >
-          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-          <span>الصالات</span>
-        </a>
-      </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         *jhiHasAnyAuthority="'ROLE_ADMIN'"
@@ -103,84 +160,10 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-          <!-- <li>
-            <a
-              class="dropdown-item"
-              routerLink="device-type"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.deviceType">Device Type</span>
-            </a>
-          </li>
-       <!--   <li>
-            <a
-              class="dropdown-item"
-              routerLink="device"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.device">Device</span>
-            </a>
-          </li>
           <li>
             <a
               class="dropdown-item"
-              routerLink="product"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.product">Product</span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="category"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.category">Category</span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="record"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.record">Record</span>
-            </a>
-          </li>
-
-         <li>
-            <a
-              class="dropdown-item"
-              routerLink="session"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.session">Session</span>
-            </a>
-          </li>
-             -->
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="record"
+              routerLink="admin/entities/record"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
@@ -193,26 +176,13 @@
           <li>
             <a
               class="dropdown-item"
-              routerLink="shops-orders"
+              routerLink="admin/entities/main-report"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span>1</span>
-            </a>
-          </li>
-
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="takeaway"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span>3</span>
+              <span>التقرير الاجمالي</span>
             </a>
           </li>
 

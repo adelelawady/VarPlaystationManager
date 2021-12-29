@@ -1,0 +1,148 @@
+<div class="row">
+  <div class="mb-3 row">
+    <label for="staticEmail" class="col-sm-2 col-form-label">من</label>
+    <div class="col-sm-10">
+      <input
+        [(ngModel)]="fromAsDate"
+        (ngModelChange)="from = $event; reload()"
+        type="date"
+        class="form-control"
+        id="staticEmail"
+        name="from"
+      />
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label for="staticEmail1" class="col-sm-2 col-form-label">الي</label>
+    <div class="col-sm-10">
+      <input [(ngModel)]="toAsDate" (ngModelChange)="to = $event; reload()" type="date" class="form-control" id="staticEmail1" name="to" />
+    </div>
+  </div>
+</div>
+<hr class="dark horizontal my-0" />
+<div class="btn-group" role="group" aria-label="Basic example" style="margin: 0; width: 100%">
+  <button type="button" (click)="today()" class="btn btn-primary">اليوم</button>
+  <button type="button" (click)="yesterday()" class="btn btn-primary">امس</button>
+  <button type="button" (click)="lastWeek()" class="btn btn-primary">الاسبوع الماضي</button>
+  <button type="button" (click)="currentMonth()" class="btn btn-primary">الشهر الحالي</button>
+  <button type="button" (click)="pervMonth()" class="btn btn-primary">الشهر الماضي</button>
+</div>
+
+<hr class="dark horizontal my-0" />
+
+<div *ngIf="report" class="p-4 m-3">
+  <div class="col-lg-6 col-7">
+    <h6>الاجهزة</h6>
+  </div>
+  <div class="row">
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-header p-3 pt-2">
+          <div class="text-end pt-1">
+            <p class="text-sm mb-0 text-capitalize">حساب الوقت</p>
+            <h4 class="mb-0">{{ formateMoney(report.totalPriceTimeDevices) }}</h4>
+          </div>
+        </div>
+        <hr class="dark horizontal my-0" />
+        <div class="card-footer p-3">
+          <p class="mb-0"><span class="text-success text-sm font-weight-bolder"></span>حساب الوقت لكل الاوردرات ف المدة</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-header p-3 pt-2">
+          <div class="text-end pt-1">
+            <p class="text-sm mb-0 text-capitalize">حساب الاوردرات</p>
+            <h4 class="mb-0">{{ formateMoney(report.totalPriceOrdersDevices) }}</h4>
+          </div>
+        </div>
+        <hr class="dark horizontal my-0" />
+        <div class="card-footer p-3">
+          <p class="mb-0"><span class="text-success text-sm font-weight-bolder"> </span>حساب الاوردرات لكل الاجهرزة ف المدة</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-header p-3 pt-2">
+          <div class="text-end pt-1">
+            <p class="text-sm mb-0 text-capitalize">المجموع الكلي للاجهزة محسوب في المدة</p>
+            <h4 class="mb-0">{{ formateMoney(report.totalPriceDevices) }}</h4>
+          </div>
+        </div>
+        <hr class="dark horizontal my-0" />
+        <div class="card-footer p-3">
+          <p class="mb-0"><span class="text-success text-sm font-weight-bolder"></span>مجموع الاوردرات + حساب الوقت في المدة</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card border border-secondary">
+        <div class="card-header p-3 pt-2">
+          <div class="text-end pt-1">
+            <p class="text-sm mb-0 text-capitalize">المجموع الكلي للاجهزة الاساسي في المدة</p>
+            <h4 class="mb-0">{{ formateMoney(report.totalPriceUserDevices) }}</h4>
+          </div>
+        </div>
+        <hr class="dark horizontal my-0" />
+        <div class="card-footer p-3">
+          <p class="mb-0"><span class="text-success text-sm font-weight-bolder"></span>مجموع مدخلات المستخدم ف الفاتورة</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="report" class="p-4 m-3">
+  <div class="row">
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <h6>اوردرات المطاعم</h6>
+      <div class="card border border-secondary">
+        <div class="card-header p-3 pt-2">
+          <div class="text-end pt-1">
+            <p class="text-sm mb-0 text-capitalize">المجموع الكلي ل اوردورات المطاعم في المدة</p>
+            <h4 class="mb-0">{{ formateMoney(report.totalPriceOrdersShops) }}</h4>
+          </div>
+        </div>
+        <hr class="dark horizontal my-0" />
+        <div class="card-footer p-3">
+          <p class="mb-0"><span class="text-success text-sm font-weight-bolder"></span>مجموع حساب اوردورات المطاعم</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <h6>الاوردرات</h6>
+      <div class="card border border-secondary">
+        <div class="card-header p-3 pt-2">
+          <div class="text-end pt-1">
+            <p class="text-sm mb-0 text-capitalize">المجموع الكلي للاوردرات في المدة</p>
+            <h4 class="mb-0">{{ formateMoney(report.totalPriceOrdersTakeAway) }}</h4>
+          </div>
+        </div>
+        <hr class="dark horizontal my-0" />
+        <div class="card-footer p-3">
+          <p class="mb-0"><span class="text-success text-sm font-weight-bolder"></span>takeaway مجموع حساب اوردورات</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <h6>الصالات</h6>
+      <div class="card border border-secondary">
+        <div class="card-header p-3 pt-2">
+          <div class="text-end pt-1">
+            <p class="text-sm mb-0 text-capitalize">المجموع الكلي للصالات في المدة</p>
+            <h4 class="mb-0">{{ formateMoney(report.totalPriceOrdersTables) }}</h4>
+          </div>
+        </div>
+        <hr class="dark horizontal my-0" />
+        <div class="card-footer p-3">
+          <p class="mb-0"><span class="text-success text-sm font-weight-bolder"></span>مجموع حساب اوردورات الصالات</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

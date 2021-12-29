@@ -11,11 +11,14 @@ import { ShopsOrdersDeleteDialogComponent } from '../delete/shops-orders-delete-
   templateUrl: './shops-orders.component.html',
 })
 export class ShopsOrdersComponent implements OnInit {
-  shopsOrders?: IShopsOrders[];
+  shopsOrders?: any[];
   isLoading = false;
 
   constructor(protected shopsOrdersService: ShopsOrdersService, protected modalService: NgbModal) {}
-
+  formateMoney(r: any): any {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  }
   loadAll(): void {
     this.isLoading = true;
 

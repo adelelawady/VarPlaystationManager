@@ -2,20 +2,20 @@
   "erApp": {
     "table": {
       "home": {
-        "title": "الجداول",
+        "title": "الصالات",
         "refreshListLabel": "تحديث القائمة",
-        "createLabel": "قم بإنشاء جدول جديد",
-        "createOrEditLabel": "إنشاء أو تحرير جدول",
-        "notFound": "لم يتم العثور على جداول"
+        "createLabel": "قم بإنشاء صالة جديد",
+        "createOrEditLabel": "إنشاء أو تحرير صالة",
+        "notFound": "لم يتم العثور على صالات"
       },
-      "created": "تم إنشاء جدول جديد بالمعرف {{param}}",
-      "updated": "تم تحديث الجدول بالمعرف {{param}}",
-      "deleted": "تم حذف جدول بالمعرف {{param}}",
+      "created": "تم إنشاء صالة جديد بالمعرف {{param}}",
+      "updated": "تم تحديث الصالة بالمعرف {{param}}",
+      "deleted": "تم حذف صالة بالمعرف {{param}}",
       "delete": {
-        "question": "هل أنت متأكد أنك تريد حذف الجدول {{id}}؟"
+        "question": "هل أنت متأكد أنك تريد حذف الصالة {{id}}؟"
       },
       "detail": {
-        "title": "جدول"
+        "title": "صالة"
       },
       "id": "بطاقة تعريف",
       "name": "اسم",

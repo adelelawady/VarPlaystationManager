@@ -29,7 +29,7 @@
         <dt><span jhiTranslate="erApp.record.device">Device</span></dt>
         <dd>
           <div *ngIf="record.device">
-            <a [routerLink]="['/device', record.device?.id, 'view']">{{ record.device?.id }}</a>
+            <a [routerLink]="['/device', record.device?.id, 'view']">{{ record.device?.name }}</a>
           </div>
         </dd>
         <dt><span jhiTranslate="erApp.record.orders">Orders</span></dt>

@@ -1,34 +1,30 @@
 <ng-sidebar-accordion #accordion style="left: 0; bottom: unset" class="ng-sidebar-accordion__bottom-pane_over">
   <!-- A sidebar -->
-  <ng-sidebar class="classtest" sidebarResizable="true" position="bottom" mode="over" [opened]="true">
+  <ng-sidebar *ngIf="account" class="classtest" sidebarResizable="true" position="bottom" mode="over" [opened]="true">
     <ng-sidebar-header>
       <div>
-        <div>ORDERS</div>
+        <div><h3 class="m-0 pt-2">الطلبات</h3></div>
       </div>
     </ng-sidebar-header>
 
     <ng-sidebar-content class="classtest">
       <div class="row mx-1">
         <div class="col-md-5">
-          <h5 class="card-title mx-4 text-center bg-info text-white rounded">الاصناف</h5>
-          <div
-            class="row border border-2 border-primary p-5 rounded"
-            role="group"
-            aria-label="..."
-            style="overflow: scroll; max-height: 250px"
-          >
+          <h5 class="card-title mx-0 text-center bg-dark text-white rounded p-1 pl-2">الاصناف</h5>
+          <div class="row border border-2 border-primary p-2 rounded" style="overflow: scroll; max-height: 250px">
             <button
               *ngFor="let cat of categories"
               (click)="getAllProductsByCategory(cat.id)"
               type="button"
-              class="btn btn-primary col-2 p-2 py-4 m-1"
+              class="col-auto p-2 py-4 m-1 badge badge-primary"
+              style="font-size: large; min-width: 100px"
             >
-              {{ cat.name }}
+              <h6 style="font-weight: bold !important">{{ cat.name }}</h6>
             </button>
           </div>
         </div>
         <div class="col-md-7">
-          <h5 class="card-title mx-4 text-center bg-info text-white rounded">الطلبات</h5>
+          <h5 class="card-title mx-0 text-center bg-dark text-white rounded p-1 pl-2">الطلبات</h5>
           <div *ngIf="products" class="row mx-1" style="overflow: scroll; max-height: 250px">
             <button
               *ngFor="let prod of products"
@@ -58,224 +54,257 @@
 
   <!-- Page content -->
   <ng-sidebar-accordion-content (click)="closeOrdersPanle()">
-    <div class="">
-      <ul class="nav nav-pills nav-fill border px-3 py-2">
-        <li class="nav-item">
-          <a class="nav-link" (click)="selectTap('tapDevices')" [ngClass]="{ active: tapDevices }" aria-current="page" href="#">الاجهزة</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="selectTap('tapTables')" [ngClass]="{ active: tapTables }" href="#">الصالات</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="selectTap('tapTakeaway'); openOrdersPanle()" [ngClass]="{ active: tapTakeaway }" href="#">اوردارت</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" (click)="selectTap('tapShops'); openOrdersPanle()" [ngClass]="{ active: tapShops }" href="#">مطاعم</a>
-        </li>
-      </ul>
-    </div>
-
-    <div class="row" *ngIf="devices">
-      <div class="col-8" [ngClass]="{ 'col-md-12': tapTakeaway || tapShops }">
-        <div class="card-body px-1" *ngIf="tapDevices">
-          <h5 class="card-title mx-4">الاجهزة</h5>
-          <div class="card jh-card m-2 p-4">
-            <div class="row">
-              <div class="col-md-3 p-1" *ngFor="let device of devices">
-                <jhi-device-component
-                  (deviceClicked)="selectedDevice = $event"
-                  (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
-                  (deviceStopped)="closeOrdersPanle()"
-                  [device]="device"
-                  [isSelected]="selectedDevice && selectedDevice.id == device.id"
-                >
-                </jhi-device-component>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body px-1" *ngIf="tapTables">
-          <h5 class="card-title mx-4">الصالات</h5>
-          <div class="card jh-card m-2 p-4">
-            <div class="row">
-              <div class="col-md-3 p-1" *ngFor="let table of tables">
-                <jhi-table-component
-                  (tableClicked)="selectedTable = $event; openOrdersPanle()"
-                  [isSelected]="selectedTable && selectedTable.id == table.id"
-                  (tableStarted)="loadAllTables()"
-                  (tableStopped)="selectedTable = null; loadAllTables()"
-                  [table]="table"
-                ></jhi-table-component>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body px-1" *ngIf="tapTakeaway">
-          <span>
-            <h5 class="card-title mx-4">takeaway اوردرات</h5>
-          </span>
-          <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
-            <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
-              <table class="table table-striped" aria-describedby="page-heading">
-                <thead style="display: none">
-                  <tr>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let takeaway of takeawayOrders" data-cy="entityTable">
-                    <td>
-                      <h4>{{ takeaway.product.name }}</h4>
-                    </td>
-                    <td>{{ takeaway.product.category ? takeaway.product.category.name : '' }}</td>
-                    <td>{{ formateMoney(takeaway.product.takeawayPrice) }}</td>
-                    <td>{{ takeaway.createdDate | date: 'short' }}</td>
-                    <td>
-                      <button
-                        type="submit"
-                        (click)="deleteTakeaway(takeaway.id)"
-                        class="btn btn-danger btn-sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <fa-icon icon="times"></fa-icon>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body px-1" *ngIf="tapShops">
-          <span>
-            <h5 class="card-title mx-4">اوردرات مطاعم</h5>
-          </span>
-          <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
-            <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
-              <table class="table table-striped" aria-describedby="page-heading">
-                <thead style="display: none">
-                  <tr>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                    <th scope="col"><span>Name</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let shopOrder of shopsOrders" data-cy="entityTable">
-                    <td>
-                      <h4>{{ shopOrder.product.name }}</h4>
-                    </td>
-                    <td>{{ shopOrder.product.category ? shopOrder.product.category.name : '' }}</td>
-                    <td>{{ formateMoney(shopOrder.totalPrice) }}</td>
-                    <td>{{ shopOrder.createdDate | date: 'short' }}</td>
-                    <td>
-                      <button
-                        type="submit"
-                        (click)="deleteShopOrder(shopOrder.id)"
-                        class="btn btn-danger btn-sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <fa-icon icon="times"></fa-icon>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+    <div *ngIf="!account">
+      <div class="card p-5 border rounded shadow-sm m-3">
+        <h1 class="display-4"><span>Welcome, To VAR</span> (1.0)</h1>
+        <img src="/content/images/logo.jpeg" style="width: 800px; margin: 0 auto" />
+        <div class="alert alert-warning">
+          <a class="alert-link" (click)="login()">تسجيل الدخول</a>
         </div>
       </div>
+    </div>
 
-      <div class="col-4 py-5">
-        <div class="card p-3" *ngIf="selectedDevice">
-          <h5 class="card-title">
-            {{ selectedDevice.name }}
-          </h5>
+    <div class="" *ngIf="account">
+      <ul class="nav nav-pills nav-fill border px-3 py-2">
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapDevices')" [ngClass]="{ active: tapDevices }" aria-current="page" href="#"
+            >الاجهزة</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapTables')" [ngClass]="{ active: tapTables }" href="#">الصالات</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapTakeaway'); openOrdersPanle()" [ngClass]="{ active: tapTakeaway }" href="#"
+            >اوردارت</a
+          >
+        </li>
 
-          <div class="card-body">
-            <div class="row" *ngIf="selectedDevice">
-              <div class="text-center align-center justify-content-center card-subtitle rounded border border-2 shadow-sm">
-                <small
-                  class="d-block"
-                  *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.ordersPrice"
-                  for="staticEmail"
-                  class="row"
-                  >{{ formateMoney(selectedDevice.session.ordersPrice) }} : حساب الطلبات</small
-                >
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapShops'); openOrdersPanle()" [ngClass]="{ active: tapShops }" href="#"
+            >مطاعم</a
+          >
+        </li>
+      </ul>
 
-                <small class="d-block" *ngIf="selectedDevice && selectedDevice.session" for="staticEmail" class="row">
-                  {{ (selectedDevice | devicePriceTimeOnly | async) || 'EGP 0' }} :حساب الوقت</small
-                >
+      <div class="row" *ngIf="devices">
+        <div class="col-8" [ngClass]="{ 'col-md-12': tapTakeaway || tapShops }">
+          <div class="card-body px-1" *ngIf="tapDevices">
+            <h5 class="card-title mx-4">الاجهزة</h5>
+            <div class="card jh-card m-2 p-4">
+              <div class="row">
+                <div class="col-md-3 p-1" *ngFor="let device of devices">
+                  <jhi-device-component
+                    (deviceClicked)="selectedDevice = $event"
+                    (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
+                    (deviceStopped)="closeOrdersPanle()"
+                    [device]="device"
+                    [isSelected]="selectedDevice && selectedDevice.id == device.id"
+                  >
+                  </jhi-device-component>
+                </div>
               </div>
-              <h5 class="card-title my-2">الطلبات</h5>
-              <ul
-                *ngIf="selectedDevice.session && selectedDevice.session.orders"
-                class="list-group list-group-flush border border-1 rounded-lg p-0"
-                style="direction: rtl"
-              >
-                <li *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" class="list-group-item">
-                  <span class="float-left">
-                    {{ prod.name }}
-                    <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
-                      <i class="fa fa-minus"></i>
-                    </button>
-                  </span>
-                  <span style="font-size: large" *ngIf="!selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary"
-                    >1
+            </div>
+          </div>
 
-                    <small class="text-muted">* {{ prod.price }}LE</small>
-                  </span>
+          <div class="card-body px-1" *ngIf="tapTables">
+            <h5 class="card-title mx-4">الصالات</h5>
+            <div class="card jh-card m-2 p-4">
+              <div class="row">
+                <div class="col-md-3 p-1" *ngFor="let table of tables">
+                  <jhi-table-component
+                    (tableClicked)="selectedTable = $event; openOrdersPanle()"
+                    [isSelected]="selectedTable && selectedTable.id == table.id"
+                    (tableStarted)="loadAllTables()"
+                    (tableStopped)="selectedTable = null; loadAllTables()"
+                    [table]="table"
+                  ></jhi-table-component>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                  <span style="font-size: large" *ngIf="selectedDevice.session.ordersQuantity[prod.id]" class="float-right text-primary">
-                    <span class="badge badge-primary">{{ selectedDevice.session.ordersQuantity[prod.id] }}</span>
+          <div class="card-body px-1" *ngIf="tapTakeaway">
+            <span>
+              <h5 class="card-title mx-4">takeaway اوردرات</h5>
+            </span>
+            <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
+              <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                  <thead style="display: none">
+                    <tr>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let takeaway of takeawayOrders" data-cy="entityTable">
+                      <td>
+                        <h4>{{ takeaway.product.name }}</h4>
+                      </td>
+                      <td>{{ takeaway.product.category ? takeaway.product.category.name : '' }}</td>
+                      <td>{{ formateMoney(takeaway.product.takeawayPrice) }}</td>
+                      <td>{{ takeaway.createdDate | date: 'short' }}</td>
+                      <td>
+                        <button
+                          type="submit"
+                          (click)="deleteTakeaway(takeaway.id)"
+                          class="btn btn-danger btn-sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <fa-icon icon="times"></fa-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
-                    <small class="text-muted">* {{ prod.price }}LE</small>
-                  </span>
-                </li>
-              </ul>
+          <div class="card-body px-1" *ngIf="tapShops">
+            <span>
+              <h5 class="card-title mx-4">اوردرات مطاعم</h5>
+            </span>
+            <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
+              <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                  <thead style="display: none">
+                    <tr>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                      <th scope="col"><span>Name</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let shopOrder of shopsOrders" data-cy="entityTable">
+                      <td>
+                        <h4>{{ shopOrder.product.name }}</h4>
+                      </td>
+                      <td>{{ shopOrder.product.category ? shopOrder.product.category.name : '' }}</td>
+                      <td>{{ formateMoney(shopOrder.totalPrice) }}</td>
+                      <td>{{ shopOrder.createdDate | date: 'short' }}</td>
+                      <td>
+                        <button
+                          type="submit"
+                          (click)="deleteShopOrder(shopOrder.id)"
+                          class="btn btn-danger btn-sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <fa-icon icon="times"></fa-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="card p-3" *ngIf="selectedTable">
-          <h5 class="card-title">
-            {{ selectedTable.name }}
-          </h5>
+        <div class="col-4 py-5">
+          <div class="card p-3" *ngIf="selectedDevice">
+            <h5 class="card-title">
+              {{ selectedDevice.name }}
+            </h5>
 
-          <div class="card-body">
-            <div class="row" *ngIf="selectedTable">
-              <h5 class="card-title my-2">الطلبات</h5>
-              <ul class="list-group list-group-flush border border-1 rounded-lg p-0" style="direction: rtl">
-                <li *ngFor="let prod of selectedTable.ordersData.slice().reverse()" class="list-group-item">
-                  <span class="float-left">
-                    {{ prod.name }}
-                    <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
-                      <i class="fa fa-minus"></i>
-                    </button>
-                  </span>
-                  <span style="font-size: large" *ngIf="!selectedTable.ordersQuantity[prod.id]" class="float-right text-primary"
-                    >1
+            <div class="card-body">
+              <div class="row" *ngIf="selectedDevice">
+                <div class="table-responsive" id="entities">
+                  <table class="table" aria-describedby="page-heading">
+                    <thead>
+                      <tr style="display: none">
+                        <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
 
-                    <small class="text-muted">* {{ prod.price }}LE</small>
-                  </span>
+                        <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
 
-                  <span style="font-size: large" *ngIf="selectedTable.ordersQuantity[prod.id]" class="float-right text-primary">
-                    <span class="badge badge-primary">{{ selectedTable.ordersQuantity[prod.id] }}</span>
+                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" data-cy="entityTable">
+                        <td style="word-break: break-word" class="text-center">
+                          <h6 class="text-primary">{{ prod.name }}</h6>
+                        </td>
 
-                    <small class="text-muted">* {{ prod.price }}LE</small>
-                  </span>
-                </li>
-              </ul>
+                        <td>
+                          <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                            <span class="badge badge-primary">{{
+                              selectedDevice.session.ordersQuantity[prod.id] ? selectedDevice.session.ordersQuantity[prod.id] : '1'
+                            }}</span>
+                          </span>
+                        </td>
+
+                        <td>
+                          <small class="text-muted"> {{ prod.price }}LE</small>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
+                            <i class="fa fa-minus"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-3" *ngIf="selectedTable">
+            <h5 class="card-title">
+              {{ selectedTable.name }}
+            </h5>
+
+            <div class="card-body">
+              <div class="row" *ngIf="selectedTable">
+                <h5 class="card-title my-2">الطلبات</h5>
+
+                <div class="table-responsive" id="entities">
+                  <table class="table" aria-describedby="page-heading">
+                    <thead>
+                      <tr style="display: none">
+                        <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
+
+                        <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let prod of selectedTable.ordersData.slice().reverse()" data-cy="entityTable">
+                        <td style="word-break: break-word" class="text-center">
+                          <h6 class="text-primary">{{ prod.name }}</h6>
+                        </td>
+
+                        <td>
+                          <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                            <span class="badge badge-primary">{{
+                              selectedTable.ordersQuantity[prod.id] ? selectedTable.ordersQuantity[prod.id] : '1'
+                            }}</span>
+                          </span>
+                        </td>
+
+                        <td>
+                          <small class="text-muted"> {{ prod.price }}LE</small>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
+                            <i class="fa fa-minus"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>

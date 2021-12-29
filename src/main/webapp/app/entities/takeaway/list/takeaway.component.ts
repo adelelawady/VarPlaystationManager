@@ -11,7 +11,7 @@ import { TakeawayDeleteDialogComponent } from '../delete/takeaway-delete-dialog.
   templateUrl: './takeaway.component.html',
 })
 export class TakeawayComponent implements OnInit {
-  takeaways?: ITakeaway[];
+  takeaways?: any[];
   isLoading = false;
 
   constructor(protected takeawayService: TakeawayService, protected modalService: NgbModal) {}
@@ -29,7 +29,10 @@ export class TakeawayComponent implements OnInit {
       }
     );
   }
-
+  formateMoney(r: any): any {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  }
   ngOnInit(): void {
     this.loadAll();
   }

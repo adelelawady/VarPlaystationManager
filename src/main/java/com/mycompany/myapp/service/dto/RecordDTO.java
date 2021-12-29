@@ -28,6 +28,16 @@ public class RecordDTO implements Serializable {
 
     private Double totalPriceUser;
 
+    private Double discount;
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
     private Duration duration;
 
     private Double totalPriceTime;

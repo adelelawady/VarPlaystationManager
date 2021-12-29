@@ -110,22 +110,15 @@ public class RecordServiceImpl implements RecordService {
 
                 LocalDateTime StartOfDay = localDate.atTime(LocalTime.MIN);
 
-                System.out.println(EndOfDay);
-                System.out.println(StartOfDay);
-
                 result =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                    this.recordRepository.findAllByStartBetween(
                             pageable,
-                            StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDay.atZone(ZoneId.systemDefault()).toInstant(),
                             StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDay.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
-                            StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDay.atZone(ZoneId.systemDefault()).toInstant(),
+                    this.recordRepository.findAllByStartBetween(
                             StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDay.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -139,18 +132,14 @@ public class RecordServiceImpl implements RecordService {
                 LocalDateTime StartOfDayyesterday = localDateyesterday.atTime(LocalTime.MIN);
 
                 result =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                    this.recordRepository.findAllByStartBetween(
                             pageable,
-                            StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
                             StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
-                            StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
+                    this.recordRepository.findAllByStartBetween(
                             StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -165,21 +154,15 @@ public class RecordServiceImpl implements RecordService {
 
                 LocalDateTime StartOfDayyesterdayx = localDateyesterdayx.atTime(LocalTime.MIN);
 
-                System.out.println(EndOfDayyesterdayx);
-                System.out.println(StartOfDayyesterdayx);
                 result =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                    this.recordRepository.findAllByStartBetween(
                             pageable,
-                            StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
                             StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
-                            StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
+                    this.recordRepository.findAllByStartBetween(
                             StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -195,18 +178,14 @@ public class RecordServiceImpl implements RecordService {
                 LocalDateTime StartOfDayMonth = localDatemonth.atTime(LocalTime.MIN);
 
                 result =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
+                    this.recordRepository.findAllByStartBetween(
                             pageable,
-                            StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant(),
                             StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetweenOrEndBetween(
-                            StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
-                            EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant(),
+                    this.recordRepository.findAllByStartBetween(
                             StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -220,7 +199,7 @@ public class RecordServiceImpl implements RecordService {
             res.setTotalPriceUser(res.getTotalPriceUser() + reco.getTotalPriceUser());
             res.setTotalPrice(res.getTotalPrice() + reco.getTotalPrice());
             res.setTotalPriceOrders(res.getTotalPriceOrders() + reco.getTotalPriceOrders());
-
+            res.setDiscount(res.getDiscount() + reco.getDiscount());
             res.setTotalPriceTime(res.getTotalPriceTime() + reco.getTotalPriceTime());
             res.setTotalHours(res.getTotalHours() + reco.getDuration().toHoursPart());
             res.setTotalMinutes(res.getTotalMinutes() + reco.getDuration().toMinutesPart());

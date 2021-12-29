@@ -1,4 +1,4 @@
-<div class="row card p-3 rounded">
+<div class="row">
   <div class="row">
     <div class="col-lg-12">
       <h2>التفاصيل</h2>
@@ -107,7 +107,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-record"
-        [routerLink]="['/record/new']"
+        [routerLink]="['/admin/entities/record/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="erApp.record.home.createLabel"> Create a new Record </span>
@@ -135,7 +135,11 @@
 
             <th scope="col" jhiSortBy="totalPriceOrders"><span>سعر الطلبات</span> <fa-icon icon="sort"></fa-icon></th>
 
+            <th scope="col" jhiSortBy="totalPrice"><span>الخصم</span> <fa-icon icon="sort"></fa-icon></th>
+
             <th scope="col" jhiSortBy="totalPrice"><span>السعر الكلي</span> <fa-icon icon="sort"></fa-icon></th>
+
+            <th scope="col" jhiSortBy="totalPrice"><span> السعر الكلي قبل الخصم</span> <fa-icon icon="sort"></fa-icon></th>
 
             <th scope="col" jhiSortBy="totalPriceUser"><span> السعر الكلي المدخل</span> <fa-icon icon="sort"></fa-icon></th>
             <th scope="col"></th>
@@ -144,22 +148,23 @@
         <tbody>
           <tr *ngFor="let record of records; trackBy: trackId" data-cy="entityTable">
             <td>
-              <a [routerLink]="['/device', record.device?.id, 'view']">{{ record.device?.name }}</a>
+              <a [routerLink]="['/admin/entities/device', record.device?.id, 'view']">{{ record.device?.name }}</a>
             </td>
 
             <td>{{ record.hours === 0 ? record.minutes + ' m' : record.hours + ' h : ' + record.minutes + ' m' }}</td>
 
             <td>{{ formateMoney(record.totalPriceTime) }}</td>
             <td>{{ formateMoney(record.totalPriceOrders) }}</td>
+            <td>{{ record.discount }}%</td>
             <td>{{ formateMoney(record.totalPrice) }}</td>
-
+            <td>{{ formateMoney(record.totalPriceTime + record.totalPriceOrders) }}</td>
             <td>{{ formateMoney(record.totalPriceUser) }}</td>
 
             <td class="text-right">
               <div class="btn-group">
                 <button
                   type="submit"
-                  [routerLink]="['/record', record.id, 'view']"
+                  [routerLink]="['/admin/entities/record', record.id, 'view']"
                   class="btn btn-info btn-sm"
                   data-cy="entityDetailsButton"
                 >
@@ -167,7 +172,7 @@
                   <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                 </button>
 
-                <!--  <button type="submit" [routerLink]="['/record', record.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <!--  <button type="submit" [routerLink]="['/admin/entities/record', record.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>-->

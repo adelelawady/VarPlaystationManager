@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * A Record.
  */
 @Document(collection = "record")
-public class Record implements Serializable {
+public class Record extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,7 +52,7 @@ public class Record implements Serializable {
     private boolean multi = false;
 
     @Field("discount")
-    private Double discount;
+    private Double discount = 0.0;
 
     @Field("ordersData")
     @JsonIgnoreProperties(ignoreUnknown = true)

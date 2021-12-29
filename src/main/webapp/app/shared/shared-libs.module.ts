@@ -6,8 +6,18 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { SidebarModule } from 'ng-sidebar';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  exports: [FormsModule, CommonModule, NgbModule, InfiniteScrollModule, FontAwesomeModule, ReactiveFormsModule, TranslateModule],
+  exports: [
+    FormsModule,
+    CommonModule,
+    RouterModule,
+    NgbModule,
+    InfiniteScrollModule,
+    FontAwesomeModule,
+    ReactiveFormsModule,
+    TranslateModule,
+  ],
 })
 export class SharedLibsModule {}

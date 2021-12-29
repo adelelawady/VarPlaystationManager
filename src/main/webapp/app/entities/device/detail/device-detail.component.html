@@ -17,7 +17,7 @@
         <dt><span jhiTranslate="erApp.device.type">Type</span></dt>
         <dd>
           <div *ngIf="device.type">
-            <a [routerLink]="['/device-type', device.type?.id, 'view']">{{ device.type?.name }}</a>
+            <a [routerLink]="['/admin/entities/device-type', device.type?.id, 'view']">{{ device.type?.name }}</a>
           </div>
         </dd>
       </dl>
@@ -26,7 +26,7 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/device', device.id, 'edit']" class="btn btn-primary">
+      <button type="button" [routerLink]="['/admin/entities/device', device.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
     </div>

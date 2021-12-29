@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MainReportPageComponent } from '../pages/main-report-page/main-report-page.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,14 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'erApp.takeaway.home.title' },
         loadChildren: () => import('./takeaway/takeaway.module').then(m => m.TakeawayModule),
       },
+
+      {
+        path: 'main-report',
+        data: { pageTitle: 'erApp.takeaway.home.title' },
+        loadChildren: () => import('../pages/main-report-page/main-report-page.module').then(m => m.MainReportPageModule),
+      },
+
+      //MainReportPageComponent
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

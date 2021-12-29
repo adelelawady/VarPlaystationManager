@@ -1,96 +1,94 @@
-<div class="card p-3">
-  <h2 id="page-heading" data-cy="DeviceTypeHeading">
-    <span jhiTranslate="erApp.deviceType.home.title">Device Types</span>
+<h2 id="page-heading" data-cy="DeviceTypeHeading">
+  <span jhiTranslate="erApp.deviceType.home.title">Device Types</span>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="erApp.deviceType.home.refreshListLabel">Refresh List</span>
-      </button>
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+      <span jhiTranslate="erApp.deviceType.home.refreshListLabel">Refresh List</span>
+    </button>
 
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-device-type"
-        [routerLink]="['/device-type/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="erApp.deviceType.home.createLabel"> Create a new Device Type </span>
-      </button>
-    </div>
-  </h2>
-
-  <jhi-alert-error></jhi-alert-error>
-
-  <jhi-alert></jhi-alert>
-
-  <div class="alert alert-warning" id="no-result" *ngIf="deviceTypes?.length === 0">
-    <span jhiTranslate="erApp.deviceType.home.notFound">No deviceTypes found</span>
+    <button
+      id="jh-create-entity"
+      data-cy="entityCreateButton"
+      class="btn btn-primary jh-create-entity create-device-type"
+      [routerLink]="['/admin/entities/device-type/new']"
+    >
+      <fa-icon icon="plus"></fa-icon>
+      <span jhiTranslate="erApp.deviceType.home.createLabel"> Create a new Device Type </span>
+    </button>
   </div>
+</h2>
 
-  <div class="table-responsive" id="entities" *ngIf="deviceTypes && deviceTypes.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="name"><span>اسم النوع</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="pricePerHour"><span>السعر ف الساعة</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="pricePerHourMulti"><span>السعر ف الساعة Multi</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let deviceType of deviceTypes; trackBy: trackId" data-cy="entityTable">
-          <td>{{ deviceType.name }}</td>
-          <td>{{ deviceType.pricePerHour }}</td>
-          <td>{{ deviceType.pricePerHourMulti }}</td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/device-type', deviceType.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
+<jhi-alert-error></jhi-alert-error>
 
-              <button
-                type="submit"
-                [routerLink]="['/device-type', deviceType.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
+<jhi-alert></jhi-alert>
 
-              <!-- <button type="submit" (click)="delete(deviceType)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+<div class="alert alert-warning" id="no-result" *ngIf="deviceTypes?.length === 0">
+  <span jhiTranslate="erApp.deviceType.home.notFound">No deviceTypes found</span>
+</div>
+
+<div class="table-responsive" id="entities" *ngIf="deviceTypes && deviceTypes.length > 0">
+  <table class="table table-striped" aria-describedby="page-heading">
+    <thead>
+      <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+        <th scope="col" jhiSortBy="name"><span>اسم النوع</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="pricePerHour"><span>السعر ف الساعة</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="pricePerHourMulti"><span>السعر ف الساعة Multi</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let deviceType of deviceTypes; trackBy: trackId" data-cy="entityTable">
+        <td>{{ deviceType.name }}</td>
+        <td>{{ deviceType.pricePerHour }}</td>
+        <td>{{ deviceType.pricePerHourMulti }}</td>
+        <td class="text-right">
+          <div class="btn-group">
+            <button
+              type="submit"
+              [routerLink]="['/admin/entities/device-type', deviceType.id, 'view']"
+              class="btn btn-info btn-sm"
+              data-cy="entityDetailsButton"
+            >
+              <fa-icon icon="eye"></fa-icon>
+              <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+            </button>
+
+            <button
+              type="submit"
+              [routerLink]="['/admin/entities/device-type', deviceType.id, 'edit']"
+              class="btn btn-primary btn-sm"
+              data-cy="entityEditButton"
+            >
+              <fa-icon icon="pencil-alt"></fa-icon>
+              <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+
+            <!-- <button type="submit" (click)="delete(deviceType)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>-->
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="deviceTypes && deviceTypes.length > 0">
+  <div class="row justify-content-center">
+    <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
   </div>
 
-  <div *ngIf="deviceTypes && deviceTypes.length > 0">
-    <div class="row justify-content-center">
-      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-    </div>
-
-    <div class="row justify-content-center">
-      <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
-        [pageSize]="itemsPerPage"
-        [maxSize]="5"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
-      ></ngb-pagination>
-    </div>
+  <div class="row justify-content-center">
+    <ngb-pagination
+      [collectionSize]="totalItems"
+      [(page)]="ngbPaginationPage"
+      [pageSize]="itemsPerPage"
+      [maxSize]="5"
+      [rotate]="true"
+      [boundaryLinks]="true"
+      (pageChange)="loadPage($event)"
+    ></ngb-pagination>
   </div>
 </div>

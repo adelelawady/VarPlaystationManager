@@ -3,7 +3,7 @@
     "title": "VAR",
     "browsehappy": "أنت تستخدم متصفحًا <strong> قديمًا </ strong>. الرجاء <a href=\"http://browsehappy.com/؟locale=en\"> ترقية المتصفح </a> لتحسين تجربتك.",
     "menu": {
-      "home": "الرئيسية",
+      "home": "مسكن",
       "jhipster-needle-menu-add-element": "سيضيف JHipster إدخالات قائمة إضافية هنا (لا تترجم!)",
       "entities": {
         "main": "جهات",
@@ -100,11 +100,11 @@
       "addblob": "أضف النقطة",
       "addimage": "إضافة صورة",
       "back": "عودة",
-      "cancel": "الغاء",
+      "cancel": "يلغي",
       "delete": "حذف",
       "edit": "تعديل",
       "open": "فتح",
-      "save": "حفظ",
+      "save": "يحفظ",
       "view": "عرض"
     },
     "detail": {

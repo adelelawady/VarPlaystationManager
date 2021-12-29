@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * A Record.
  */
 @Document(collection = "tableRecord")
-public class TableRecord implements Serializable {
+public class TableRecord extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

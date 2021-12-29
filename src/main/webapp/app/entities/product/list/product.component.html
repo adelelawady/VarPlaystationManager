@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-product"
-        [routerLink]="['/product/new']"
+        [routerLink]="['/admin/entities/product/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="erApp.product.home.createLabel"> Create a new Product </span>
@@ -51,14 +51,14 @@
           <td>{{ product.shopsPrice }}</td>
           <td>
             <div *ngIf="product.category">
-              <a [routerLink]="['/category', product.category?.id, 'view']">{{ product.category?.name }}</a>
+              <a [routerLink]="['/admin/entities/category', product.category?.id, 'view']">{{ product.category?.name }}</a>
             </div>
           </td>
           <td class="text-right">
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/product', product.id, 'view']"
+                [routerLink]="['/admin/entities/product', product.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -68,7 +68,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/product', product.id, 'edit']"
+                [routerLink]="['/admin/entities/product', product.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

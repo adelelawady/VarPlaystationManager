@@ -24,6 +24,9 @@ Main page styles
 ::ndg-deep ng-sidebar-header {
   display: none;
 }
+.mainTabTxt {
+  font-size: larger;
+}
 
 ::ng-deep .ng-sidebar-accordion__bottom-pane {
   bottom: 50px !important;
@@ -31,4 +34,14 @@ Main page styles
 
 ::ng-deep .modal-backdrop.fade.show {
   display: none;
+}
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
