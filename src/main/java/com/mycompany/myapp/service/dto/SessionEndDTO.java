@@ -14,17 +14,27 @@ public class SessionEndDTO implements Serializable {
 
     private Double totalPrice = 0.0;
 
-    private Double discount = 0.0;
+    private Double ordersDiscount = 0.0;
 
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
+    private Double timeDiscount = 0.0;
 
     private boolean print = true;
+
+    public Double getOrdersDiscount() {
+        return ordersDiscount;
+    }
+
+    public void setOrdersDiscount(Double ordersDiscount) {
+        this.ordersDiscount = ordersDiscount;
+    }
+
+    public Double getTimeDiscount() {
+        return timeDiscount;
+    }
+
+    public void setTimeDiscount(Double timeDiscount) {
+        this.timeDiscount = timeDiscount;
+    }
 
     public Double getTotalPrice() {
         return totalPrice;

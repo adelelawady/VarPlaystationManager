@@ -184,19 +184,33 @@ public class DeviceServiceImpl implements DeviceService {
 
             totalPriceCalculatedTime = (double) Math.round(totalPriceCalculatedTime);
 
+            // Double totalOrderPriceAfterDiscount
             rec.setTotalPriceOrders(currentActiveSession.getOrdersPrice());
 
             rec.setTotalPriceTime(totalPriceCalculatedTime);
+
             rec.setMulti(currentActiveSession.isMulti());
 
-            Double totalPriceCalculated = rec.getTotalPriceOrders() + rec.getTotalPriceTime();
+            Double totalPriceCalculated = 0.0;
+            Double totalPriceOrdersCalculated = 0.0;
+            Double totalPriceTimeCalculated = 0.0;
 
-            if (sessionEndDto.getDiscount() > 0) {
-                totalPriceCalculated = (double) Math.round((100 - sessionEndDto.getDiscount()) * totalPriceCalculated / 100);
-                rec.setDiscount(sessionEndDto.getDiscount());
+            if (sessionEndDto.getOrdersDiscount() > 0 && sessionEndDto.getOrdersDiscount() < 100) {
+                totalPriceOrdersCalculated =
+                    (double) Math.round((100 - sessionEndDto.getOrdersDiscount()) * rec.getTotalPriceOrders() / 100);
+                rec.setOrdersDiscount(sessionEndDto.getOrdersDiscount());
             } else {
-                rec.setDiscount(0.0);
+                totalPriceOrdersCalculated = rec.getTotalPriceOrders();
             }
+
+            if (sessionEndDto.getTimeDiscount() > 0 && sessionEndDto.getTimeDiscount() < 100) {
+                totalPriceTimeCalculated = (double) Math.round((100 - sessionEndDto.getTimeDiscount()) * rec.getTotalPriceTime() / 100);
+                rec.setTimeDiscount(sessionEndDto.getTimeDiscount());
+            } else {
+                totalPriceTimeCalculated = rec.getTotalPriceTime();
+            }
+
+            totalPriceCalculated = totalPriceOrdersCalculated + totalPriceTimeCalculated;
 
             rec.setTotalPrice(totalPriceCalculated);
             rec.setDuration(d);
@@ -214,9 +228,7 @@ public class DeviceServiceImpl implements DeviceService {
             if (sessionEndDto.isPrint() && savedRecId != null) {
                 recordService.printRecord(savedRecId.getId());
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+        } catch (Exception e) {}
         return this.toDeviceSession(deviceId);
     }
 

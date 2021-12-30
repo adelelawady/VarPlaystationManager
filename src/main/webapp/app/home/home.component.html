@@ -7,7 +7,7 @@
       </div>
     </ng-sidebar-header>
 
-    <ng-sidebar-content class="classtest">
+    <ng-sidebar-content class="classtest" style="overflow: scroll">
       <div class="row mx-1">
         <div class="col-md-5">
           <h5 class="card-title mx-0 text-center bg-dark text-white rounded p-1 pl-2">الاصناف</h5>
@@ -207,14 +207,14 @@
           </div>
         </div>
 
-        <div class="col-4 py-5">
+        <div class="col-lg-4 py-5 col-sm-12">
           <div class="card p-3" *ngIf="selectedDevice">
             <h5 class="card-title">
               {{ selectedDevice.name }}
             </h5>
 
             <div class="card-body">
-              <div class="row" *ngIf="selectedDevice">
+              <div class="row" *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.orders">
                 <div class="table-responsive" id="entities">
                   <table class="table" aria-describedby="page-heading">
                     <thead>
@@ -230,7 +230,7 @@
                     <tbody>
                       <tr *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" data-cy="entityTable">
                         <td style="word-break: break-word" class="text-center">
-                          <h6 class="text-primary">{{ prod.name }}</h6>
+                          <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
                         </td>
 
                         <td>
@@ -263,7 +263,7 @@
             </h5>
 
             <div class="card-body">
-              <div class="row" *ngIf="selectedTable">
+              <div class="row" *ngIf="selectedTable && selectedTable.active && selectedTable.ordersData">
                 <h5 class="card-title my-2">الطلبات</h5>
 
                 <div class="table-responsive" id="entities">
@@ -281,7 +281,7 @@
                     <tbody>
                       <tr *ngFor="let prod of selectedTable.ordersData.slice().reverse()" data-cy="entityTable">
                         <td style="word-break: break-word" class="text-center">
-                          <h6 class="text-primary">{{ prod.name }}</h6>
+                          <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
                         </td>
 
                         <td>

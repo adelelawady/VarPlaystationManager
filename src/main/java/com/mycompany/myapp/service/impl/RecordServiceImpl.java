@@ -199,7 +199,8 @@ public class RecordServiceImpl implements RecordService {
             res.setTotalPriceUser(res.getTotalPriceUser() + reco.getTotalPriceUser());
             res.setTotalPrice(res.getTotalPrice() + reco.getTotalPrice());
             res.setTotalPriceOrders(res.getTotalPriceOrders() + reco.getTotalPriceOrders());
-            res.setDiscount(res.getDiscount() + reco.getDiscount());
+            res.setOrdersDiscount(res.getOrdersDiscount() + reco.getOrdersDiscount());
+            res.setTimeDiscount(res.getTimeDiscount() + reco.getTimeDiscount());
             res.setTotalPriceTime(res.getTotalPriceTime() + reco.getTotalPriceTime());
             res.setTotalHours(res.getTotalHours() + reco.getDuration().toHoursPart());
             res.setTotalMinutes(res.getTotalMinutes() + reco.getDuration().toMinutesPart());
@@ -207,7 +208,6 @@ public class RecordServiceImpl implements RecordService {
 
         res.setResultList(result.map(recordMapper::toDto));
 
-        // TODO Auto-generated method stub
         return res;
     }
 

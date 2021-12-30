@@ -229,7 +229,7 @@ public class TableResource {
         if (table.isPresent()) {
             Table tableob = table.get();
             Double netTotalPrice = tableob.getTotalPrice();
-            tableob.setDiscount(dto.getDiscount());
+            tableob.setDiscount(dto.getOrdersDiscount());
             tableob.setActive(false);
 
             Table savedTable = tableRepository.save(tableob);

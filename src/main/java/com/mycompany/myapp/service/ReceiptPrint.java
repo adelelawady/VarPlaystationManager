@@ -65,11 +65,6 @@ public class ReceiptPrint implements Printable {
             line
         );
 
-        if (currentRecord.getDiscount() > 0) {
-            line += 13;
-            g2d.drawString(String.format("%-25s", "DISCOUNT : " + currentRecord.getDiscount() + " %"), 1, line);
-        }
-
         if (currentRecord.getDuration().toMinutes() > 0) {
             String time = currentRecord.getDuration().toHoursPart() > 0
                 ? currentRecord.getDuration().toHoursPart() + " h " + currentRecord.getDuration().toMinutesPart() + " m"

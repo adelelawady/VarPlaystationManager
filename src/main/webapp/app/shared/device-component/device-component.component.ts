@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, OnInit, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, OnInit, ChangeDetectorRef, EventEmitter, Output, AfterViewInit } from '@angular/core';
 import { DevicesSessionsService } from 'app/home/devicesSessions.service';
 import { async } from 'rxjs';
 import { DevicePricePipe } from './price.pipe';
@@ -11,11 +11,12 @@ declare const $: any;
   styleUrls: ['./device-component.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeviceComponentComponent implements OnInit {
+export class DeviceComponentComponent implements OnInit, AfterViewInit {
   isMulti = false;
   print = true;
-  discount = 0.0;
-  totalPriceUser = 0;
+  timeDiscount = 0.0;
+  ordersDiscount = 0.0;
+  totalPriceUser: any;
   @Input() isSelected = false;
   @Input() device: any;
   @Output() deviceSelected = new EventEmitter();
@@ -26,12 +27,16 @@ export class DeviceComponentComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private devicesSessionsService: DevicesSessionsService
   ) {}
+  ngAfterViewInit(): void {
+    this.getDevicePrice();
+  }
   ngOnInit(): void {
     // throw new Error('Method not implemented.');
     this.getDevicePrice();
   }
   OnDeviceClicked(): void {
-    this.totalPriceUser = this.getDevicePrice();
+    this.getDevicePrice();
+
     this.deviceClicked.emit(this.device);
   }
 
@@ -52,43 +57,9 @@ export class DeviceComponentComponent implements OnInit {
     });
   }
 
-  getDevicePrice(): any {
-    if (!this.device || !this.device.session) {
-      return 0;
-    }
-    let diff = (new Date(this.device.session.start).getTime() - new Date().getTime()) / 1000;
-    diff /= 60;
-    const diffMin = Math.abs(Math.round(diff));
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-
-    let pricePerHour = this.device.session.device.type.pricePerHour;
-    if (this.device.session.multi) {
-      pricePerHour = this.device.session.device.type.pricePerHourMulti;
-    } else {
-      pricePerHour = this.device.session.device.type.pricePerHour;
-    }
-
-    const totalOrderprice = this.device.session.ordersPrice ? this.device.session.ordersPrice : 0;
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    const res = Math.round((diffMin / 60) * pricePerHour) + totalOrderprice;
-    if (res > 0) {
-      if (this.discount && this.discount <= 100 && this.discount > 0) {
-        const resdis = Math.round(((100 - this.discount) * res) / 100);
-        this.totalPriceUser = resdis;
-        this.cd.markForCheck();
-        return resdis;
-      } else {
-        this.totalPriceUser = res;
-        this.cd.markForCheck();
-        return res;
-      }
-    } else {
-      return 0;
+  getDevicePrice(): void {
+    if (this.device?.session) {
+      this.totalPriceUser = this.devicePricePipe.transform(this.device, true, this.timeDiscount, this.ordersDiscount, false, false);
     }
   }
   formateMoney(r: any): any {
@@ -100,7 +71,8 @@ export class DeviceComponentComponent implements OnInit {
     const sessionEnd = {
       totalPrice: this.totalPriceUser,
       print: this.print,
-      discount: this.discount,
+      ordersDiscount: this.ordersDiscount,
+      timeDiscount: this.timeDiscount,
     };
     this.devicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(dev => {
       this.device = dev;

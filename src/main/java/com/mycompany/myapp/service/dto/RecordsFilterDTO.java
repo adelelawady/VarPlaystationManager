@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.Product;
 import java.io.Serializable;
 import java.time.Duration;
@@ -36,14 +37,24 @@ public class RecordsFilterDTO implements Serializable {
 
     private int totalHours = 0;
 
-    private Double discount = 0.0;
+    private Double ordersDiscount = 0.0;
 
-    public Double getDiscount() {
-        return discount;
+    private Double timeDiscount = 0.0;
+
+    public Double getOrdersDiscount() {
+        return ordersDiscount;
     }
 
-    public void setDiscount(Double discount) {
-        this.discount = discount;
+    public void setOrdersDiscount(Double ordersDiscount) {
+        this.ordersDiscount = ordersDiscount;
+    }
+
+    public Double getTimeDiscount() {
+        return timeDiscount;
+    }
+
+    public void setTimeDiscount(Double timeDiscount) {
+        this.timeDiscount = timeDiscount;
     }
 
     private Page<RecordDTO> resultList;

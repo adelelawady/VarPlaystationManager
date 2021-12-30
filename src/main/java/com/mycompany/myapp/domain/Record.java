@@ -51,8 +51,11 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Field("multi")
     private boolean multi = false;
 
-    @Field("discount")
-    private Double discount = 0.0;
+    @Field("ordersDiscount")
+    private Double ordersDiscount = 0.0;
+
+    @Field("timeDiscount")
+    private Double timeDiscount = 0.0;
 
     @Field("ordersData")
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -152,12 +155,20 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         this.multi = multi;
     }
 
-    public Double getDiscount() {
-        return discount;
+    public Double getOrdersDiscount() {
+        return ordersDiscount;
     }
 
-    public void setDiscount(Double discount) {
-        this.discount = discount;
+    public void setOrdersDiscount(Double ordersDiscount) {
+        this.ordersDiscount = ordersDiscount;
+    }
+
+    public Double getTimeDiscount() {
+        return timeDiscount;
+    }
+
+    public void setTimeDiscount(Double timeDiscount) {
+        this.timeDiscount = timeDiscount;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

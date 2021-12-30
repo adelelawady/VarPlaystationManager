@@ -8,7 +8,7 @@ import { IRecord } from '../record.model';
   templateUrl: './record-detail.component.html',
 })
 export class RecordDetailComponent implements OnInit {
-  record: IRecord | null = null;
+  record: any | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
@@ -16,6 +16,10 @@ export class RecordDetailComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ record }) => {
       this.record = record;
     });
+  }
+  formateMoney(r: any): any {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
 
   previousState(): void {

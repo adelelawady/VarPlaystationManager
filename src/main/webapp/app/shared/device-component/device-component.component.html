@@ -28,7 +28,7 @@
     <a href="#" class="card-link">
       <label class="badge badge-success">{{ (device.session.start | countdowntimer | async) || '0 m' }}</label></a
     >
-    <a href="#" class="card-link float-right m-0 pr-2">{{ (device | devicePrice | async) || 'EGP 0' }}</a>
+    <a href="#" class="card-link float-right m-0 pr-2">{{ device | devicePrice: false:0:0:false:false:true | async }}</a>
   </div>
   <div *ngIf="!device.session" class="card-footer p-2">
     <a href="#" class="card-link float-left">
@@ -61,35 +61,57 @@
       <div class="modal-body">
         <form>
           <div *ngIf="device.session" class="form-group row">
-            <label for="staticEmail" class="col-sm-2 col-form-label">الوقت</label>
-            <div class="col-sm-10" style="text-align: right">
+            <div class="col text-left" style="text-align: right">
               <label class="badge badge-success">{{ (device.session.start | countdowntimer | async) || '0 m' }}</label>
             </div>
+            <label for="staticEmail" class="col-auto">الوقت</label>
           </div>
           <div *ngIf="device.session" class="form-group row">
-            <label for="staticEmail" class="col-sm-2 col-form-label">السعر</label>
-            <div class="col-sm-10" style="text-align: right">
-              <a href="#" class="card-link">{{ (device | devicePrice: discount | async) || '0 LE' }}</a>
+            <div class="col text-left" style="text-align: right">
+              <a href="#" class="card-link">{{
+                (device | devicePrice: false:timeDiscount:ordersDiscount:false:false:true | async) || '0 LE'
+              }}</a>
             </div>
+            <label for="staticEmail" class="col-auto">السعر</label>
+          </div>
+
+          <div *ngIf="device.session && (timeDiscount > 0 || ordersDiscount > 0)" class="form-group row">
+            <div class="col text-left" style="text-align: right">
+              <a href="#" class="text-danger">{{ (device | devicePrice: false:0:0:false:false:true | async) || '0 LE' }}</a>
+            </div>
+            <label for="staticEmail" class="col-auto"> السعر قبل الخصم</label>
           </div>
 
           <div *ngIf="device.session" class="form-group row">
-            <label for="staticEmail" class="col-sm-2 col-form-label">وقت البدا</label>
-            <div class="col-sm-10" style="text-align: right">
+            <div class="col text-left" style="text-align: right">
               <a href="#" class="card-link">{{ device.session.start | date: 'shortTime' }}</a>
             </div>
+            <label for="staticEmail" class="col-auto">وقت البدا</label>
           </div>
 
           <div
             *ngIf="device.session"
             class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm"
           >
-            <small class="d-block" *ngIf="device && device.session && device.session.ordersPrice" for="staticEmail" class="row"
-              >{{ formateMoney(device.session.ordersPrice) }} : حساب الطلبات</small
+            <small *ngIf="device && device.session && device.session.ordersPrice" for="staticEmail" class="col text-right"
+              >{{ (device | devicePrice: false:timeDiscount:ordersDiscount:false:true | async) || '0 LE' }} : حساب الطلبات</small
             >
 
-            <small class="d-block" *ngIf="device && device.session" for="staticEmail" class="row">
-              {{ (device | devicePriceTimeOnly | async) || 'EGP 0' }} :حساب الوقت</small
+            <small *ngIf="device && device.session" for="staticEmail" class="col text-right">
+              {{ (device | devicePrice: false:timeDiscount:ordersDiscount:true:false | async) || '0 LE' }} :حساب الوقت</small
+            >
+          </div>
+
+          <div
+            *ngIf="device.session && (timeDiscount > 0 || ordersDiscount > 0)"
+            class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm"
+          >
+            <small *ngIf="device && device.session && device.session.ordersPrice" for="staticEmail" class="col text-right text-danger"
+              >{{ (device | devicePrice: false:0:0:false:true | async) || '0 LE' }} : حساب الطلبات قبل الخصم</small
+            >
+
+            <small *ngIf="device && device.session" for="staticEmail" class="col text-right text-danger">
+              {{ (device | devicePrice: false:0:0:true:false | async) || '0 LE' }} :حساب الوقت قبل الخصم</small
             >
           </div>
 
@@ -111,38 +133,59 @@
           <hr />
 
           <div *ngIf="device.session" class="form-group row">
-            <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">السعر الكلي</label>
-            <div class="col-sm-8">
+            <div class="col">
               <div class="input-group mb-3">
                 <input
-                  type="email"
-                  [(ngModel)]="totalPriceUser"
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="100"
+                  (ngModelChange)="ordersDiscount = $event; getDevicePrice()"
+                  [(ngModel)]="ordersDiscount"
                   [ngModelOptions]="{ standalone: true }"
-                  [value]="totalPriceUser"
+                  [value]="ordersDiscount"
                   class="form-control form-control-lg"
-                  id="colFormLabelLg"
+                  id="colFormLabelLg1"
                   placeholder=""
                 />
-                <span class="input-group-text">$</span>
+                <span class="input-group-text p-0 p-1">% خصم الاوردرات</span>
               </div>
             </div>
-          </div>
-
-          <div *ngIf="device.session" class="form-group row">
-            <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">الخصم</label>
-            <div class="col-sm-8">
+            <div class="col">
               <div class="input-group mb-3">
                 <input
-                  type="email"
-                  (ngModelChange)="discount = $event; getDevicePrice()"
-                  [(ngModel)]="discount"
+                  type="number"
+                  step="1"
+                  min="0"
+                  max="100"
+                  (ngModelChange)="timeDiscount = $event; getDevicePrice()"
+                  [(ngModel)]="timeDiscount"
                   [ngModelOptions]="{ standalone: true }"
-                  [value]="discount"
+                  [value]="timeDiscount"
                   class="form-control form-control-lg"
                   id="colFormLabelLg"
                   placeholder=""
                 />
-                <span class="input-group-text">%</span>
+                <span class="input-group-text p-0 p-1">% خصم الوقت</span>
+              </div>
+            </div>
+            <hr />
+
+            <div *ngIf="device.session" class="form-group row">
+              <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">السعر الكلي</label>
+              <div class="col-sm-8">
+                <div class="input-group mb-3">
+                  <input
+                    type="email"
+                    [(ngModel)]="totalPriceUser"
+                    [ngModelOptions]="{ standalone: true }"
+                    [value]="totalPriceUser"
+                    class="form-control form-control-lg"
+                    id="colFormLabelLg"
+                    placeholder=""
+                  />
+                  <span class="input-group-text p-0 p-1">$</span>
+                </div>
               </div>
             </div>
           </div>
