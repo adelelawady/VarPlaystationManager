@@ -48,7 +48,7 @@ export class TableComponentComponent implements OnInit {
     this.table.active = false;
     const sessionEnd = {
       print: this.print,
-      discount: this.discount,
+      ordersDiscount: this.discount,
     };
     this.tableService.stopTable(this.table.id, sessionEnd).subscribe(table => {
       this.table = table;
