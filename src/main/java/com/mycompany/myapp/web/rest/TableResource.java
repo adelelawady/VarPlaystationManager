@@ -238,7 +238,7 @@ public class TableResource {
             TableRecord tableRecord = new TableRecord();
             tableRecord.setDiscount(resTabel.getDiscount());
 
-            tableRecord.setTotalPrice(resTabel.getTotalPrice());
+            tableRecord.setTotalPrice(dto.getTotalPrice());
             tableRecord.setOrdersData(resTabel.getOrdersData());
             tableRecord.setOrdersQuantity(resTabel.getOrdersQuantity());
             tableRecord.setTable(resTabel);

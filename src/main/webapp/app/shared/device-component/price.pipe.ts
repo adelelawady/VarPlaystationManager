@@ -60,7 +60,7 @@ export class DevicePricePipe implements PipeTransform {
     addEGP;
 
     if (resultTotalPrice > 0) {
-      resultFinal = resultTotalPrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      resultFinal = resultTotalPrice.toFixed(2);
     } else {
       resultFinal = 0;
     }

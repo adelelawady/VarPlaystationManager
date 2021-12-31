@@ -80,6 +80,24 @@
               </div>
             </div>
           </div>
+
+          <div *ngIf="table.active" class="form-group row">
+            <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">السعر الكلي</label>
+            <div class="col-sm-8">
+              <div class="input-group mb-3">
+                <input
+                  type="email"
+                  [(ngModel)]="totalPrice"
+                  [ngModelOptions]="{ standalone: true }"
+                  [value]="totalPrice"
+                  class="form-control form-control-lg"
+                  id="colFormLabelLgx"
+                  placeholder=""
+                />
+                <span class="input-group-text p-0 p-1">$</span>
+              </div>
+            </div>
+          </div>
         </form>
         <div *ngIf="table.active" class="form-group row">
           <div class="col-sm-10 offset-sm-0">
