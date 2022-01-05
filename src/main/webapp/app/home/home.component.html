@@ -97,7 +97,7 @@
                   <jhi-device-component
                     (deviceClicked)="selectedDevice = $event"
                     (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
-                    (deviceStopped)="closeOrdersPanle()"
+                    (deviceStopped)="selectedDevice = null; closeOrdersPanle()"
                     [device]="device"
                     [isSelected]="selectedDevice && selectedDevice.id == device.id"
                   >
@@ -117,6 +117,7 @@
                     [isSelected]="selectedTable && selectedTable.id == table.id"
                     (tableStarted)="loadAllTables()"
                     (tableStopped)="selectedTable = null; loadAllTables()"
+                    (tableMovedToDevice)="tableMovedToDevice($event)"
                     [table]="table"
                   ></jhi-table-component>
                 </div>

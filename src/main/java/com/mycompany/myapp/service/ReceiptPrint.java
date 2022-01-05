@@ -10,6 +10,8 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
 import javax.swing.table.TableModel;
@@ -27,13 +29,13 @@ public class ReceiptPrint implements Printable {
     public static final String pspace = "               "; // 15-spaces
 
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-        df.applyPattern("dd/MM/yyyy HH:mm:ss");
         String lineDot = "----------------------------------------------------------------------------------";
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
         int line = 10;
 
-        Font font = new Font("Lucida Handwriting", Font.BOLD, 10);
+        Font font = new Font("Arial", Font.BOLD, 10);
         // Font font = new Font("MS Gothic", Font.PLAIN, 10);
 
         if (pageIndex < 0 || pageIndex >= 1) {
@@ -45,6 +47,7 @@ public class ReceiptPrint implements Printable {
         int imagewidth = 160;
         int imageheight = 50;
         BufferedImage read;
+
         try {
             read = ImageIO.read(getClass().getResource("/image/img.jpeg"));
             g2d.drawImage(read, 5, line, imagewidth, imageheight, null); // draw image
@@ -54,7 +57,7 @@ public class ReceiptPrint implements Printable {
         }
         g2d.setFont(font);
         line += 70;
-        font = new Font("MS Gothic", Font.PLAIN, 9);
+        font = new Font("Arial", Font.PLAIN, 9);
         g2d.setFont(font);
 
         g2d.drawString(String.format("%-25s", "DEVICE :  " + currentRecord.getDevice().getName()), 1, line);
@@ -100,7 +103,7 @@ public class ReceiptPrint implements Printable {
 
                     cH = (y + 70) + (10 * i); // shifting drawing line
 
-                    g2d.drawString(itemid, 15, cH);
+                    g2d.drawString(toCodedString(itemid), 15, cH);
                     g2d.drawString(itemname, 100, cH);
                     g2d.drawString(price + " LE", 140, cH);
                     i++;
@@ -155,5 +158,9 @@ public class ReceiptPrint implements Printable {
         }
 
         return Printable.PAGE_EXISTS;
+    }
+
+    String toCodedString(String strValue) {
+        return new String(strValue.getBytes(), StandardCharsets.UTF_8);
     }
 }

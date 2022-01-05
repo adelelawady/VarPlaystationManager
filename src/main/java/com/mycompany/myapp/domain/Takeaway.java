@@ -16,6 +16,7 @@ public class Takeaway extends AbstractAuditingEntity implements Serializable {
     @Id
     private String id;
 
+    // Old
     @Field("product")
     private Product product;
 

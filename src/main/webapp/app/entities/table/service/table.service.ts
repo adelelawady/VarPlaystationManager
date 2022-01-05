@@ -57,6 +57,10 @@ export class TableService {
     return this.http.get<any[]>(`${this.resourceUrl}/${tableId}/products/${productid}/delete`, { observe: 'body' });
   }
 
+  moveToDevice(tableId: string, deviceId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/${tableId}/devices/${deviceId}/move`, { observe: 'body' });
+  }
+
   addTableToCollectionIfMissing(tableCollection: ITable[], ...tablesToCheck: (ITable | null | undefined)[]): ITable[] {
     const tables: ITable[] = tablesToCheck.filter(isPresent);
     if (tables.length > 0) {

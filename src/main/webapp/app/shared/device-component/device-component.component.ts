@@ -34,6 +34,7 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
     // throw new Error('Method not implemented.');
     this.getDevicePrice();
   }
+
   OnDeviceClicked(): void {
     this.getDevicePrice();
 
@@ -56,7 +57,6 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
       this.cd.markForCheck();
     });
   }
-
   getDevicePrice(): void {
     if (this.device?.session) {
       this.totalPriceUser = this.devicePricePipe.transform(this.device, true, this.timeDiscount, this.ordersDiscount, false, false);

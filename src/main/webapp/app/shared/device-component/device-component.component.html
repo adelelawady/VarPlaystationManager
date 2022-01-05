@@ -12,6 +12,7 @@
         <a (click)="OnDeviceClicked()" href="#" class="card-link"> {{ device.name }}</a></span
       >
       <i
+        [id]="'device-' + device.id + '-Orderselector'"
         *ngIf="device.session"
         style="cursor: pointer"
         (click)="selectDevice(device)"

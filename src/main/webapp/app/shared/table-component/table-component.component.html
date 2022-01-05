@@ -29,7 +29,32 @@
         class="fa fa-check text-success float-right rounded p-1 border"
       ></i>
     </h5>
+    <li
+      (click)="loadAllDevices()"
+      *ngIf="table.active"
+      style="list-style: none"
+      ngbDropdown
+      class="nav-item dropdown pointer"
+      display="dynamic"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+        <span>
+          <i class="fa fa-cog" aria-hidden="true"></i>
+          <span>تحويل لجهاز</span>
+        </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li *ngFor="let device of devices">
+          <a class="dropdown-item" (click)="moveToDevice(device)">
+            <span>{{ device.name }}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
   </div>
+
   <div *ngIf="table.active && table.totalPrice" class="card-footer p-2">
     <a href="#" class="card-link float-right m-0 pr-2">{{ formateMoney(table.totalPrice) || 'EGP 0' }}</a>
   </div>

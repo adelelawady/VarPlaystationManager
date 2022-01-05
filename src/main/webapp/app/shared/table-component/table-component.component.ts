@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DevicesSessionsService } from 'app/home/devicesSessions.service';
 import { TableService } from '../../entities/table/service/table.service';
 
 @Component({
@@ -11,6 +12,7 @@ export class TableComponentComponent implements OnInit {
   print = true;
   discount = 0.0;
   totalPrice = 0;
+  devices: any;
   @Input() isSelected = false;
   @Input() table: any;
 
@@ -18,8 +20,10 @@ export class TableComponentComponent implements OnInit {
   @Output() tableClicked = new EventEmitter();
   @Output() tableStopped = new EventEmitter();
   @Output() tableStarted = new EventEmitter();
+  @Output() tableMovedToDevice = new EventEmitter();
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(private cd: ChangeDetectorRef, private tableService: TableService) {}
+  constructor(private cd: ChangeDetectorRef, private tableService: TableService, private devicesSessionsService: DevicesSessionsService) {}
 
   ngOnInit(): void {
     this.getDevicePrice();
@@ -39,7 +43,17 @@ export class TableComponentComponent implements OnInit {
       }
     }
   }
-
+  loadAllDevices(): void {
+    this.devicesSessionsService.getDevicesSessions().subscribe((devicesFound: any) => {
+      this.devices = devicesFound;
+    });
+  }
+  moveToDevice(device: any): void {
+    this.tableService.moveToDevice(this.table.id, device.id).subscribe((table: any) => {
+      this.table = table;
+      this.tableMovedToDevice.emit(device);
+    });
+  }
   deviceClicked(): void {
     this.getDevicePrice();
     this.tableClicked.emit(this.table);

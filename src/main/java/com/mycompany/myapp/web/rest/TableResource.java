@@ -1,16 +1,20 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Device;
 import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Session;
 import com.mycompany.myapp.domain.Table;
 import com.mycompany.myapp.domain.TableRecord;
+import com.mycompany.myapp.repository.DeviceRepository;
 import com.mycompany.myapp.repository.ProductRepository;
 import com.mycompany.myapp.repository.TableRecordRepository;
 import com.mycompany.myapp.repository.TableRepository;
+import com.mycompany.myapp.service.DeviceService;
 import com.mycompany.myapp.service.PrinterSupport;
 import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.ReceiptPrint;
 import com.mycompany.myapp.service.ReceiptTablePrint;
+import com.mycompany.myapp.service.SessionService;
 import com.mycompany.myapp.service.dto.DeviceSessionDTO;
 import com.mycompany.myapp.service.dto.SessionEndDTO;
 import com.mycompany.myapp.service.dto.SessionStartDTO;
@@ -60,6 +64,15 @@ public class TableResource {
 
     @Autowired
     TableRecordRepository recordRepository;
+
+    @Autowired
+    SessionService sessionService;
+
+    @Autowired
+    DeviceService deviceService;
+
+    @Autowired
+    DeviceRepository deviceRepository;
 
     public TableResource(TableRepository tableRepository, ProductRepository productRepository) {
         this.tableRepository = tableRepository;
@@ -326,6 +339,70 @@ public class TableResource {
             }
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/tables/{tableId}/devices/{deviceId}/move")
+    public ResponseEntity<Table> modeTableToDevice(@PathVariable String tableId, @PathVariable String deviceId) {
+        Optional<Table> table = tableRepository.findById(tableId);
+        if (table.isPresent()) {
+            Table tableObject = table.get();
+
+            Optional<Device> deviceFound = deviceRepository.findById(deviceId);
+
+            Session sess = sessionService.getDeviceActiveSession(deviceId);
+            if (sess != null) {
+                // device  active
+
+                // add products to orders data
+
+                addProductsToSession(sess, tableObject);
+
+                // empty table
+                resetTable(tableObject);
+            } else {
+                //device not active
+                SessionStartDTO sessionStartDTO = new SessionStartDTO();
+                sessionStartDTO.setMulti(false);
+                deviceService.startSession(deviceId, sessionStartDTO);
+                // add products to orders data
+                Session activeSession = sessionService.getDeviceActiveSession(deviceId);
+                addProductsToSession(activeSession, tableObject);
+
+                resetTable(tableObject);
+            }
+        }
+        Optional<Table> tableRes = tableRepository.findById(tableId);
+        if (tableRes.isPresent()) {
+            return ResponseEntity.ok(tableRes.get());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    Table resetTable(Table table) {
+        table.setActive(false);
+        table.setTotalPrice(0.0);
+        table.setDiscount(0.0);
+        table.setOrdersData(new HashSet<>());
+        table.setOrdersQuantity(new HashMap<>());
+        return tableRepository.save(table);
+    }
+
+    Session addProductsToSession(Session sess, Table table) {
+        // add all missing products
+        sess.getOrders().addAll(table.getOrdersData());
+        for (Product prodToAdd : table.getOrdersData()) {
+            boolean sessionHasItem = sess.getOrdersQuantity().containsKey(prodToAdd.getId());
+            int currentvalueTable = table.getOrdersQuantity().get(prodToAdd.getId());
+            if (sessionHasItem) {
+                int currentvalueDevice = sess.getOrdersQuantity().get(prodToAdd.getId());
+                sess.getOrdersQuantity().put(prodToAdd.getId(), currentvalueDevice + currentvalueTable);
+            } else {
+                sess.getOrdersQuantity().put(prodToAdd.getId(), currentvalueTable);
+            }
+        }
+        sessionService.calculateDeviceSessionOrderesPrice(sess);
+
+        return sessionService.getDeviceActiveSession(sess.getDevice().getId());
     }
 
     private Table calculateDeviceSessionOrderesPrice(Table table) {

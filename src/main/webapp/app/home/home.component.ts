@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -55,7 +55,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private takeawayService: TakeawayService,
     private tableService: TableService,
     private shopsOrdersService: ShopsOrdersService,
-    private devicesSessionService: DevicesSessionsService
+    private devicesSessionService: DevicesSessionsService,
+    private cd: ChangeDetectorRef
   ) {}
   ngAfterViewInit(): void {
     this.closeOrdersPanle();
@@ -109,8 +110,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   loadAllDevices(): void {
-    this.devicesSessionService.getDevicesSessions().subscribe(devicesFound => {
+    this.devicesSessionService.getDevicesSessions().subscribe((devicesFound: any) => {
       this.devices = devicesFound;
+      // eslint-disable-next-line eqeqeq
+      if (this.selectedDevice && this.selectedDevice.id === devicesFound.id) {
+        this.selectedDevice = devicesFound;
+      }
     });
   }
 
@@ -119,7 +124,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.tables = tables.body;
     });
   }
-
+  tableMovedToDevice(device: any): void {
+    this.selectTap('tapDevices');
+    this.selectedDevice = device;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      $('#device-' + device.id + '-Orderselector').click();
+      $('.ng-sidebar-header').click();
+    }, 1000);
+    this.loadAllTables();
+  }
   login(): void {
     this.router.navigate(['/login']);
   }
