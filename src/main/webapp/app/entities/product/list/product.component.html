@@ -8,6 +8,9 @@
         <span jhiTranslate="erApp.product.home.refreshListLabel">Refresh List</span>
       </button>
 
+      <button class="btn btn-info mr-2" (click)="translateProducts()" [disabled]="isLoading">
+        <span>Translate all products</span>
+      </button>
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"

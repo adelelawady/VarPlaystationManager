@@ -32,6 +32,20 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     @Field("shopsPrice")
     private Double shopsPrice = 0.0;
 
+    @Field("enName")
+    private String enName;
+
+    public String getEnName() {
+        if (enName == null || enName.isBlank()) {
+            return name;
+        }
+        return enName;
+    }
+
+    public void setEnName(String enName) {
+        this.enName = enName;
+    }
+
     public Double getTakeawayPrice() {
         if (shopsPrice <= 0) {
             return price;
@@ -112,7 +126,8 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -127,17 +142,14 @@ public class Product extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "Product{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", price=" + getPrice() +
-            "}";
-    }
+	@Override
+	public String toString() {
+		return "Product{" + "id=" + getId() + ", name='" + getName() + "'" + ", price=" + getPrice() + "}";
+	}
 }

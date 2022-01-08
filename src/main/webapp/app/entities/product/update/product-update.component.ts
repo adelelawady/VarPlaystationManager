@@ -26,6 +26,7 @@ export class ProductUpdateComponent implements OnInit {
     category: [],
     takeawayPrice: [],
     shopsPrice: [],
+    enName: [],
   });
 
   constructor(
@@ -88,6 +89,7 @@ export class ProductUpdateComponent implements OnInit {
       category: product.category,
       takeawayPrice: product.takeawayPrice,
       shopsPrice: product.shopsPrice,
+      enName: product.enName,
     });
 
     this.categoriesCollection = this.categoryService.addCategoryToCollectionIfMissing(this.categoriesCollection, product.category);
@@ -114,6 +116,7 @@ export class ProductUpdateComponent implements OnInit {
       category: this.editForm.get(['category'])!.value,
       takeawayPrice: this.editForm.get(['takeawayPrice'])!.value,
       shopsPrice: this.editForm.get(['shopsPrice'])!.value,
+      enName: this.editForm.get(['enName'])!.value,
     };
   }
 }

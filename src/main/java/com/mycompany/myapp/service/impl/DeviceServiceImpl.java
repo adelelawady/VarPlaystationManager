@@ -134,7 +134,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public synchronized DeviceSessionDTO startSession(String deviceId, SessionStartDTO sessionStart) {
+    public DeviceSessionDTO startSession(String deviceId, SessionStartDTO sessionStart) {
         Optional<Device> dev = deviceRepository.findById(deviceId);
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
@@ -217,8 +217,10 @@ public class DeviceServiceImpl implements DeviceService {
 
         rec.setStart(currentActiveSession.getStart());
         if (save) {
-            rec.setPreviousSessionsTotalPrice(currentActiveSession.getPreviousSessionsTotalPrice());
-            rec.setPreviousSessions(currentActiveSession.getPreviousSessions());
+            if (!currentActiveSession.getPreviousSessions().isEmpty()) {
+                rec.setPreviousSessionsTotalPrice(currentActiveSession.getPreviousSessionsTotalPrice());
+                rec.setPreviousSessions(currentActiveSession.getPreviousSessions());
+            }
             return recordService.save(rec);
         } else {
             return rec;
@@ -226,24 +228,26 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public synchronized DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto) {
-        Optional<Device> dev = deviceRepository.findById(deviceId);
-        if (!dev.isPresent()) {
-            throw new RuntimeException("DeviceNotFound");
-        }
-        Record savedRecId = null;
-        Session currentActiveSession = sessionService.getDeviceActiveSession(deviceId);
-        if (currentActiveSession != null) {
-            savedRecId = stopSession(dev.get(), currentActiveSession, sessionEndDto, true);
-        }
-
+    public DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto) {
         this.sessionService.stopAllDeviceActiveSessions(deviceId);
 
         try {
-            if (sessionEndDto.isPrint() && savedRecId != null) {
-                recordService.printRecord(savedRecId.getId());
+            Optional<Device> dev = deviceRepository.findById(deviceId);
+            if (!dev.isPresent()) {
+                throw new RuntimeException("DeviceNotFound");
             }
-        } catch (Exception e) {}
+            Record savedRecId = null;
+            Session currentActiveSession = sessionService.getDeviceActiveSession(deviceId);
+            if (currentActiveSession != null) {
+                savedRecId = stopSession(dev.get(), currentActiveSession, sessionEndDto, true);
+            }
+            //if (sessionEndDto.isPrint() && savedRecId != null) {
+            //	recordService.printRecord(savedRecId.getId());
+            //}
+
+        } catch (Exception e) {
+            this.toDeviceSession(deviceId);
+        }
         return this.toDeviceSession(deviceId);
     }
 

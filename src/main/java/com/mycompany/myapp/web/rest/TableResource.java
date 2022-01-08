@@ -257,6 +257,10 @@ public class TableResource {
             tableRecord.setOrdersQuantity(resTabel.getOrdersQuantity());
             tableRecord.setTable(resTabel);
             tableRecord.setNetTotalPrice(netTotalPrice);
+            tableRecord.setType(resTabel.getType());
+            if (resTabel.getDiscount() > 0) {
+                tableRecord.setTotalDiscountPrice(netTotalPrice - tableRecord.getTotalPrice());
+            }
 
             TableRecord SavedTableRecord = recordRepository.save(tableRecord);
 

@@ -91,7 +91,8 @@ public class Session implements Serializable {
             "duration",
             "createdDate",
             "totalPrice",
-        }
+        },
+        allowSetters = true
     )
     private List<Record> previousSessions = new ArrayList<>();
 

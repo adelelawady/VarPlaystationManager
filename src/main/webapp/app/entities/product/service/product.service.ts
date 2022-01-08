@@ -20,6 +20,9 @@ export class ProductService {
     return this.http.post<IProduct>(this.resourceUrl, product, { observe: 'response' });
   }
 
+  translateProducts(): Observable<any> {
+    return this.http.get<any>(`${this.resourceUrl}/translate-products`, { observe: 'response' });
+  }
   update(product: IProduct): Observable<EntityResponseType> {
     return this.http.put<IProduct>(`${this.resourceUrl}/${getProductIdentifier(product) as string}`, product, { observe: 'response' });
   }

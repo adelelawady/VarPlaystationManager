@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mycompany.myapp.domain.Table.TABLE_TYPE;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
@@ -28,11 +29,36 @@ public class TableRecord extends AbstractAuditingEntity implements Serializable 
     @Field("total_price")
     private Double totalPrice;
 
+    @Field("total_discount_price")
+    private Double totalDiscountPrice = 0.0;
+
+    public Double getTotalDiscountPrice() {
+        if (discount > 0 && totalDiscountPrice == 0.0) {
+            return netTotalPrice - totalPrice;
+        }
+        return totalDiscountPrice;
+    }
+
+    public void setTotalDiscountPrice(Double totalDiscountPrice) {
+        this.totalDiscountPrice = totalDiscountPrice;
+    }
+
     @Field("net_total_price")
     private Double netTotalPrice;
 
     @Field("discount")
     private Double discount;
+
+    @Field("type")
+    private Table.TABLE_TYPE type = TABLE_TYPE.TABLE;
+
+    public Table.TABLE_TYPE getType() {
+        return type;
+    }
+
+    public void setType(Table.TABLE_TYPE type) {
+        this.type = type;
+    }
 
     @Field("ordersData")
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,24 +1,37 @@
 package com.mycompany.myapp.web.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.repository.ProductRepository;
 import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.dto.ProductDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -37,11 +50,14 @@ public class ProductResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final RestTemplate restTemplate;
+
     private final ProductService productService;
 
     private final ProductRepository productRepository;
 
-    public ProductResource(ProductService productService, ProductRepository productRepository) {
+    public ProductResource(ProductService productService, ProductRepository productRepository, RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
         this.productService = productService;
         this.productRepository = productRepository;
     }
@@ -50,7 +66,9 @@ public class ProductResource {
      * {@code POST  /products} : Create a new product.
      *
      * @param productDTO the productDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new productDTO, or with status {@code 400 (Bad Request)} if the product has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new productDTO, or with status {@code 400 (Bad Request)} if
+     *         the product has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/products")
@@ -69,11 +87,13 @@ public class ProductResource {
     /**
      * {@code PUT  /products/:id} : Updates an existing product.
      *
-     * @param id the id of the productDTO to save.
+     * @param id         the id of the productDTO to save.
      * @param productDTO the productDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated productDTO,
-     * or with status {@code 400 (Bad Request)} if the productDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the productDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated productDTO, or with status {@code 400 (Bad Request)} if
+     *         the productDTO is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the productDTO couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/products/{id}")
@@ -101,14 +121,17 @@ public class ProductResource {
     }
 
     /**
-     * {@code PATCH  /products/:id} : Partial updates given fields of an existing product, field will ignore if it is null
+     * {@code PATCH  /products/:id} : Partial updates given fields of an existing
+     * product, field will ignore if it is null
      *
-     * @param id the id of the productDTO to save.
+     * @param id         the id of the productDTO to save.
      * @param productDTO the productDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated productDTO,
-     * or with status {@code 400 (Bad Request)} if the productDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the productDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the productDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated productDTO, or with status {@code 400 (Bad Request)} if
+     *         the productDTO is not valid, or with status {@code 404 (Not Found)}
+     *         if the productDTO is not found, or with status
+     *         {@code 500 (Internal Server Error)} if the productDTO couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/products/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -140,7 +163,8 @@ public class ProductResource {
      * {@code GET  /products} : get all the products.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of products in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of products in body.
      */
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> getAllProducts(Pageable pageable) {
@@ -154,7 +178,8 @@ public class ProductResource {
      * {@code GET  /products/:id} : get the "id" product.
      *
      * @param id the id of the productDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the productDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the productDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductDTO> getProduct(@PathVariable String id) {
@@ -174,6 +199,56 @@ public class ProductResource {
         log.debug("REST request to delete Product : {}", id);
         productService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
+    }
+
+    public String tranlateArabicTxt(String txt) {
+        try {
+            String url = "https://translation.googleapis.com/language/translate/v2?key=AIzaSyBdWIAk8SVAj98bYitTGwLTh2CgonGZ5bQ";
+
+            // create headers
+            HttpHeaders headers = new HttpHeaders();
+            // set `content-type` header
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            // set `accept` header
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add(
+                "user-agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36"
+            );
+            // create a map for post parameters
+            Map<String, Object> map = new HashMap<>();
+            map.put("key", "AIzaSyBdWIAk8SVAj98bYitTGwLTh2CgonGZ5bQ");
+            map.put("q", txt);
+            map.put("source", "ar");
+            map.put("target", "en");
+            map.put("format", "text");
+
+            // build the request
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
+
+            // send POST request
+            ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
+
+            // check response status code
+            org.json.JSONObject jsonObject;
+            jsonObject = new org.json.JSONObject(response.getBody());
+            return jsonObject.getJSONObject("data").getJSONArray("translations").getJSONObject(0).get("translatedText").toString();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/products/translate-products")
+    public ResponseEntity<String> tranlateProducts() {
+        log.debug("REST request to get a page of Products");
+        for (Product prod : productRepository.findAll()) {
+            String enTxt = tranlateArabicTxt(prod.getName());
+            if (enTxt == null) {}
+            prod.setEnName(enTxt);
+            productRepository.save(prod);
+        }
+
+        return ResponseEntity.ok("done");
     }
 
     @GetMapping("/products/category/{categoryId}")

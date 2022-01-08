@@ -17,6 +17,16 @@ public class ProductDTO implements Serializable {
 
     private Double takeawayPrice;
 
+    private String enName;
+
+    public String getEnName() {
+        return enName;
+    }
+
+    public void setEnName(String enName) {
+        this.enName = enName;
+    }
+
     public Double getTakeawayPrice() {
         return takeawayPrice;
     }

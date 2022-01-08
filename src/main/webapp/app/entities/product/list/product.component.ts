@@ -111,6 +111,14 @@ export class ProductComponent implements OnInit {
     this.ngbPaginationPage = this.page;
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  translateProducts(): void {
+    this.productService.translateProducts().subscribe(data => {
+      // eslint-disable-next-line no-console
+      console.log(data);
+    });
+  }
+
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
   }

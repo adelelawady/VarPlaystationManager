@@ -41,7 +41,7 @@
         {{ showOptionsTxt ? 'اعدادات' : '' }}
       </button>
       <button
-        *ngIf="device.session && device.session.active && device.session.previousSessions.length > 0"
+        *ngIf="device.session && device.session.active && device.session.previousSessions && device.session.previousSessions.length > 0"
         (click)="selectDevice(device); showPreviousSessions = !showPreviousSessions; showOptions = false"
         class="btn mt-3 col-3 shadow-sm border text-center m-auto btn-sm p-0"
         [ngClass]="{ 'badge-primary': !showPreviousSessions, 'badge-warning': showPreviousSessions && isSelected }"
