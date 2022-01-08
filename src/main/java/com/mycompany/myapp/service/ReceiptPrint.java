@@ -3,13 +3,16 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Record;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -33,9 +36,12 @@ public class ReceiptPrint implements Printable {
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        String[] fontFamilies = ge.getAvailableFontFamilyNames();
+
         int line = 10;
 
-        Font font = new Font("Arial", Font.BOLD, 10);
+        Font font = new Font(fontFamilies[0], Font.BOLD, 10);
         // Font font = new Font("MS Gothic", Font.PLAIN, 10);
 
         if (pageIndex < 0 || pageIndex >= 1) {
@@ -57,8 +63,8 @@ public class ReceiptPrint implements Printable {
         }
         g2d.setFont(font);
         line += 70;
-        font = new Font("Arial", Font.PLAIN, 9);
-        g2d.setFont(font);
+        // font = new Font("Arial", Font.PLAIN, 9);
+        // g2d.setFont(font);
 
         g2d.drawString(String.format("%-25s", "DEVICE :  " + currentRecord.getDevice().getName()), 1, line);
         line += 13;
@@ -112,7 +118,7 @@ public class ReceiptPrint implements Printable {
                         cH = cH + 10;
                         g2d.drawLine(10, cH, 180, cH);
                         cH = cH + 20;
-                        font = new Font("Arial", Font.BOLD, 11); // changed font size
+                        // font = new Font("Arial", Font.BOLD, 11); // changed font size
                         g2d.setFont(font);
 
                         if (currentRecord.getDuration().toMinutes() > 0) {
