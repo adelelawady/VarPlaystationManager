@@ -27,6 +27,8 @@ public interface RecordRepository extends MongoRepository<Record, String> {
 
     Page<Record> findAllByStartBetween(Pageable pageable, Instant startDate, Instant endDate);
 
+    Page<Record> findAllByEndBetween(Pageable pageable, Instant startDate, Instant endDate);
+
     Page<Record> findAllByStartBetweenOrEndBetween(
         Pageable pageable,
         Instant startDate,
@@ -34,7 +36,10 @@ public interface RecordRepository extends MongoRepository<Record, String> {
         Instant startDatex,
         Instant endDatex
     );
+
     List<Record> findAllByStartBetween(Instant startDate, Instant endDate);
+
+    List<Record> findAllByEndBetween(Instant startDate, Instant endDate);
 
     List<Record> findAllByStartBetweenOrEndBetween(Instant startDate, Instant endDate, Instant startDatex, Instant endDatex);
 }

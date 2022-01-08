@@ -32,13 +32,17 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="erApp.table.name">Name</span></th>
+          <th scope="col"><span jhiTranslate="erApp.table.name">الاسم</span></th>
+          <th scope="col"><span>النوع</span></th>
+          <th scope="col"><span>الترتيب</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let table of tables; trackBy: trackId" data-cy="entityTable">
           <td>{{ table.name }}</td>
+          <td>{{ table.type }}</td>
+          <td>{{ table.index }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -12,6 +12,7 @@ import { TableService } from 'app/entities/table/service/table.service';
 import { TakeawayService } from 'app/entities/takeaway/service/takeaway.service';
 import { ShopsOrdersService } from 'app/entities/shops-orders/service/shops-orders.service';
 declare const $: any;
+declare const document: any;
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
@@ -35,6 +36,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedDevice: any;
   selectedTable: any;
 
+  eventReloadTables: Subject<void> = new Subject<void>();
+
   tapDevices = true;
   tapTables = false;
   tapTakeaway = false;
@@ -46,6 +49,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   disablePanelClose = false;
 
+  disablePanelOpen = false;
+
   private readonly destroy$ = new Subject<void>();
   constructor(
     private productService: ProductService,
@@ -55,8 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private takeawayService: TakeawayService,
     private tableService: TableService,
     private shopsOrdersService: ShopsOrdersService,
-    private devicesSessionService: DevicesSessionsService,
-    private cd: ChangeDetectorRef
+    private devicesSessionService: DevicesSessionsService
   ) {}
   ngAfterViewInit(): void {
     this.closeOrdersPanle();
@@ -72,6 +76,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getAllCategories();
   }
 
+  callReloadTables(): void {
+    this.eventReloadTables.next();
+  }
+
+  onTableSelectionChange(table: any): void {
+    this.selectedTable = table;
+  }
   selectTap(tabname: any): void {
     this.selectedDevice = null;
     this.selectedTable = null;
@@ -88,14 +99,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.tapTables = true;
         this.tapTakeaway = false;
         this.tapShops = false;
-        this.loadAllTables();
+        this.callReloadTables();
         break;
       case 'tapTakeaway':
         this.tapDevices = false;
         this.tapTables = false;
         this.tapTakeaway = true;
         this.tapShops = false;
-        this.getAllTakeawayOrders();
+        this.callReloadTables();
         break;
 
       case 'tapShops':
@@ -103,7 +114,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.tapTables = false;
         this.tapTakeaway = false;
         this.tapShops = true;
-        this.getAllShopsOrders();
+        this.callReloadTables();
         break;
       default:
         break;
@@ -119,22 +130,35 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  loadAllTables(): void {
-    this.tableService.query().subscribe(tables => {
-      this.tables = tables.body;
-    });
-  }
   tableMovedToDevice(device: any): void {
     this.selectTap('tapDevices');
     this.selectedDevice = device;
     // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     setTimeout(() => {
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       $('#device-' + device.id + '-Orderselector').click();
-      $('.ng-sidebar-header').click();
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      document.getElementById('#device-' + device.id + '-Orderselector').scrollIntoView();
+      self.disablePanelClose = false;
+      self.closeOrdersPanle();
     }, 1000);
-    this.loadAllTables();
   }
+
+  tableMovedToTable(table: any): void {
+    this.selectedTable = table;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      $('#table-' + table.id + 'selector').click();
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      document.getElementById('#table-' + table.id + 'selector').scrollIntoView();
+      self.disablePanelClose = false;
+      self.closeOrdersPanle();
+    }, 500);
+  }
+
   login(): void {
     this.router.navigate(['/login']);
   }
@@ -204,7 +228,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.selectedTable) {
       this.tableService.addProductToTable(this.selectedTable.id, productId).subscribe(table => {
         this.selectedTable = table;
-        this.loadAllTables();
+
+        this.callReloadTables();
       });
     }
 
@@ -231,7 +256,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.selectedTable) {
       this.tableService.deleteProductFromTable(this.selectedTable.id, productId).subscribe(table => {
         this.selectedTable = table;
-        this.loadAllTables();
+        this.callReloadTables();
       });
     }
   }

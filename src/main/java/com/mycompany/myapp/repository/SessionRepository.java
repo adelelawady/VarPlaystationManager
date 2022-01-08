@@ -24,4 +24,6 @@ public interface SessionRepository extends MongoRepository<Session, String> {
     Optional<Session> findOneWithEagerRelationships(String id);
 
     List<Session> findByDeviceIdAndActive(String deviceId, boolean active);
+
+    List<Session> findAllByActive(boolean active);
 }

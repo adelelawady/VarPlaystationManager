@@ -55,7 +55,9 @@ public class DeviceResource {
      * {@code POST  /devices} : Create a new device.
      *
      * @param deviceDTO the deviceDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new deviceDTO, or with status {@code 400 (Bad Request)} if the device has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new deviceDTO, or with status {@code 400 (Bad Request)} if
+     *         the device has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/devices")
@@ -74,11 +76,13 @@ public class DeviceResource {
     /**
      * {@code PUT  /devices/:id} : Updates an existing device.
      *
-     * @param id the id of the deviceDTO to save.
+     * @param id        the id of the deviceDTO to save.
      * @param deviceDTO the deviceDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deviceDTO,
-     * or with status {@code 400 (Bad Request)} if the deviceDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the deviceDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated deviceDTO, or with status {@code 400 (Bad Request)} if
+     *         the deviceDTO is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the deviceDTO couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/devices/{id}")
@@ -106,14 +110,17 @@ public class DeviceResource {
     }
 
     /**
-     * {@code PATCH  /devices/:id} : Partial updates given fields of an existing device, field will ignore if it is null
+     * {@code PATCH  /devices/:id} : Partial updates given fields of an existing
+     * device, field will ignore if it is null
      *
-     * @param id the id of the deviceDTO to save.
+     * @param id        the id of the deviceDTO to save.
      * @param deviceDTO the deviceDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deviceDTO,
-     * or with status {@code 400 (Bad Request)} if the deviceDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the deviceDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the deviceDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated deviceDTO, or with status {@code 400 (Bad Request)} if
+     *         the deviceDTO is not valid, or with status {@code 404 (Not Found)} if
+     *         the deviceDTO is not found, or with status
+     *         {@code 500 (Internal Server Error)} if the deviceDTO couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/devices/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -145,7 +152,8 @@ public class DeviceResource {
      * {@code GET  /devices} : get all the devices.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of devices in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of devices in body.
      */
     @GetMapping("/devices")
     public ResponseEntity<List<DeviceDTO>> getAllDevices(Pageable pageable) {
@@ -155,11 +163,19 @@ public class DeviceResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/devices/active/{active}")
+    public ResponseEntity<List<DeviceDTO>> getAllDevicesByActive(@PathVariable boolean active) {
+        log.debug("REST request to get a page of Devices");
+        List<DeviceDTO> page = deviceService.findAllByActive(active);
+        return ResponseEntity.ok(page);
+    }
+
     /**
      * {@code GET  /devices/:id} : get the "id" device.
      *
      * @param id the id of the deviceDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the deviceDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the deviceDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/devices/{id}")
     public ResponseEntity<DeviceDTO> getDevice(@PathVariable String id) {
@@ -204,6 +220,18 @@ public class DeviceResource {
     @PostMapping("/stop-session/{deviceId}")
     public ResponseEntity<DeviceSessionDTO> stopDeviceSession(@PathVariable String deviceId, @RequestBody SessionEndDTO sessionend) {
         DeviceSessionDTO listDevices = deviceService.stopSession(deviceId, sessionend);
+        return ResponseEntity.ok(listDevices);
+    }
+
+    @GetMapping("/device/{deviceId}/session/device/{deviceToId}/move")
+    public ResponseEntity<DeviceSessionDTO> moveDevice(@PathVariable String deviceId, @PathVariable String deviceToId) {
+        DeviceSessionDTO listDevices = deviceService.moveDevice(deviceId, deviceToId);
+        return ResponseEntity.ok(listDevices);
+    }
+
+    @GetMapping("/device/{deviceId}/session/device/multi/{multi}/move")
+    public ResponseEntity<DeviceSessionDTO> moveDeviceMulti(@PathVariable String deviceId, @PathVariable boolean multi) {
+        DeviceSessionDTO listDevices = deviceService.moveDeviceMulti(deviceId, multi);
         return ResponseEntity.ok(listDevices);
     }
 

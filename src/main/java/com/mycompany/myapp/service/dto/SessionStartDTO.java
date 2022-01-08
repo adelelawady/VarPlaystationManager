@@ -16,6 +16,16 @@ public class SessionStartDTO implements Serializable {
 
     private boolean multi;
 
+    private int plusMinutes = 0;
+
+    public int getPlusMinutes() {
+        return plusMinutes;
+    }
+
+    public void setPlusMinutes(int plusMinutes) {
+        this.plusMinutes = plusMinutes;
+    }
+
     public Double getReserved() {
         return reserved;
     }

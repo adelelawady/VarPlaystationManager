@@ -16,8 +16,8 @@ import { DeviceComponentComponent } from './device-component/device-component.co
 import { CountdownPipe } from './device-component/countdown.pipe';
 import { DevicePricePipe } from './device-component/price.pipe';
 import { SidebarAccordionModule } from 'ng-sidebar-accordion';
-import { DevicePricePipeTimeOnly } from './device-component/priceTimeOnly.pipe';
 import { TableComponentComponent } from './table-component/table-component.component';
+import { TablesTapComponentComponent } from '../pages/components/tables-tap-component/tables-tap-component.component';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -36,8 +36,8 @@ import { TableComponentComponent } from './table-component/table-component.compo
     DeviceComponentComponent,
     CountdownPipe,
     DevicePricePipe,
-    DevicePricePipeTimeOnly,
     TableComponentComponent,
+    TablesTapComponentComponent,
   ],
   exports: [
     SharedLibsModule,
@@ -56,8 +56,8 @@ import { TableComponentComponent } from './table-component/table-component.compo
     CountdownPipe,
     DevicePricePipe,
     SidebarAccordionModule,
-    DevicePricePipeTimeOnly,
     TableComponentComponent,
+    TablesTapComponentComponent,
   ],
   providers: [DevicePricePipe],
 })

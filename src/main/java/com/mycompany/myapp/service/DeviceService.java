@@ -39,6 +39,8 @@ public interface DeviceService {
      */
     Page<DeviceDTO> findAll(Pageable pageable);
 
+    List<DeviceDTO> findAllByActive(boolean active);
+
     /**
      * Get the "id" device.
      *
@@ -65,4 +67,8 @@ public interface DeviceService {
     DeviceSessionDTO addProductToDeviceSession(String deviceId, String productId);
 
     DeviceSessionDTO deleteProductFromDeviceSession(String deviceId, String productId);
+
+    DeviceSessionDTO moveDevice(String moveFromDeviceId, String moveToDeviceId);
+
+    DeviceSessionDTO moveDeviceMulti(String moveFromDeviceId, boolean multi);
 }

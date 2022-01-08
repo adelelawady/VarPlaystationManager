@@ -37,6 +37,10 @@ export class TableService {
     return this.http.get<any[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  findAll(type: string): Observable<EntityArrayResponseType> {
+    return this.http.get<any[]>(this.resourceUrl + '/' + type + '/getall', { observe: 'response' });
+  }
+
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
@@ -59,6 +63,10 @@ export class TableService {
 
   moveToDevice(tableId: string, deviceId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.resourceUrl}/${tableId}/devices/${deviceId}/move`, { observe: 'body' });
+  }
+
+  moveToTable(tableId: string, tableIdToMoveTO: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/${tableId}/tables/${tableIdToMoveTO}/move`, { observe: 'body' });
   }
 
   addTableToCollectionIfMissing(tableCollection: ITable[], ...tablesToCheck: (ITable | null | undefined)[]): ITable[] {

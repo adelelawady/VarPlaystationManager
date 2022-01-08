@@ -69,7 +69,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
     FooterComponent,
     AdminLayoutComponent,
   ],
-  bootstrap: [MainComponent, AdminLayoutComponent],
+  bootstrap: [MainComponent],
 })
 export class AppModule {
   constructor(

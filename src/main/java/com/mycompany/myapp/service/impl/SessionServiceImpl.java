@@ -162,4 +162,10 @@ public class SessionServiceImpl implements SessionService {
         session.setOrdersPrice(totalCalculationsOfOrders);
         sessionRepository.save(session);
     }
+
+    @Override
+    public List<Session> findByActive(boolean active) {
+        // TODO Auto-generated method stub
+        return sessionRepository.findAllByActive(active);
+    }
 }

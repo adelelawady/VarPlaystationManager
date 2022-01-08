@@ -25,6 +25,21 @@
           <label class="form-control-label" jhiTranslate="erApp.table.name" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_index">الترتيب</label>
+          <input type="number" class="form-control" name="index" id="field_index" data-cy="index" formControlName="index" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="erApp.device.type" for="field_type">Type</label>
+          <select class="form-control" id="field_type" data-cy="type" name="type" formControlName="type">
+            <option *ngIf="editForm.get(['type'])!.value == null" [ngValue]="null" selected></option>
+            <option [ngValue]="'table'">TABLE</option>
+            <option [ngValue]="'takeaway'">TAKEAWAY</option>
+            <option [ngValue]="'shops'">SHOPS</option>
+          </select>
+        </div>
       </div>
 
       <div>

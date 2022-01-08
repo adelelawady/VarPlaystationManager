@@ -1,11 +1,14 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -64,7 +67,55 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Field("ordersQuantity")
     private HashMap<String, Integer> ordersQuantity = new HashMap<>();
 
+    @Field("previousSessionsTotalPrice")
+    private Double previousSessionsTotalPrice = 0.0;
+
+    public Double getPreviousSessionsTotalPrice() {
+        return previousSessionsTotalPrice;
+    }
+
+    public void setPreviousSessionsTotalPrice(Double previousSessionsTotalPrice) {
+        this.previousSessionsTotalPrice = previousSessionsTotalPrice;
+    }
+
+    @Field("previousSessions")
+    @JsonIgnoreProperties(
+        value = {
+            "device.category",
+            "device.type",
+            "ordersData",
+            "ordersQuantity",
+            "previousSessions",
+            "id",
+            "totalPriceOrders",
+            "totalPriceUser",
+            "ordersDiscount",
+            "timeDiscount",
+            "duration",
+        }
+    )
+    private List<Record> previousSessions = new ArrayList<>();
+
+    private int minutes;
+    private int hours;
+
+    public int getMinutes() {
+        return this.duration.toMinutesPart();
+    }
+
+    public int getHours() {
+        return this.duration.toHoursPart();
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public List<Record> getPreviousSessions() {
+        return previousSessions;
+    }
+
+    public void setPreviousSessions(List<Record> previousSessions) {
+        this.previousSessions = previousSessions;
+    }
 
     public HashMap<String, Integer> getOrdersQuantity() {
         return ordersQuantity;

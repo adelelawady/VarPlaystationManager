@@ -69,4 +69,6 @@ public interface SessionService {
     void addProductOrderToDeviceSession(Session session, Product product);
 
     void deleteProductOrderFromDeviceSession(Session session, Product product);
+
+    List<Session> findByActive(boolean active);
 }

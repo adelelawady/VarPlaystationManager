@@ -1,6 +1,8 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,7 +15,39 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * A Table.
  */
 @Document(collection = "table")
-public class Table implements Serializable {
+public class Table extends AbstractAuditingEntity implements Serializable {
+
+    public enum TABLE_TYPE {
+        TABLE("table"),
+        TAKEAWAY("takeaway"),
+        SHOPS("shops");
+
+        private final String value;
+
+        TABLE_TYPE(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        public String getValue() {
+            return value.toLowerCase();
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static TABLE_TYPE fromValue(String value) {
+            for (TABLE_TYPE b : TABLE_TYPE.values()) {
+                if (b.getValue().equalsIgnoreCase(value)) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("Unexpected TABLE_TYPE value '" + value + "'");
+        }
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +73,21 @@ public class Table implements Serializable {
     @Field("ordersQuantity")
     private HashMap<String, Integer> ordersQuantity = new HashMap<>();
 
+    @Field("type")
+    private TABLE_TYPE type = TABLE_TYPE.TABLE;
+
+    @Field("index")
+    private Integer index = 0;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
 
     public boolean isActive() {
         return active;
@@ -101,7 +149,8 @@ public class Table implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     public Set<Product> getOrdersData() {
         return ordersData;
@@ -113,6 +162,14 @@ public class Table implements Serializable {
 
     public HashMap<String, Integer> getOrdersQuantity() {
         return ordersQuantity;
+    }
+
+    public TABLE_TYPE getType() {
+        return type;
+    }
+
+    public void setType(TABLE_TYPE type) {
+        this.type = type;
     }
 
     public void setOrdersQuantity(HashMap<String, Integer> ordersQuantity) {
@@ -132,18 +189,15 @@ public class Table implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "Table{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", discount=" + getDiscount() +
-            ", totalPrice=" + getTotalPrice() +
-            "}";
-    }
+	@Override
+	public String toString() {
+		return "Table{" + "id=" + getId() + ", name='" + getName() + "'" + ", discount=" + getDiscount()
+				+ ", totalPrice=" + getTotalPrice() + "}";
+	}
 }

@@ -1,10 +1,16 @@
 
-  ${AnsiColor.GREEN}      ██╗${AnsiColor.RED} ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗
-  ${AnsiColor.GREEN}      ██║${AnsiColor.RED} ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗
-  ${AnsiColor.GREEN}      ██║${AnsiColor.RED} ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝
-  ${AnsiColor.GREEN}██╗   ██║${AnsiColor.RED} ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║
-  ${AnsiColor.GREEN}╚██████╔╝${AnsiColor.RED} ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗
-  ${AnsiColor.GREEN} ╚═════╝ ${AnsiColor.RED} ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝
 
-${AnsiColor.BRIGHT_BLUE}:: JHipster 🤓  :: Running Spring Boot ${spring-boot.version} ::
-:: https://www.jhipster.tech ::${AnsiColor.DEFAULT}
+
+			
+${AnsiColor.GREEN}██╗░░██╗${AnsiColor.RED}░█████╗░███╗░░██╗░██████╗░█████╗░██╗░░░░░
+${AnsiColor.GREEN}██║░██╔╝${AnsiColor.RED}██╔══██╗████╗░██║██╔════╝██╔══██╗██║░░░░░
+${AnsiColor.GREEN}█████═╝░${AnsiColor.RED}██║░░██║██╔██╗██║╚█████╗░██║░░██║██║░░░░░
+${AnsiColor.GREEN}██╔═██╗░${AnsiColor.RED}██║░░██║██║╚████║░╚═══██╗██║░░██║██║░░░░░
+${AnsiColor.GREEN}██║░╚██╗${AnsiColor.RED}╚█████╔╝██║░╚███║██████╔╝╚█████╔╝███████╗
+${AnsiColor.GREEN}╚═╝░░╚═╝${AnsiColor.RED}░╚════╝░╚═╝░░╚══╝╚═════╝░░╚════╝░╚══════╝
+
+
+
+
+${AnsiColor.BRIGHT_BLUE}:: KONSOL 🤓  :: ${spring-boot.version} ::
+:: https://www.facebook.com/adel.ali.elawady/ ::${AnsiColor.DEFAULT}

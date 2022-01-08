@@ -1,4 +1,24 @@
+<!--
+
+
+(mouseleave)="showOptions=false;"
+-->
+
 <div
+  *ngIf="table"
+  (mouseenter)="showCloseButton = true"
+  (mouseleave)="showOptions = false; showCloseButton = false"
+  style="
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    cursor: pointer;
+  "
+  (click)="singleClick()"
+  (dblclick)="dblClick()"
+  [id]="'table-' + table.id + 'selector'"
   class="card border"
   [ngClass]="{
     'border-3': isSelected,
@@ -7,58 +27,116 @@
   }"
 >
   <div class="card-body">
-    <h5 class="card-title">
-      <span>
-        <a
+    <h5 class="card-title row">
+      <span class="col-10">
+        <i class="fa fa-bitbucket mx-1" aria-hidden="true"></i><a *ngIf="table" href="#" class="card-link"> {{ table.name }}</a>
+      </span>
+
+      <div style="text-align: center" *ngIf="tableType == 'table'">
+        <button
           *ngIf="table.active"
-          data-toggle="modal"
-          [attr.data-target]="'#modal' + table.id"
-          (click)="deviceClicked()"
-          href="#"
-          class="card-link"
+          (click)="diableClick(); showOptions = !showOptions; deviceClicked()"
+          class="btn mt-3 col-3 badge-primary shadow-sm border text-center m-auto btn-sm p-0"
         >
-          {{ table.name }}</a
+          <i style="font-size: large" class="fa fa-cog m-auto mx-0 mt-1" aria-hidden="true"></i>
+        </button>
+        <li
+          class="col-sm p-0 pointer my-1 border text-center btn p-2 shadow-sm dropdown px-5"
+          (click)="diableClick(); loadAllDevices()"
+          *ngIf="table.active && showOptions"
+          style="list-style: none"
+          ngbDropdown
+          display="dynamic"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a *ngIf="!table.active" (click)="deviceClicked()" href="#" class="card-link"> {{ table.name }}</a></span
-      >
-      <i
-        (click)="deviceClicked()"
-        *ngIf="table.active"
-        style="cursor: pointer"
-        class="float-right"
-        class="fa fa-check text-success float-right rounded p-1 border"
-      ></i>
-    </h5>
-    <li
-      (click)="loadAllDevices()"
-      *ngIf="table.active"
-      style="list-style: none"
-      ngbDropdown
-      class="nav-item dropdown pointer"
-      display="dynamic"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
-        <span>
-          <i class="fa fa-cog" aria-hidden="true"></i>
-          <span>تحويل لجهاز</span>
-        </span>
-      </a>
-      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-        <li *ngFor="let device of devices">
-          <a class="dropdown-item" (click)="moveToDevice(device)">
-            <span>{{ device.name }}</span>
+          <a
+            style="float: right; font-size: small; text-align: right"
+            class="nav-link dropdown-toggle p-0"
+            ngbDropdownToggle
+            href="javascript:void(0);"
+            id="entity-menu"
+            data-cy="entity"
+          >
+            <span>
+              <i class="fa fa-share" aria-hidden="true"></i>
+              <span>تحويل لجهاز</span>
+            </span>
           </a>
+          <ul style="overflow: scroll; max-height: 300px" class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <li *ngFor="let device of devices">
+              <a class="dropdown-item" style="text-transform: none" (click)="moveToDevice(device)">
+                <span>{{ device.name }}</span>
+              </a>
+            </li>
+          </ul>
         </li>
-      </ul>
-    </li>
+
+        <li
+          class="col-sm p-0 pointer my-1 border text-center btn p-2 shadow-sm dropdown px-5"
+          (click)="diableClick(); loadAllTables()"
+          *ngIf="table.active && showOptions"
+          style="list-style: none"
+          ngbDropdown
+          display="dynamic"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a
+            style="float: right; font-size: small; text-align: right"
+            class="nav-link dropdown-toggle p-0"
+            ngbDropdownToggle
+            href="javascript:void(0);"
+            id="entity-menu"
+            data-cy="entity"
+          >
+            <span>
+              <i class="fa fa-share" aria-hidden="true"></i>
+              <span>تحويل لصالة</span>
+            </span>
+          </a>
+          <ul style="overflow: scroll; max-height: 300px" class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <li *ngFor="let tablex of tables">
+              <a *ngIf="tablex.id != table.id" class="dropdown-item" style="text-transform: none" (click)="moveToTable(tablex)">
+                <span>{{ tablex.name }}</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </div>
+    </h5>
   </div>
 
-  <div *ngIf="table.active && table.totalPrice" class="card-footer p-2">
-    <a href="#" class="card-link float-right m-0 pr-2">{{ formateMoney(table.totalPrice) || 'EGP 0' }}</a>
+  <div *ngIf="table.active && table.totalPrice" class="justify-content-center align-items-center p-1 row border-top mx-2 m-1 pt-2">
+    <a
+      *ngIf="showCloseButton"
+      (click)="diableClick(); openCheckoutModal()"
+      style="float: right; font-size: 15px; text-align: right"
+      class="nav-link text-danger btn-sm col-auto p-0"
+      id="entity-menu"
+      data-cy="entity"
+    >
+      <span>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        <span> انهاء</span>
+      </span>
+    </a>
+
+    <a
+      style="
+        text-align: right;
+        user-select: none; /* supported by Chrome and Opera */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+      "
+      href="#"
+      class="card-link float-right m-0 pr-2 col-sm"
+      >{{ formateMoney(table.totalPrice) || 'EGP 0' }}</a
+    >
   </div>
-  <div *ngIf="!table.active" class="card-footer p-2">
+  <div *ngIf="!table.active" class="justify-content-center align-items-center p-1 row border-top mx-2 m-1 pt-2">
     <a href="#" class="card-link float-left">
       <label class="badge badge-danger">{{ 'متوقف' }}</label></a
     >

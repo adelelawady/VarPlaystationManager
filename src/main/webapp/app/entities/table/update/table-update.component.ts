@@ -18,6 +18,8 @@ export class TableUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [],
+    type: [],
+    index: [],
   });
 
   constructor(protected tableService: TableService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -65,20 +67,21 @@ export class TableUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(table: ITable): void {
+  protected updateForm(table: any): void {
     this.editForm.patchValue({
       id: table.id,
       name: table.name,
-      discount: table.discount,
-      totalPrice: table.totalPrice,
+      type: table.type,
+      index: table.index,
     });
   }
 
-  protected createFromForm(): ITable {
+  protected createFromForm(): any {
     return {
-      ...new Table(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
+      type: this.editForm.get(['type'])!.value,
+      index: this.editForm.get(['index'])!.value,
     };
   }
 }

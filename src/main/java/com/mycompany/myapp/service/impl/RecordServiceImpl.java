@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -99,9 +100,8 @@ public class RecordServiceImpl implements RecordService {
     public RecordsFilterDTO findAllFilterd(Pageable pageable, RecordsFilterRequestDTO filterRequestDTO) {
         Page<Record> result = null;
 
-        List<Record> allrecords = null;
+        List<Record> allrecords = new ArrayList<>();
 
-        RecordsFilterDTO res = new RecordsFilterDTO();
         switch (filterRequestDTO.getQueryType()) {
             case "today":
                 LocalDate localDate = LocalDate.now();
@@ -111,14 +111,14 @@ public class RecordServiceImpl implements RecordService {
                 LocalDateTime StartOfDay = localDate.atTime(LocalTime.MIN);
 
                 result =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             pageable,
                             StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDay.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             StartOfDay.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDay.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -132,14 +132,14 @@ public class RecordServiceImpl implements RecordService {
                 LocalDateTime StartOfDayyesterday = localDateyesterday.atTime(LocalTime.MIN);
 
                 result =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             pageable,
                             StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             StartOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterday.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -155,14 +155,14 @@ public class RecordServiceImpl implements RecordService {
                 LocalDateTime StartOfDayyesterdayx = localDateyesterdayx.atTime(LocalTime.MIN);
 
                 result =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             pageable,
                             StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             StartOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDayyesterdayx.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -178,14 +178,14 @@ public class RecordServiceImpl implements RecordService {
                 LocalDateTime StartOfDayMonth = localDatemonth.atTime(LocalTime.MIN);
 
                 result =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             pageable,
                             StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant()
                         );
 
                 allrecords =
-                    this.recordRepository.findAllByStartBetween(
+                    this.recordRepository.findAllByEndBetween(
                             StartOfDayMonth.atZone(ZoneId.systemDefault()).toInstant(),
                             EndOfDaymonth.atZone(ZoneId.systemDefault()).toInstant()
                         );
@@ -194,16 +194,18 @@ public class RecordServiceImpl implements RecordService {
             default:
                 break;
         }
-
+        RecordsFilterDTO res = new RecordsFilterDTO();
         for (Record reco : allrecords) {
-            res.setTotalPriceUser(res.getTotalPriceUser() + reco.getTotalPriceUser());
-            res.setTotalPrice(res.getTotalPrice() + reco.getTotalPrice());
-            res.setTotalPriceOrders(res.getTotalPriceOrders() + reco.getTotalPriceOrders());
-            res.setOrdersDiscount(res.getOrdersDiscount() + reco.getOrdersDiscount());
-            res.setTimeDiscount(res.getTimeDiscount() + reco.getTimeDiscount());
-            res.setTotalPriceTime(res.getTotalPriceTime() + reco.getTotalPriceTime());
-            res.setTotalHours(res.getTotalHours() + reco.getDuration().toHoursPart());
-            res.setTotalMinutes(res.getTotalMinutes() + reco.getDuration().toMinutesPart());
+            if (reco != null) {
+                res.setTotalPriceUser(res.getTotalPriceUser() + reco.getTotalPriceUser());
+                res.setTotalPrice(res.getTotalPrice() + reco.getTotalPrice());
+                res.setTotalPriceOrders(res.getTotalPriceOrders() + reco.getTotalPriceOrders());
+                res.setOrdersDiscount(res.getOrdersDiscount() + reco.getOrdersDiscount());
+                res.setTimeDiscount(res.getTimeDiscount() + reco.getTimeDiscount());
+                res.setTotalPriceTime(res.getTotalPriceTime() + reco.getTotalPriceTime());
+                res.setTotalHours(res.getTotalHours() + reco.getDuration().toHoursPart());
+                res.setTotalMinutes(res.getTotalMinutes() + reco.getDuration().toMinutesPart());
+            }
         }
 
         res.setResultList(result.map(recordMapper::toDto));

@@ -17,11 +17,26 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
   timeDiscount = 0.0;
   ordersDiscount = 0.0;
   totalPriceUser: any;
+  plusMinutes = 0;
+  showOptions = false;
+  devices: any[] | undefined;
+  showPreviousSessions = false;
+  showCloseButton = false;
+  showOptionsTxt = false;
+  showPreviousSessionsTxt = false;
+  showCloseSessionsTxt = false;
+
+  isSingleClick = true;
+  disableClick = false;
   @Input() isSelected = false;
   @Input() device: any;
   @Output() deviceSelected = new EventEmitter();
   @Output() deviceClicked = new EventEmitter();
   @Output() deviceStopped = new EventEmitter();
+  @Output() deviceMoved = new EventEmitter();
+  @Output() deviceDoubleClicked = new EventEmitter();
+  @Output() deviceCheckOut = new EventEmitter();
+
   constructor(
     private devicePricePipe: DevicePricePipe,
     private cd: ChangeDetectorRef,
@@ -40,7 +55,60 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
 
     this.deviceClicked.emit(this.device);
   }
+  loadAllDevices(): void {
+    this.devicesSessionsService.getDevicesSessions().subscribe((devicesFound: any) => {
+      this.devices = devicesFound.filter((device: any) => !device.session);
+    });
+  }
 
+  singleClick(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    if (this.disableClick) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+
+      setTimeout(() => {
+        self.disableClick = false;
+      }, 1000);
+      return;
+    }
+
+    self.isSingleClick = true;
+    setTimeout(() => {
+      if (self.isSingleClick) {
+        self.deviceSelected.emit(self.device);
+      }
+    }, 250);
+  }
+  dblClick(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    if (this.disableClick) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+
+      setTimeout(() => {
+        self.disableClick = false;
+      }, 1000);
+      return;
+    }
+    this.isSingleClick = false;
+    if (!this.device.session) {
+      this.openCheckOut();
+    } else {
+      this.getDevicePrice();
+      this.deviceDoubleClicked.emit(this.device);
+    }
+  }
+  diableClick(): void {
+    this.disableClick = true;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+
+      self.disableClick = false;
+    }, 1000);
+  }
   selectDevice(device: any): void {
     // eslint-disable-next-line no-console
     this.deviceSelected.emit(device);
@@ -49,6 +117,7 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
     const sessionStart = {
       multi: this.isMulti,
       reserved: 0,
+      plusMinutes: this.plusMinutes,
     };
 
     this.devicesSessionsService.startDeviceSession(this.device.id, sessionStart).subscribe(dev => {
@@ -57,11 +126,30 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
       this.cd.markForCheck();
     });
   }
+
+  openCheckOut(): void {
+    this.getDevicePrice();
+    this.deviceCheckOut.emit(this);
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    $('#modal' + this.device.id).modal();
+  }
   getDevicePrice(): void {
     if (this.device?.session) {
       this.totalPriceUser = this.devicePricePipe.transform(this.device, true, this.timeDiscount, this.ordersDiscount, false, false);
     }
   }
+  moveToDevice(dev: any): void {
+    this.devicesSessionsService.moveDevice(this.device.id, dev.id).subscribe((devicesFound: any) => {
+      this.deviceMoved.emit(devicesFound);
+    });
+  }
+
+  moveToDeviceMulti(): void {
+    this.devicesSessionsService.moveDeviceToMulti(this.device.id, !this.device.session.multi).subscribe((devicesFound: any) => {
+      this.deviceMoved.emit(devicesFound);
+    });
+  }
+
   formateMoney(r: any): any {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');

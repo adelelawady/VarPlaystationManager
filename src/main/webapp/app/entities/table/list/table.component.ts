@@ -11,7 +11,7 @@ import { TableDeleteDialogComponent } from '../delete/table-delete-dialog.compon
   templateUrl: './table.component.html',
 })
 export class TableComponent implements OnInit {
-  tables?: ITable[];
+  tables?: any[];
   isLoading = false;
 
   constructor(protected tableService: TableService, protected modalService: NgbModal) {}

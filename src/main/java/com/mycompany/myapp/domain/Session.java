@@ -1,10 +1,13 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
@@ -28,6 +31,9 @@ public class Session implements Serializable {
 
     @Field("reserved")
     private Double reserved;
+
+    @Field("previousSessionsTotalPrice")
+    private Double previousSessionsTotalPrice = 0.0;
 
     @Field("active")
     private boolean active;
@@ -68,6 +74,26 @@ public class Session implements Serializable {
 
     @Field("ordersQuantity")
     private HashMap<String, Integer> ordersQuantity = new HashMap<>();
+
+    @Field("previousSessions")
+    @JsonIgnoreProperties(
+        value = {
+            "device.category",
+            "device.type",
+            "ordersData",
+            "ordersQuantity",
+            "previousSessions",
+            "id",
+            "totalPriceOrders",
+            "totalPriceUser",
+            "ordersDiscount",
+            "timeDiscount",
+            "duration",
+            "createdDate",
+            "totalPrice",
+        }
+    )
+    private List<Record> previousSessions = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -147,6 +173,14 @@ public class Session implements Serializable {
         this.orders = products;
     }
 
+    public Double getPreviousSessionsTotalPrice() {
+        return previousSessionsTotalPrice;
+    }
+
+    public void setPreviousSessionsTotalPrice(Double previousSessionsTotalPrice) {
+        this.previousSessionsTotalPrice = previousSessionsTotalPrice;
+    }
+
     public Session orders(Set<Product> products) {
         this.setOrders(products);
         return this;
@@ -187,6 +221,14 @@ public class Session implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<Record> getPreviousSessions() {
+        return previousSessions;
+    }
+
+    public void setPreviousSessions(List<Record> previousSessions) {
+        this.previousSessions = previousSessions;
     }
 
     // prettier-ignore

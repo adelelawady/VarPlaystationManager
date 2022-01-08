@@ -57,13 +57,16 @@ export class DevicePricePipe implements PipeTransform {
 
     let resultFinal = 0;
 
-    addEGP;
+    if (device.session.previousSessionsTotalPrice) {
+      resultTotalPrice += device.session.previousSessionsTotalPrice;
+    }
 
     if (resultTotalPrice > 0) {
       resultFinal = resultTotalPrice.toFixed(2);
     } else {
       resultFinal = 0;
     }
+
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     return addEGP ? 'EGP ' + resultFinal : resultFinal;
   }

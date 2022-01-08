@@ -12,10 +12,8 @@ import com.mycompany.myapp.repository.TableRepository;
 import com.mycompany.myapp.service.DeviceService;
 import com.mycompany.myapp.service.PrinterSupport;
 import com.mycompany.myapp.service.ProductService;
-import com.mycompany.myapp.service.ReceiptPrint;
 import com.mycompany.myapp.service.ReceiptTablePrint;
 import com.mycompany.myapp.service.SessionService;
-import com.mycompany.myapp.service.dto.DeviceSessionDTO;
 import com.mycompany.myapp.service.dto.SessionEndDTO;
 import com.mycompany.myapp.service.dto.SessionStartDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -24,14 +22,11 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,6 +191,12 @@ public class TableResource {
         return tableRepository.findAll();
     }
 
+    @GetMapping("/tables/{type}/getall")
+    public List<Table> getAllTablesByType(@PathVariable String type) {
+        log.debug("REST request to get all Tables");
+        return tableRepository.findAllByTypeOrderByIndex(type.toUpperCase());
+    }
+
     /**
      * {@code GET  /tables/:id} : get the "id" table.
      *
@@ -224,7 +225,7 @@ public class TableResource {
     }
 
     @GetMapping("/tables/start-session/{tableId}")
-    public ResponseEntity<Table> startDeviceSession(@PathVariable String tableId) {
+    public ResponseEntity<Table> startTableSession(@PathVariable String tableId) {
         Optional<Table> table = tableRepository.findById(tableId);
 
         if (table.isPresent()) {
@@ -237,7 +238,7 @@ public class TableResource {
     }
 
     @PostMapping("/tables/stop-session/{tableId}")
-    public ResponseEntity<Table> stopDeviceSession(@PathVariable String tableId, @RequestBody SessionEndDTO dto) {
+    public ResponseEntity<Table> stopTableSession(@PathVariable String tableId, @RequestBody SessionEndDTO dto) {
         Optional<Table> table = tableRepository.findById(tableId);
         if (table.isPresent()) {
             Table tableob = table.get();
@@ -259,12 +260,7 @@ public class TableResource {
 
             TableRecord SavedTableRecord = recordRepository.save(tableRecord);
 
-            resTabel.setActive(false);
-            resTabel.setTotalPrice(0.0);
-            resTabel.setDiscount(0.0);
-            resTabel.setOrdersData(new HashSet<>());
-            resTabel.setOrdersQuantity(new HashMap<>());
-            Table savedTableX = tableRepository.save(resTabel);
+            Table savedTableX = resetTable(resTabel);
 
             if (dto.isPrint()) {
                 Printable printable = new ReceiptTablePrint(SavedTableRecord);
@@ -330,7 +326,7 @@ public class TableResource {
                     }
                 }
 
-                if (tableob.getOrdersData().size() == 0) {
+                if (tableob.getOrdersData().isEmpty()) {
                     tableob.setActive(false);
                 }
                 tableRepository.save(tableob);
@@ -351,7 +347,7 @@ public class TableResource {
 
             Session sess = sessionService.getDeviceActiveSession(deviceId);
             if (sess != null) {
-                // device  active
+                // device active
 
                 // add products to orders data
 
@@ -360,7 +356,7 @@ public class TableResource {
                 // empty table
                 resetTable(tableObject);
             } else {
-                //device not active
+                // device not active
                 SessionStartDTO sessionStartDTO = new SessionStartDTO();
                 sessionStartDTO.setMulti(false);
                 deviceService.startSession(deviceId, sessionStartDTO);
@@ -370,6 +366,28 @@ public class TableResource {
 
                 resetTable(tableObject);
             }
+        }
+        Optional<Table> tableRes = tableRepository.findById(tableId);
+        if (tableRes.isPresent()) {
+            return ResponseEntity.ok(tableRes.get());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/tables/{tableId}/tables/{tableIdToMoveTo}/move")
+    public ResponseEntity<Table> modeTableToTable(@PathVariable String tableId, @PathVariable String tableIdToMoveTo) {
+        Optional<Table> table = tableRepository.findById(tableId);
+        if (table.isPresent()) {
+            Table tableObject = table.get();
+
+            Optional<Table> tableToMoveTo = tableRepository.findById(tableIdToMoveTo);
+
+            if (tableToMoveTo.isPresent()) {
+                moveOrdersTableToTable(table.get(), tableToMoveTo.get());
+            }
+
+            // empty table One
+            resetTable(tableObject);
         }
         Optional<Table> tableRes = tableRepository.findById(tableId);
         if (tableRes.isPresent()) {
@@ -405,6 +423,25 @@ public class TableResource {
         return sessionService.getDeviceActiveSession(sess.getDevice().getId());
     }
 
+    Table moveOrdersTableToTable(Table tableFrom, Table tableTo) {
+        // add all missing products
+        tableTo.getOrdersData().addAll(tableFrom.getOrdersData());
+
+        for (Product prodToAdd : tableFrom.getOrdersData()) {
+            boolean sessionHasItem = tableTo.getOrdersQuantity().containsKey(prodToAdd.getId());
+            int currentvalueFromTable = tableFrom.getOrdersQuantity().get(prodToAdd.getId());
+            if (sessionHasItem) {
+                int currentvalueToTable = tableTo.getOrdersQuantity().get(prodToAdd.getId());
+                tableTo.getOrdersQuantity().put(prodToAdd.getId(), currentvalueToTable + currentvalueFromTable);
+            } else {
+                tableTo.getOrdersQuantity().put(prodToAdd.getId(), currentvalueFromTable);
+            }
+        }
+        tableTo.setActive(true);
+        Table savedTable = tableRepository.save(tableTo);
+        return calculateDeviceSessionOrderesPrice(savedTable);
+    }
+
     private Table calculateDeviceSessionOrderesPrice(Table table) {
         Double totalCalculationsOfOrders = 0.0;
         for (Product order : table.getOrdersData()) {
@@ -414,8 +451,21 @@ public class TableResource {
             } else {
                 prodValue = 1;
             }
-
             Double prodPrice = order.getPrice();
+            switch (table.getType()) {
+                case TABLE:
+                    prodPrice = order.getPrice();
+                    break;
+                case SHOPS:
+                    prodPrice = order.getShopsPrice();
+                    break;
+                case TAKEAWAY:
+                    prodPrice = order.getTakeawayPrice();
+                    break;
+                default:
+                    break;
+            }
+
             Double totalProdPrice = Double.valueOf(prodValue) * prodPrice;
             totalCalculationsOfOrders += totalProdPrice;
         }

@@ -1,6 +1,6 @@
 <ng-sidebar-accordion #accordion style="left: 0; bottom: unset" class="ng-sidebar-accordion__bottom-pane_over">
   <!-- A sidebar -->
-  <ng-sidebar *ngIf="account" class="classtest" sidebarResizable="true" position="bottom" mode="over" [opened]="true">
+  <ng-sidebar *ngIf="account" class="classtest" sidebarResizable="true" position="bottom" mode="over" [opened]="false">
     <ng-sidebar-header>
       <div>
         <div><h3 class="m-0 pt-2">الطلبات</h3></div>
@@ -75,31 +75,53 @@
           <a class="nav-link mainTabTxt" (click)="selectTap('tapTables')" [ngClass]="{ active: tapTables }" href="#">الصالات</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link mainTabTxt" (click)="selectTap('tapTakeaway'); openOrdersPanle()" [ngClass]="{ active: tapTakeaway }" href="#"
-            >اوردارت</a
-          >
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapTakeaway')" [ngClass]="{ active: tapTakeaway }" href="#">اوردارت</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link mainTabTxt" (click)="selectTap('tapShops'); openOrdersPanle()" [ngClass]="{ active: tapShops }" href="#"
-            >مطاعم</a
-          >
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapShops')" [ngClass]="{ active: tapShops }" href="#">مطاعم</a>
         </li>
       </ul>
 
+      <jhi-tables-tap-component
+        [tableType]="'shops'"
+        (tableDoubleClicked)="onTableSelectionChange($event); openOrdersPanle()"
+        [events]="eventReloadTables.asObservable()"
+        (tableSelected)="onTableSelectionChange($event)"
+        *ngIf="tapShops"
+      ></jhi-tables-tap-component>
+
+      <jhi-tables-tap-component
+        [tableType]="'takeaway'"
+        (tableDoubleClicked)="onTableSelectionChange($event); openOrdersPanle()"
+        [events]="eventReloadTables.asObservable()"
+        (tableSelected)="onTableSelectionChange($event)"
+        *ngIf="tapTakeaway"
+      ></jhi-tables-tap-component>
+
+      <jhi-tables-tap-component
+        [tableType]="'table'"
+        (tableDoubleClicked)="onTableSelectionChange($event); openOrdersPanle()"
+        [events]="eventReloadTables.asObservable()"
+        (tableSelected)="onTableSelectionChange($event)"
+        *ngIf="tapTables"
+      ></jhi-tables-tap-component>
       <div class="row" *ngIf="devices">
-        <div class="col-8" [ngClass]="{ 'col-md-12': tapTakeaway || tapShops }">
+        <div class="col-8">
           <div class="card-body px-1" *ngIf="tapDevices">
             <h5 class="card-title mx-4">الاجهزة</h5>
             <div class="card jh-card m-2 p-4">
-              <div class="row">
+              <div class="row justify-content-center align-items-center">
                 <div class="col-md-3 p-1" *ngFor="let device of devices">
                   <jhi-device-component
                     (deviceClicked)="selectedDevice = $event"
-                    (deviceSelected)="selectedDevice = $event; openOrdersPanle()"
+                    (deviceSelected)="selectedDevice = $event"
                     (deviceStopped)="selectedDevice = null; closeOrdersPanle()"
                     [device]="device"
                     [isSelected]="selectedDevice && selectedDevice.id == device.id"
+                    (deviceMoved)="loadAllDevices()"
+                    (deviceDoubleClicked)="selectedDevice = $event; openOrdersPanle()"
+                    (deviceCheckOut)="closeOrdersPanle()"
                   >
                   </jhi-device-component>
                 </div>
@@ -107,10 +129,12 @@
             </div>
           </div>
 
-          <div class="card-body px-1" *ngIf="tapTables">
+          <!--
+
+         <div class="card-body px-1" *ngIf="tapTables">
             <h5 class="card-title mx-4">الصالات</h5>
             <div class="card jh-card m-2 p-4">
-              <div class="row">
+              <div class="row justify-content-center align-items-center">
                 <div class="col-md-3 p-1" *ngFor="let table of tables">
                   <jhi-table-component
                     (tableClicked)="selectedTable = $event; openOrdersPanle()"
@@ -118,94 +142,13 @@
                     (tableStarted)="loadAllTables()"
                     (tableStopped)="selectedTable = null; loadAllTables()"
                     (tableMovedToDevice)="tableMovedToDevice($event)"
+                    (tableMovedToTable)="tableMovedToTable($event)"
                     [table]="table"
                   ></jhi-table-component>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="card-body px-1" *ngIf="tapTakeaway">
-            <span>
-              <h5 class="card-title mx-4">takeaway اوردرات</h5>
-            </span>
-            <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
-              <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
-                <table class="table table-striped" aria-describedby="page-heading">
-                  <thead style="display: none">
-                    <tr>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let takeaway of takeawayOrders" data-cy="entityTable">
-                      <td>
-                        <h4>{{ takeaway.product.name }}</h4>
-                      </td>
-                      <td>{{ takeaway.product.category ? takeaway.product.category.name : '' }}</td>
-                      <td>{{ formateMoney(takeaway.product.takeawayPrice) }}</td>
-                      <td>{{ takeaway.createdDate | date: 'short' }}</td>
-                      <td>
-                        <button
-                          type="submit"
-                          (click)="deleteTakeaway(takeaway.id)"
-                          class="btn btn-danger btn-sm"
-                          data-cy="entityDeleteButton"
-                        >
-                          <fa-icon icon="times"></fa-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-body px-1" *ngIf="tapShops">
-            <span>
-              <h5 class="card-title mx-4">اوردرات مطاعم</h5>
-            </span>
-            <div class="row border m-1 p-1 rounded border-2" style="max-height: 600px; overflow: scroll">
-              <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
-                <table class="table table-striped" aria-describedby="page-heading">
-                  <thead style="display: none">
-                    <tr>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                      <th scope="col"><span>Name</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let shopOrder of shopsOrders" data-cy="entityTable">
-                      <td>
-                        <h4>{{ shopOrder.product.name }}</h4>
-                      </td>
-                      <td>{{ shopOrder.product.category ? shopOrder.product.category.name : '' }}</td>
-                      <td>{{ formateMoney(shopOrder.totalPrice) }}</td>
-                      <td>{{ shopOrder.createdDate | date: 'short' }}</td>
-                      <td>
-                        <button
-                          type="submit"
-                          (click)="deleteShopOrder(shopOrder.id)"
-                          class="btn btn-danger btn-sm"
-                          data-cy="entityDeleteButton"
-                        >
-                          <fa-icon icon="times"></fa-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="col-lg-4 py-5 col-sm-12">
@@ -258,6 +201,9 @@
             </div>
           </div>
 
+          <!--
+
+
           <div class="card p-3" *ngIf="selectedTable">
             <h5 class="card-title">
               {{ selectedTable.name }}
@@ -308,6 +254,7 @@
               </div>
             </div>
           </div>
+                    -->
         </div>
       </div>
     </div>
