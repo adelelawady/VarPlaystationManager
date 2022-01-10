@@ -60,6 +60,16 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Field("timeDiscount")
     private Double timeDiscount = 0.0;
 
+    @Field("total_discount_price")
+    private Double totalDiscountPrice = 0.0;
+
+    public Double getTotalDiscountPrice() {
+        if (ordersDiscount > 0 || timeDiscount > 0) {
+            return (totalPriceTime + totalPriceOrders) - totalPrice;
+        }
+        return totalDiscountPrice;
+    }
+
     @Field("ordersData")
     @JsonIgnoreProperties(ignoreUnknown = true)
     private Set<Product> ordersData = new HashSet<>();
@@ -78,44 +88,24 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         this.previousSessionsTotalPrice = previousSessionsTotalPrice;
     }
 
-    @Field("previousSessions")
-    @JsonIgnoreProperties(
-        value = {
-            "device.category",
-            "device.type",
-            "ordersData",
-            "ordersQuantity",
-            "previousSessions",
-            "id",
-            "totalPriceOrders",
-            "totalPriceUser",
-            "ordersDiscount",
-            "timeDiscount",
-            "duration",
-        }
-    )
-    private List<Record> previousSessions = new ArrayList<>();
-
-    private int minutes;
-    private int hours;
+    private int minutes = 0;
+    private int hours = 0;
 
     public int getMinutes() {
+        if (this.duration == null) {
+            return 0;
+        }
         return this.duration.toMinutesPart();
     }
 
     public int getHours() {
+        if (this.duration == null) {
+            return 0;
+        }
         return this.duration.toHoursPart();
     }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public List<Record> getPreviousSessions() {
-        return previousSessions;
-    }
-
-    public void setPreviousSessions(List<Record> previousSessions) {
-        this.previousSessions = previousSessions;
-    }
 
     public HashMap<String, Integer> getOrdersQuantity() {
         return ordersQuantity;

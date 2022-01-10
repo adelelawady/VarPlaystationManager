@@ -132,6 +132,7 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
     this.deviceCheckOut.emit(this);
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     $('#modal' + this.device.id).modal();
+    this.cd.markForCheck();
   }
   getDevicePrice(): void {
     if (this.device?.session) {
@@ -141,12 +142,14 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
   moveToDevice(dev: any): void {
     this.devicesSessionsService.moveDevice(this.device.id, dev.id).subscribe((devicesFound: any) => {
       this.deviceMoved.emit(devicesFound);
+      this.cd.markForCheck();
     });
   }
 
   moveToDeviceMulti(): void {
     this.devicesSessionsService.moveDeviceToMulti(this.device.id, !this.device.session.multi).subscribe((devicesFound: any) => {
       this.deviceMoved.emit(devicesFound);
+      this.cd.markForCheck();
     });
   }
 

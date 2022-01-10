@@ -11,6 +11,7 @@ import { ProductService } from 'app/entities/product/service/product.service';
 import { TableService } from 'app/entities/table/service/table.service';
 import { TakeawayService } from 'app/entities/takeaway/service/takeaway.service';
 import { ShopsOrdersService } from 'app/entities/shops-orders/service/shops-orders.service';
+import { SheftService } from './sheft.service';
 declare const $: any;
 declare const document: any;
 @Component({
@@ -36,6 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedDevice: any;
   selectedTable: any;
 
+  currentSheft: any | undefined;
   eventReloadTables: Subject<void> = new Subject<void>();
 
   tapDevices = true;

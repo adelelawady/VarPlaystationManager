@@ -15,6 +15,16 @@
   >
     <fa-icon icon="bars"></fa-icon>
   </a>
+  <a class="nav-link border badge p-2" style="font-size: large">
+    <span>
+      <i class="fa fa-clock"></i>
+      <span (click)="startSheft()" *ngIf="!currentSheft">Sheft : N/A</span>
+      <span routerLink="sheft/current/report" *ngIf="currentSheft"
+        >Sheft : {{ currentSheft.user.firstName }}
+        <small class="badge badge-success">{{ '  ' + (currentSheft.start | countdowntimer | async) }}</small>
+      </span>
+    </span>
+  </a>
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -29,7 +39,7 @@
         </a>
       </li>
 
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li class="nav-item float-left" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
           <span>
             <fa-icon icon="home"></fa-icon>

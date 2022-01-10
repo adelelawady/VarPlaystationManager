@@ -109,7 +109,20 @@ public class SheftResource {
         if (sheftRepository.findAllByEnd(null).isEmpty()) {
             return null;
         } else {
+            //stopSheft(sheftRepository.findAllByEnd(null).get(0).getId());
+            //Optional<Sheft> res = sheftRepository.findById(sheftRepository.findAllByEnd(null).get(0).getId());
             return ResponseEntity.ok(sheftRepository.findAllByEnd(null).get(0));
+        }
+    }
+
+    @GetMapping("/sheft/current/updated")
+    public ResponseEntity<Sheft> currentUpdated() {
+        if (sheftRepository.findAllByEnd(null).isEmpty()) {
+            return null;
+        } else {
+            stopSheft(sheftRepository.findAllByEnd(null).get(0).getId());
+            Optional<Sheft> res = sheftRepository.findById(sheftRepository.findAllByEnd(null).get(0).getId());
+            return ResponseEntity.ok(res.get());
         }
     }
 
@@ -146,92 +159,154 @@ public class SheftResource {
         if (sheftFound.isPresent()) {
             Sheft sheftObj = sheftFound.get();
 
-            List<Record> records = recordRepository.findAllByEndBetween(sheftFound.get().getStart(), sheftFound.get().getEnd());
+            List<Record> records = recordRepository.findAllByEndBetween(
+                sheftFound.get().getStart(),
+                sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
+            );
             sheftObj.setRecords(records);
 
-            List<TableRecord> tableRecords = tableRecordRepository.findAllByCreatedDateBetween(
+            List<TableRecord> tableRecords = tableRecordRepository.findAllByTypeAndCreatedDateBetween(
+                "TABLE",
                 sheftFound.get().getStart(),
-                sheftFound.get().getEnd()
+                sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
             );
+
+            List<TableRecord> takeawayRecords = tableRecordRepository.findAllByTypeAndCreatedDateBetween(
+                "TAKEAWAY",
+                sheftFound.get().getStart(),
+                sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
+            );
+
+            List<TableRecord> shopsRecords = tableRecordRepository.findAllByTypeAndCreatedDateBetween(
+                "SHOPS",
+                sheftFound.get().getStart(),
+                sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
+            );
+
             sheftObj.setTableRecords(tableRecords);
+            sheftObj.setTableTakeAwayRecords(takeawayRecords);
+            sheftObj.setTableShopsRecords(shopsRecords);
 
-            Double total_net_price = records.stream().map(Record::getTotalPrice).mapToDouble(Double::doubleValue).sum();
+            // DEVICES
 
-            Double total_discount = records.stream().map(Record::getTotalPrice).mapToDouble(Double::doubleValue).sum();
+            Double total_net_price_devices = 0.0;
 
-            /* @Field("total_net_price_after_discount")
-	        private Double total_net_price_after_discount=0.0;
+            //records.stream().map(Record::getTotalPrice)
+            //.mapToDouble(Double::doubleValue).sum();
 
-	        
-	        
-	        
-	        @Field("total_net_price_devices")
-	        private Double total_net_price_devices=0.0;
-	        
-	        @Field("total_net_user_price_devices")
-	        private Double total_net_user_price_devices=0.0;
-	        
-	        @Field("total_discount_price_devices")
-	        private Double total_discount_price_devices=0.0;
-	        
-	        
-	        @Field("total_price_time_devices")
-	        private Double total_discount_price_time_devices=0.0;
-	        
-	        
-	        
-	        @Field("total_price_orders_devices")
-	        private Double total_discount_price_orders_devices=0.0;
-	        
-	        
-	        
-	        
-	        
-	        
-	        @Field("total_net_price_after_discount_devices")
-	        private Double total_net_price_after_discount_devices=0.0;
-	        
-	        
-	        
-	        
-	        @Field("total_net_price_Tables")
-	        private Double total_net_price_Tables=0.0;
-	        
-	        
-	        @Field("total_discount_price_Tables")
-	        private Double total_discount_price_Tables=0.0;
-	        
-	        
-	        @Field("total_net_price_after_discount_Tables")
-	        private Double total_net_price_after_discount_Tables=0.0;
-	        
-	        
-	        
-	        
-	        @Field("total_net_price_takeaway")
-	        private Double total_net_price_takeaway=0.0;
-	        
-	        
-	        @Field("total_discount_price_takeaway")
-	        private Double total_discount_price_takeaway=0.0;
-	        
-	        
-	        @Field("total_net_price_after_discount_takeaway")
-	        private Double total_net_price_after_discount_takeaway=0.0;
-	        
-	        
-	        
-	        
-	        @Field("total_net_price_shops")
-	        private Double total_net_price_shops=0.0;
-	        
-	        
-	        @Field("total_discount_price_shops")
-	        private Double total_discount_price_shops=0.0;
-	        
-	        
-	        @Field("total_net_price_after_discount_shops")
-	        private Double total_net_price_after_discount_shops=0.0;*/
+            Double total_net_user_price_devices = records.stream().map(Record::getTotalPriceUser).mapToDouble(Double::doubleValue).sum();
+
+            Double total_discount_price_devices = records
+                .stream()
+                .map(Record::getTotalDiscountPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+            Double total_price_time_devices = records.stream().map(Record::getTotalPriceTime).mapToDouble(Double::doubleValue).sum();
+
+            Double total_price_orders_devices = records.stream().map(Record::getTotalPriceOrders).mapToDouble(Double::doubleValue).sum();
+
+            total_net_price_devices = (total_price_time_devices + total_price_orders_devices) - total_discount_price_devices;
+
+            sheftObj.setTotal_net_price_devices(total_net_price_devices);
+
+            sheftObj.setTotal_net_user_price_devices(total_net_user_price_devices);
+
+            sheftObj.setTotal_discount_price_devices(total_discount_price_devices);
+
+            sheftObj.setTotal_price_time_devices(total_price_time_devices);
+
+            sheftObj.setTotal_price_orders_devices(total_price_orders_devices);
+
+            // TABLES
+
+            //totalPrice == user input
+            // net price all actualprice
+
+            Double total_net_price_Tables = tableRecords.stream().map(TableRecord::getNetTotalPrice).mapToDouble(Double::doubleValue).sum();
+
+            Double total_discount_price_Tables = tableRecords
+                .stream()
+                .map(TableRecord::getTotalDiscountPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+            Double total_net_price_after_discount_Tables = tableRecords
+                .stream()
+                .map(TableRecord::getTotalPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+            Double total_net_price_after_discount_Tables_System = total_net_price_Tables - total_discount_price_Tables;
+
+            sheftObj.setTotal_net_price_Tables(total_net_price_Tables);
+            sheftObj.setTotal_discount_price_Tables(total_discount_price_Tables);
+            sheftObj.setTotal_net_price_after_discount_Tables(total_net_price_after_discount_Tables);
+            // TakeAway
+            Double total_net_price_takeaway = takeawayRecords
+                .stream()
+                .map(TableRecord::getNetTotalPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+            Double total_discount_price_takeaway = takeawayRecords
+                .stream()
+                .map(TableRecord::getTotalDiscountPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+            Double total_net_price_after_discount_takeaway = takeawayRecords
+                .stream()
+                .map(TableRecord::getTotalPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+            Double total_net_price_after_discount_Tables_TakeAway_System = total_net_price_takeaway - total_discount_price_takeaway;
+
+            sheftObj.setTotal_net_price_takeaway(total_net_price_takeaway);
+            sheftObj.setTotal_discount_price_takeaway(total_discount_price_takeaway);
+            sheftObj.setTotal_net_price_after_discount_takeaway(total_net_price_after_discount_takeaway);
+            // shops
+            Double total_net_price_shops = shopsRecords.stream().map(TableRecord::getNetTotalPrice).mapToDouble(Double::doubleValue).sum();
+            Double total_discount_price_shops = shopsRecords
+                .stream()
+                .map(TableRecord::getTotalDiscountPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+            Double total_net_price_after_discount_shops = shopsRecords
+                .stream()
+                .map(TableRecord::getTotalPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+            Double total_net_price_after_discount_Tables_Shops_System = total_net_price_shops - total_discount_price_shops;
+
+            sheftObj.setTotal_net_price_shops(total_net_price_shops);
+            sheftObj.setTotal_discount_price_shops(total_discount_price_shops);
+            sheftObj.setTotal_net_price_after_discount_shops(total_net_price_after_discount_shops);
+
+            Double total_net_price = total_net_price_shops + total_net_price_takeaway + total_net_price_Tables + total_net_price_devices;
+
+            Double total_discount =
+                total_discount_price_shops + total_discount_price_takeaway + total_discount_price_Tables + total_discount_price_devices;
+
+            Double total_net_price_after_discount =
+                total_net_price_after_discount_shops +
+                total_net_price_after_discount_takeaway +
+                total_net_price_after_discount_Tables +
+                total_net_user_price_devices;
+
+            Double total_net_price_after_discountSystem =
+                total_net_price_devices +
+                total_net_price_after_discount_Tables_System +
+                total_net_price_after_discount_Tables_TakeAway_System +
+                total_net_price_after_discount_Tables_Shops_System;
+
+            sheftObj.setTotal_net_price(total_net_price);
+
+            sheftObj.setTotal_discount(total_discount);
+
+            sheftObj.setTotal_net_price_after_discount(total_net_price_after_discount);
+
+            sheftObj.setTotal_net_price_after_discount_system(total_net_price_after_discountSystem);
 
             sheftRepository.save(sheftObj);
         }

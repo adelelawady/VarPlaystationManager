@@ -48,6 +48,11 @@ export class DevicePricePipe implements PipeTransform {
     }
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     let resultTotalPrice = timePrice + totalOrderprice;
+
+    if (device.session.previousSessionsTotalPrice) {
+      resultTotalPrice += device.session.previousSessionsTotalPrice;
+    }
+
     if (ordersOnly) {
       resultTotalPrice = totalOrderprice;
     }
@@ -56,10 +61,6 @@ export class DevicePricePipe implements PipeTransform {
     }
 
     let resultFinal = 0;
-
-    if (device.session.previousSessionsTotalPrice) {
-      resultTotalPrice += device.session.previousSessionsTotalPrice;
-    }
 
     if (resultTotalPrice > 0) {
       resultFinal = resultTotalPrice.toFixed(2);

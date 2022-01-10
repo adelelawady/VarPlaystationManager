@@ -219,7 +219,7 @@ public class DeviceServiceImpl implements DeviceService {
         if (save) {
             if (!currentActiveSession.getPreviousSessions().isEmpty()) {
                 rec.setPreviousSessionsTotalPrice(currentActiveSession.getPreviousSessionsTotalPrice());
-                rec.setPreviousSessions(currentActiveSession.getPreviousSessions());
+                // rec.setPreviousSessions(currentActiveSession.getPreviousSessions());
             }
             return recordService.save(rec);
         } else {
@@ -229,8 +229,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto) {
-        this.sessionService.stopAllDeviceActiveSessions(deviceId);
-
         try {
             Optional<Device> dev = deviceRepository.findById(deviceId);
             if (!dev.isPresent()) {
@@ -240,11 +238,11 @@ public class DeviceServiceImpl implements DeviceService {
             Session currentActiveSession = sessionService.getDeviceActiveSession(deviceId);
             if (currentActiveSession != null) {
                 savedRecId = stopSession(dev.get(), currentActiveSession, sessionEndDto, true);
+                if (sessionEndDto.isPrint() && savedRecId != null) {
+                    recordService.printRecord(savedRecId.getId());
+                }
             }
-            //if (sessionEndDto.isPrint() && savedRecId != null) {
-            //	recordService.printRecord(savedRecId.getId());
-            //}
-
+            this.sessionService.stopAllDeviceActiveSessions(deviceId);
         } catch (Exception e) {
             this.toDeviceSession(deviceId);
         }

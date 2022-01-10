@@ -1,0 +1,27 @@
+<p>single-sheft-report works!</p>
+
+<table *ngIf="sheft" class="table">
+  <thead>
+    <tr>
+      <th title="Field #6">اسم المستخدم</th>
+
+      <th title="Field #13">وقت البدا</th>
+      <th title="Field #15">اجمالي قبل الخصم</th>
+      <th title="Field #16">اجمالي الخصم</th>
+      <th title="Field #18">اجمالي حساب النظام</th>
+      <th title="Field #17">الاجمالي</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ sheft.user.firstName }}</td>
+      <td>{{ sheft.start | date: 'medium' }}</td>
+      <td align="center">{{ sheft.total_net_price }}</td>
+      <td>{{ sheft.total_discount }}</td>
+      <td align="center">{{ sheft.total_net_price_after_discount_system }}</td>
+      <td align="center">{{ sheft.total_net_price_after_discount }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<button class="btn btn-danger" (click)="stopSheft()">اغلاق الشيفت</button>

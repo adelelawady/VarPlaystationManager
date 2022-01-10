@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TableRecordRepository extends MongoRepository<TableRecord, String> {
     List<TableRecord> findAllByCreatedDateBetween(Instant startDate, Instant endDate);
+
+    List<TableRecord> findAllByTypeAndCreatedDateBetween(String type, Instant startDate, Instant endDate);
 }

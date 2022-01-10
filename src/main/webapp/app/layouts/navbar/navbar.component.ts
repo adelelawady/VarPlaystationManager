@@ -10,6 +10,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { DOCUMENT } from '@angular/common';
+import { SheftService } from 'app/home/sheft.service';
 
 @Component({
   selector: 'jhi-navbar',
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
   account: Account | null = null;
   elem: any;
   isFullScreen = false;
+  currentSheft: any | null = null;
   constructor(
     @Inject(DOCUMENT) private document: any,
     private loginService: LoginService,
@@ -32,11 +34,27 @@ export class NavbarComponent implements OnInit {
     private sessionStorageService: SessionStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private sheftService: SheftService
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
     }
+  }
+  startSheft(): void {
+    this.sheftService.start().subscribe(() => {
+      this.sheftService.current().subscribe((sheft: any) => {
+        this.currentSheft = sheft;
+      });
+    });
+  }
+
+  stopSheft(): void {
+    this.sheftService.stop().subscribe(() => {
+      this.sheftService.current().subscribe((sheft: any) => {
+        this.currentSheft = sheft;
+      });
+    });
   }
   fullScreen(): void {
     this.isFullScreen = !this.isFullScreen;

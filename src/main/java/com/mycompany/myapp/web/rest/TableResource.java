@@ -256,10 +256,12 @@ public class TableResource {
             tableRecord.setOrdersData(resTabel.getOrdersData());
             tableRecord.setOrdersQuantity(resTabel.getOrdersQuantity());
             tableRecord.setTable(resTabel);
-            tableRecord.setNetTotalPrice(netTotalPrice);
+            tableRecord.setNetTotalPrice(calculateNetDeviceSessionOrderesPrice(resTabel));
             tableRecord.setType(resTabel.getType());
             if (resTabel.getDiscount() > 0) {
-                tableRecord.setTotalDiscountPrice(netTotalPrice - tableRecord.getTotalPrice());
+                tableRecord.setTotalDiscountPrice(
+                    ((double) Math.round((100 - resTabel.getDiscount())) * tableRecord.getNetTotalPrice() / 100)
+                );
             }
 
             TableRecord SavedTableRecord = recordRepository.save(tableRecord);
@@ -479,5 +481,35 @@ public class TableResource {
         }
         table.setTotalPrice(totalCalculationsOfOrders);
         return tableRepository.save(table);
+    }
+
+    private Double calculateNetDeviceSessionOrderesPrice(Table table) {
+        Double totalCalculationsOfOrders = 0.0;
+        for (Product order : table.getOrdersData()) {
+            int prodValue;
+            if (table.getOrdersQuantity().containsKey(order.getId())) {
+                prodValue = table.getOrdersQuantity().get(order.getId());
+            } else {
+                prodValue = 1;
+            }
+            Double prodPrice = order.getPrice();
+            switch (table.getType()) {
+                case TABLE:
+                    prodPrice = order.getPrice();
+                    break;
+                case SHOPS:
+                    prodPrice = order.getShopsPrice();
+                    break;
+                case TAKEAWAY:
+                    prodPrice = order.getTakeawayPrice();
+                    break;
+                default:
+                    break;
+            }
+
+            Double totalProdPrice = Double.valueOf(prodValue) * prodPrice;
+            totalCalculationsOfOrders += totalProdPrice;
+        }
+        return totalCalculationsOfOrders;
     }
 }
