@@ -12,6 +12,7 @@ import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.SessionService;
 import com.mycompany.myapp.service.dto.DeviceDTO;
 import com.mycompany.myapp.service.dto.DeviceSessionDTO;
+import com.mycompany.myapp.service.dto.SessionDTO;
 import com.mycompany.myapp.service.dto.SessionEndDTO;
 import com.mycompany.myapp.service.dto.SessionStartDTO;
 import com.mycompany.myapp.service.mapper.DeviceMapper;
@@ -105,6 +106,15 @@ public class DeviceServiceImpl implements DeviceService {
         deviceRepository.deleteById(id);
     }
 
+    @Override
+    public Session getDeviceActiveSession(String deviceId) {
+        Optional<Device> deviceOp = deviceRepository.findById(deviceId);
+        if (!deviceOp.isPresent() || deviceOp.get().getSession() == null) {
+            return null;
+        }
+        return deviceOp.get().getSession();
+    }
+
     private DeviceSessionDTO toDeviceSession(String deviceId) {
         Optional<Device> deviceOp = deviceRepository.findById(deviceId);
 
@@ -113,19 +123,8 @@ public class DeviceServiceImpl implements DeviceService {
         }
 
         Device device = deviceOp.get();
-        DeviceSessionDTO dev = new DeviceSessionDTO();
-        dev.setId(device.getId());
-        if (device.getType() != null) {
-            dev.setType(device.getType().getName());
-        }
-        dev.setName(device.getName());
 
-        Session sess = sessionService.getDeviceActiveSession(device.getId());
-
-        if (sess != null) {
-            dev.setSession(sess);
-        }
-        return dev;
+        return deviceMapper.toDeviceSessionDTO(device);
     }
 
     @Override
@@ -139,16 +138,20 @@ public class DeviceServiceImpl implements DeviceService {
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
         }
-        Session currentActiveSession = sessionService.getDeviceActiveSession(deviceId);
+        Session currentActiveSession = getDeviceActiveSession(deviceId);
         if (currentActiveSession == null) {
             Session session = new Session();
             session.setActive(true);
-            session.setDevice(dev.get());
-
+            // session.setDevice(dev.get());
+            session.setDeviceId(dev.get().getId());
+            session.setDeviceName(dev.get().getName());
             session.setStart(Instant.now().minusSeconds((sessionStart.getPlusMinutes() * 60)));
             session.setMulti(sessionStart.isMulti());
             session.reserved(sessionStart.getReserved());
             sessionService.save(session);
+            Device device = dev.get();
+            device.setSession(session);
+            deviceRepository.save(device);
         }
 
         return this.toDeviceSession(deviceId);
@@ -171,9 +174,9 @@ public class DeviceServiceImpl implements DeviceService {
         Double houres = Double.valueOf((double) minutes / 60.0);
 
         if (currentActiveSession.isMulti()) {
-            totalPriceCalculatedTime = houres * currentActiveSession.getDevice().getType().getPricePerHourMulti();
+            totalPriceCalculatedTime = houres * dev.getType().getPricePerHourMulti();
         } else {
-            totalPriceCalculatedTime = houres * currentActiveSession.getDevice().getType().getPricePerHour();
+            totalPriceCalculatedTime = houres * dev.getType().getPricePerHour();
         }
 
         totalPriceCalculatedTime = (double) Math.round(totalPriceCalculatedTime);
@@ -188,6 +191,11 @@ public class DeviceServiceImpl implements DeviceService {
         Double totalPriceCalculated = 0.0;
         Double totalPriceOrdersCalculated = 0.0;
         Double totalPriceTimeCalculated = 0.0;
+
+        Double totalNetPriceTimeCalculated =
+            totalPriceCalculatedTime + currentActiveSession.getOrdersPrice() + currentActiveSession.getPreviousSessionsTotalPrice();
+
+        rec.setTotalNetPriceCalculated(totalNetPriceTimeCalculated);
 
         if (sessionEndDto.getOrdersDiscount() > 0 && sessionEndDto.getOrdersDiscount() < 100) {
             totalPriceOrdersCalculated = (double) Math.round((100 - sessionEndDto.getOrdersDiscount()) * rec.getTotalPriceOrders() / 100);
@@ -206,6 +214,15 @@ public class DeviceServiceImpl implements DeviceService {
         totalPriceCalculated = totalPriceOrdersCalculated + totalPriceTimeCalculated;
 
         totalPriceCalculated += currentActiveSession.getPreviousSessionsTotalPrice();
+
+        if (
+            (sessionEndDto.getOrdersDiscount() > 0 && sessionEndDto.getOrdersDiscount() < 100) ||
+            (sessionEndDto.getTimeDiscount() > 0 && sessionEndDto.getTimeDiscount() < 100)
+        ) {
+            rec.setTotalDiscountPrice(totalNetPriceTimeCalculated - totalPriceCalculated);
+        } else {
+            rec.setTotalDiscountPrice(0.0);
+        }
 
         rec.setTotalPrice(totalPriceCalculated);
 
@@ -235,13 +252,17 @@ public class DeviceServiceImpl implements DeviceService {
                 throw new RuntimeException("DeviceNotFound");
             }
             Record savedRecId = null;
-            Session currentActiveSession = sessionService.getDeviceActiveSession(deviceId);
+            Session currentActiveSession = getDeviceActiveSession(deviceId);
             if (currentActiveSession != null) {
                 savedRecId = stopSession(dev.get(), currentActiveSession, sessionEndDto, true);
+                Device device = dev.get();
+                device.setSession(null);
+                deviceRepository.save(device);
                 if (sessionEndDto.isPrint() && savedRecId != null) {
                     recordService.printRecord(savedRecId.getId());
                 }
             }
+
             this.sessionService.stopAllDeviceActiveSessions(deviceId);
         } catch (Exception e) {
             this.toDeviceSession(deviceId);
@@ -260,14 +281,14 @@ public class DeviceServiceImpl implements DeviceService {
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
         }
-        Session sess = sessionService.getDeviceActiveSession(deviceId);
+        Session sess = getDeviceActiveSession(deviceId);
 
         if (sess != null) {
             Optional<Product> product = productService.findOneDomain(productId);
             if (product.isPresent()) {
                 sessionService.addProductOrderToDeviceSession(sess, product.get());
 
-                Session savedSession = sessionService.getDeviceActiveSession(deviceId);
+                Session savedSession = getDeviceActiveSession(deviceId);
                 savedSession.addOrders(product.get());
                 Session savedSession2 = sessionService.save(savedSession);
                 sessionService.calculateDeviceSessionOrderesPrice(savedSession2);
@@ -283,14 +304,14 @@ public class DeviceServiceImpl implements DeviceService {
         if (!dev.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
         }
-        Session sess = sessionService.getDeviceActiveSession(deviceId);
+        Session sess = getDeviceActiveSession(deviceId);
 
         if (sess != null) {
             Optional<Product> product = productService.findOneDomain(productId);
             if (product.isPresent()) {
                 sessionService.deleteProductOrderFromDeviceSession(sess, product.get());
 
-                Session savedSession = sessionService.getDeviceActiveSession(deviceId);
+                Session savedSession = getDeviceActiveSession(deviceId);
                 try {
                     boolean sessionHasItem = savedSession.getOrdersQuantity().containsKey(productId);
                     if (sessionHasItem) {
@@ -326,8 +347,11 @@ public class DeviceServiceImpl implements DeviceService {
             }
         }
         sessionService.calculateDeviceSessionOrderesPrice(sess);
-
-        return sessionService.getDeviceActiveSession(sess.getDevice().getId());
+        Optional<Session> sessionSaved = sessionService.findById(sess.getId());
+        if (sessionSaved.isPresent()) {
+            return sessionSaved.get();
+        }
+        return null;
     }
 
     @Override
@@ -337,8 +361,8 @@ public class DeviceServiceImpl implements DeviceService {
         if (!devFrom.isPresent() || !devTo.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
         }
-        Session sessFrom = sessionService.getDeviceActiveSession(moveFromDeviceId);
-        Session sessTo = sessionService.getDeviceActiveSession(moveToDeviceId);
+        Session sessFrom = getDeviceActiveSession(moveFromDeviceId);
+        Session sessTo = getDeviceActiveSession(moveToDeviceId);
 
         if (sessTo != null) {
             throw new RuntimeException("Device is already active");
@@ -355,7 +379,11 @@ public class DeviceServiceImpl implements DeviceService {
         sessionEnd.setTotalPrice(0.0);
         Record record = stopSession(devFrom.get(), sessFrom, sessionEnd, false);
 
-        sessFrom.setDevice(devTo.get());
+        // sessFrom.setDevice(devTo.get());
+
+        sessFrom.setDeviceId(devTo.get().getId());
+        sessFrom.setDeviceName(devTo.get().getName());
+
         sessFrom.getPreviousSessions().add(record);
         Double currentPreviousSessionsTotalPrice = sessFrom.getPreviousSessionsTotalPrice();
         sessFrom.setActive(true);
@@ -363,6 +391,15 @@ public class DeviceServiceImpl implements DeviceService {
         sessFrom.setPreviousSessionsTotalPrice(currentPreviousSessionsTotalPrice + record.getTotalPriceTime());
         sessFrom.setMulti(false);
         sessionService.save(sessFrom);
+
+        Device deviceFromObj = devFrom.get();
+        Device deviceToObj = devTo.get();
+
+        deviceFromObj.setSession(null);
+        deviceToObj.setSession(sessFrom);
+
+        deviceRepository.save(deviceFromObj);
+        deviceRepository.save(deviceToObj);
 
         return this.toDeviceSession(moveToDeviceId);
     }
@@ -372,7 +409,7 @@ public class DeviceServiceImpl implements DeviceService {
         if (!devFrom.isPresent()) {
             throw new RuntimeException("DeviceNotFound");
         }
-        Session sessFrom = sessionService.getDeviceActiveSession(moveFromDeviceId);
+        Session sessFrom = getDeviceActiveSession(moveFromDeviceId);
 
         if (sessFrom == null) {
             throw new RuntimeException("Device is not active");
@@ -385,7 +422,10 @@ public class DeviceServiceImpl implements DeviceService {
         sessionEnd.setTotalPrice(0.0);
         Record record = stopSession(devFrom.get(), sessFrom, sessionEnd, false);
 
-        sessFrom.setDevice(devFrom.get());
+        // sessFrom.setDevice(devFrom.get());
+
+        sessFrom.setDeviceId(devFrom.get().getId());
+        sessFrom.setDeviceName(devFrom.get().getName());
 
         Double currentPreviousSessionsTotalPrice = sessFrom.getPreviousSessionsTotalPrice();
         sessFrom.setActive(true);
@@ -395,6 +435,7 @@ public class DeviceServiceImpl implements DeviceService {
             sessFrom.getPreviousSessions().add(record);
             sessFrom.setPreviousSessionsTotalPrice(currentPreviousSessionsTotalPrice + record.getTotalPriceTime());
         }
+
         sessFrom.setMulti(multi);
         sessionService.save(sessFrom);
 
@@ -402,6 +443,13 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     public List<DeviceDTO> findAllByActive(boolean active) {
-        return sessionService.findByActive(active).stream().map(Session::getDevice).map(deviceMapper::toDto).collect(Collectors.toList());
+        return sessionService
+            .findByActive(active)
+            .stream()
+            .map(Session::getDeviceId)
+            .map(deviceRepository::findById)
+            .map(Optional::get)
+            .map(deviceMapper::toDto)
+            .collect(Collectors.toList());
     }
 }

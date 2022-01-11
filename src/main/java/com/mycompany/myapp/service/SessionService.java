@@ -21,6 +21,8 @@ public interface SessionService {
     SessionDTO save(SessionDTO sessionDTO);
 
     Session save(Session session);
+
+    Optional<Session> findById(String sessionId);
     /**
      * Partially updates a session.
      *
@@ -59,8 +61,6 @@ public interface SessionService {
      * @param id the id of the entity.
      */
     void delete(String id);
-
-    Session getDeviceActiveSession(String deviceId);
 
     void stopAllDeviceActiveSessions(String deviceId);
 

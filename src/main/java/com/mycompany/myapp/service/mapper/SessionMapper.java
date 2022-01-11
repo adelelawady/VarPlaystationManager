@@ -10,7 +10,6 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { DeviceMapper.class, ProductMapper.class })
 public interface SessionMapper extends EntityMapper<SessionDTO, Session> {
-    @Mapping(target = "device", source = "device", qualifiedByName = "id")
     @Mapping(target = "orders", source = "orders", qualifiedByName = "idSet")
     SessionDTO toDto(Session s);
 

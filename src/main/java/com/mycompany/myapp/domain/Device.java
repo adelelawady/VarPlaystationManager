@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
@@ -25,7 +26,19 @@ public class Device extends AbstractAuditingEntity implements Serializable {
     @Field("type")
     private DeviceType type;
 
+    @DBRef
+    @Field("session")
+    private Session session;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
 
     public String getId() {
         return this.id;

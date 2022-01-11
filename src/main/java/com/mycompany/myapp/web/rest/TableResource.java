@@ -351,7 +351,7 @@ public class TableResource {
 
             Optional<Device> deviceFound = deviceRepository.findById(deviceId);
 
-            Session sess = sessionService.getDeviceActiveSession(deviceId);
+            Session sess = deviceService.getDeviceActiveSession(deviceId);
             if (sess != null) {
                 // device active
 
@@ -367,7 +367,7 @@ public class TableResource {
                 sessionStartDTO.setMulti(false);
                 deviceService.startSession(deviceId, sessionStartDTO);
                 // add products to orders data
-                Session activeSession = sessionService.getDeviceActiveSession(deviceId);
+                Session activeSession = deviceService.getDeviceActiveSession(deviceId);
                 addProductsToSession(activeSession, tableObject);
 
                 resetTable(tableObject);
@@ -426,7 +426,15 @@ public class TableResource {
         }
         sessionService.calculateDeviceSessionOrderesPrice(sess);
 
-        return sessionService.getDeviceActiveSession(sess.getDevice().getId());
+        Optional<Device> deviceOp = deviceRepository.findById(sess.getDeviceId());
+
+        if (!deviceOp.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+
+        Device device = deviceOp.get();
+
+        return device.getSession();
     }
 
     Table moveOrdersTableToTable(Table tableFrom, Table tableTo) {

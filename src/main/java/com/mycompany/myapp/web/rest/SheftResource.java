@@ -189,10 +189,11 @@ public class SheftResource {
 
             // DEVICES
 
-            Double total_net_price_devices = 0.0;
-
-            //records.stream().map(Record::getTotalPrice)
-            //.mapToDouble(Double::doubleValue).sum();
+            Double total_net_price_devices = records
+                .stream()
+                .map(Record::getTotalNetPriceCalculated)
+                .mapToDouble(Double::doubleValue)
+                .sum();
 
             Double total_net_user_price_devices = records.stream().map(Record::getTotalPriceUser).mapToDouble(Double::doubleValue).sum();
 
@@ -205,8 +206,6 @@ public class SheftResource {
             Double total_price_time_devices = records.stream().map(Record::getTotalPriceTime).mapToDouble(Double::doubleValue).sum();
 
             Double total_price_orders_devices = records.stream().map(Record::getTotalPriceOrders).mapToDouble(Double::doubleValue).sum();
-
-            total_net_price_devices = (total_price_time_devices + total_price_orders_devices) - total_discount_price_devices;
 
             sheftObj.setTotal_net_price_devices(total_net_price_devices);
 
@@ -295,7 +294,7 @@ public class SheftResource {
                 total_net_user_price_devices;
 
             Double total_net_price_after_discountSystem =
-                total_net_price_devices +
+                (total_net_price_devices - total_discount_price_devices) +
                 total_net_price_after_discount_Tables_System +
                 total_net_price_after_discount_Tables_TakeAway_System +
                 total_net_price_after_discount_Tables_Shops_System;

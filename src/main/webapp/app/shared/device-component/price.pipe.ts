@@ -29,11 +29,11 @@ export class DevicePricePipe implements PipeTransform {
     const diffMin = Math.abs(Math.round(diff));
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
 
-    let pricePerHour = device.session.device.type.pricePerHour;
+    let pricePerHour = device.type.pricePerHour;
     if (device.session.multi) {
-      pricePerHour = device.session.device.type.pricePerHourMulti;
+      pricePerHour = device.type.pricePerHourMulti;
     } else {
-      pricePerHour = device.session.device.type.pricePerHour;
+      pricePerHour = device.type.pricePerHour;
     }
     let totalOrderprice = device.session.ordersPrice ? device.session.ordersPrice : 0;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

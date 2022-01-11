@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.domain.Session;
 import com.mycompany.myapp.service.dto.DeviceDTO;
 import com.mycompany.myapp.service.dto.DeviceSessionDTO;
 import com.mycompany.myapp.service.dto.SessionEndDTO;
@@ -71,4 +72,6 @@ public interface DeviceService {
     DeviceSessionDTO moveDevice(String moveFromDeviceId, String moveToDeviceId);
 
     DeviceSessionDTO moveDeviceMulti(String moveFromDeviceId, boolean multi);
+
+    Session getDeviceActiveSession(String deviceId);
 }

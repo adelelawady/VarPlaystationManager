@@ -79,7 +79,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link mainTabTxt" (click)="selectTap('tapShops')" [ngClass]="{ active: tapShops }" href="#">مطاعم</a>
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapShops')" [ngClass]="{ active: tapShops }" href="#">محلات</a>
         </li>
       </ul>
 
@@ -128,27 +128,6 @@
               </div>
             </div>
           </div>
-
-          <!--
-
-         <div class="card-body px-1" *ngIf="tapTables">
-            <h5 class="card-title mx-4">الصالات</h5>
-            <div class="card jh-card m-2 p-4">
-              <div class="row justify-content-center align-items-center">
-                <div class="col-md-3 p-1" *ngFor="let table of tables">
-                  <jhi-table-component
-                    (tableClicked)="selectedTable = $event; openOrdersPanle()"
-                    [isSelected]="selectedTable && selectedTable.id == table.id"
-                    (tableStarted)="loadAllTables()"
-                    (tableStopped)="selectedTable = null; loadAllTables()"
-                    (tableMovedToDevice)="tableMovedToDevice($event)"
-                    (tableMovedToTable)="tableMovedToTable($event)"
-                    [table]="table"
-                  ></jhi-table-component>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
 
         <div class="col-lg-4 py-5 col-sm-12">
@@ -200,61 +179,6 @@
               </div>
             </div>
           </div>
-
-          <!--
-
-
-          <div class="card p-3" *ngIf="selectedTable">
-            <h5 class="card-title">
-              {{ selectedTable.name }}
-            </h5>
-
-            <div class="card-body">
-              <div class="row" *ngIf="selectedTable && selectedTable.active && selectedTable.ordersData">
-                <h5 class="card-title my-2">الطلبات</h5>
-
-                <div class="table-responsive" id="entities">
-                  <table class="table" aria-describedby="page-heading">
-                    <thead>
-                      <tr style="display: none">
-                        <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
-
-                        <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
-
-                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
-                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let prod of selectedTable.ordersData.slice().reverse()" data-cy="entityTable">
-                        <td style="word-break: break-word" class="text-center">
-                          <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
-                        </td>
-
-                        <td>
-                          <span style="font-size: large" class="float-left text-primary col-xs p-0">
-                            <span class="badge badge-primary">{{
-                              selectedTable.ordersQuantity[prod.id] ? selectedTable.ordersQuantity[prod.id] : '1'
-                            }}</span>
-                          </span>
-                        </td>
-
-                        <td>
-                          <small class="text-muted"> {{ prod.price }}LE</small>
-                        </td>
-                        <td>
-                          <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
-                            <i class="fa fa-minus"></i>
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-                    -->
         </div>
       </div>
     </div>

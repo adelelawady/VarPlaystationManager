@@ -49,6 +49,7 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     //Duration
 
     @Field("device")
+    @JsonIgnoreProperties(value = { "session" }, allowSetters = true)
     private Device device;
 
     @Field("multi")
@@ -60,13 +61,17 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Field("timeDiscount")
     private Double timeDiscount = 0.0;
 
+    @Field("totalNetPriceCalculated")
+    private Double totalNetPriceCalculated = 0.0;
+
     @Field("total_discount_price")
     private Double totalDiscountPrice = 0.0;
 
+    public void setTotalDiscountPrice(Double totalDiscountPrice) {
+        this.totalDiscountPrice = totalDiscountPrice;
+    }
+
     public Double getTotalDiscountPrice() {
-        if (ordersDiscount > 0 || timeDiscount > 0) {
-            return (totalPriceTime + totalPriceOrders) - totalPrice;
-        }
         return totalDiscountPrice;
     }
 
@@ -103,6 +108,14 @@ public class Record extends AbstractAuditingEntity implements Serializable {
             return 0;
         }
         return this.duration.toHoursPart();
+    }
+
+    public Double getTotalNetPriceCalculated() {
+        return totalNetPriceCalculated;
+    }
+
+    public void setTotalNetPriceCalculated(Double totalNetPriceCalculated) {
+        this.totalNetPriceCalculated = totalNetPriceCalculated;
     }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -29,6 +29,12 @@ public class Session implements Serializable {
     @Field("start")
     private Instant start;
 
+    @Field("deviceId")
+    private String deviceId;
+
+    @Field("deviceName")
+    private String deviceName;
+
     @Field("reserved")
     private Double reserved;
 
@@ -63,9 +69,26 @@ public class Session implements Serializable {
         this.multi = multi;
     }
 
-    @DBRef
-    @Field("device")
-    private Device device;
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    // @DBRef
+    // @Field("device")
+    // @JsonIgnoreProperties(value = {"session" }, allowSetters = true)
+    // private Device device;
 
     @DBRef
     @Field("orders")
@@ -78,6 +101,7 @@ public class Session implements Serializable {
     @Field("previousSessions")
     @JsonIgnoreProperties(
         value = {
+            "device.session",
             "device.category",
             "device.type",
             "ordersData",
@@ -153,18 +177,18 @@ public class Session implements Serializable {
         this.reserved = reserved;
     }
 
-    public Device getDevice() {
-        return this.device;
-    }
+    //  public Device getDevice() {
+    //      return this.device;
+    //  }
 
-    public void setDevice(Device device) {
-        this.device = device;
-    }
+    //  public void setDevice(Device device) {
+    //      this.device = device;
+    //  }
 
-    public Session device(Device device) {
-        this.setDevice(device);
-        return this;
-    }
+    //  public Session device(Device device) {
+    //      this.setDevice(device);
+    //      return this;
+    //  }
 
     public Set<Product> getOrders() {
         return this.orders;

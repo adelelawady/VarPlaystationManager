@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.DeviceType;
 import com.mycompany.myapp.domain.Session;
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,7 +15,7 @@ public class DeviceSessionDTO implements Serializable {
 
     private String name;
 
-    private String type;
+    private DeviceType type;
 
     private Session session;
 
@@ -61,7 +62,6 @@ public class DeviceSessionDTO implements Serializable {
         return "DeviceDTO{" +
             "id='" + getId() + "'" +
             ", name='" + getName() + "'" +
-            ", type=" + getType() +
             "}";
     }
 
@@ -73,11 +73,11 @@ public class DeviceSessionDTO implements Serializable {
         this.session = session;
     }
 
-    public String getType() {
+    public DeviceType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(DeviceType type) {
         this.type = type;
     }
 }

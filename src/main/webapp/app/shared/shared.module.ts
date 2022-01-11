@@ -18,6 +18,7 @@ import { DevicePricePipe } from './device-component/price.pipe';
 import { SidebarAccordionModule } from 'ng-sidebar-accordion';
 import { TableComponentComponent } from './table-component/table-component.component';
 import { TablesTapComponentComponent } from '../pages/components/tables-tap-component/tables-tap-component.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   imports: [SharedLibsModule],
