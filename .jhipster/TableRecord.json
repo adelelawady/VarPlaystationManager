@@ -1,0 +1,32 @@
+{
+  "name": "TableRecord",
+  "fields": [
+    {
+      "fieldName": "totalPrice",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalDiscountPrice",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "netTotalPrice",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "discount",
+      "fieldType": "Double"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "table_record",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20220111181102"
+}

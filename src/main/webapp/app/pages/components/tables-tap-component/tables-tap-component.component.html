@@ -1,9 +1,9 @@
 <div class="row" *ngIf="tables" style="display: content">
   <div class="col-8">
     <div class="card-body px-1">
-      <h5 *ngIf="tableType = 'table'" class="card-title mx-4">الصالات</h5>
-      <h5 *ngIf="tableType = 'takeaway'" class="card-title mx-4">الاوردرات</h5>
-      <h5 *ngIf="tableType = 'shops'" class="card-title mx-4">المحلات</h5>
+      <h5 *ngIf="tableType == 'table'" class="card-title mx-4">الصالات</h5>
+      <h5 *ngIf="tableType == 'takeaway'" class="card-title mx-4">الاوردرات</h5>
+      <h5 *ngIf="tableType == 'shops'" class="card-title mx-4">المحلات</h5>
       <div class="card jh-card m-2 p-4">
         <div class="row justify-content-center align-items-center">
           <div class="col-md-3 p-1" *ngFor="let table of tables">

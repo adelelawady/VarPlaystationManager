@@ -86,15 +86,12 @@ public class Sheft extends AbstractAuditingEntity implements Serializable {
     private Double total_net_price_after_discount_shops = 0.0;
 
     @DBRef
-    @JsonIgnore
     List<Record> records = new ArrayList<>();
 
     @DBRef
-    @JsonIgnore
     List<TableRecord> tableRecords = new ArrayList<>();
 
     @DBRef
-    @JsonIgnore
     List<TableRecord> tableTakeAwayRecords = new ArrayList<>();
 
     public List<TableRecord> getTableTakeAwayRecords() {

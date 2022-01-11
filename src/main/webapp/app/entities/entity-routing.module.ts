@@ -56,8 +56,21 @@ import { MainReportPageComponent } from '../pages/main-report-page/main-report-p
         data: { pageTitle: 'erApp.takeaway.home.title' },
         loadChildren: () => import('../pages/main-report-page/main-report-page.module').then(m => m.MainReportPageModule),
       },
-
-      //MainReportPageComponent
+      {
+        path: 'table-record',
+        data: { pageTitle: 'erApp.tableRecord.home.title' },
+        loadChildren: () => import('./table-record/table-record.module').then(m => m.TableRecordModule),
+      },
+      {
+        path: 'table-record',
+        data: { pageTitle: 'erApp.tableRecord.home.title' },
+        loadChildren: () => import('./table-record/table-record.module').then(m => m.TableRecordModule),
+      },
+      {
+        path: 'table-record',
+        data: { pageTitle: 'erApp.tableRecord.home.title' },
+        loadChildren: () => import('./table-record/table-record.module').then(m => m.TableRecordModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

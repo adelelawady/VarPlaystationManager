@@ -126,31 +126,6 @@
               <span>الصالات</span>
             </a>
           </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="admin/entities/shops-orders"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="erApp.shopsOrders.home.title">Shops Orders</span>
-            </a>
-          </li>
-
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="admin/entities/takeaway"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="erApp.takeaway.home.title">Takeaways</span>
-            </a>
-          </li>
         </ul>
       </li>
 
@@ -180,6 +155,45 @@
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span>سجلات الاجهزة</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/table-record/table"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>سجلات الصالات</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/table-record/takeaway"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>سجلات الاوردرات</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/table-record/shops"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>سجلات المحلات</span>
             </a>
           </li>
 

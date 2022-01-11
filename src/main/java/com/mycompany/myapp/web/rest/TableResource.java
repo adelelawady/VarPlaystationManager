@@ -259,9 +259,7 @@ public class TableResource {
             tableRecord.setNetTotalPrice(calculateNetDeviceSessionOrderesPrice(resTabel));
             tableRecord.setType(resTabel.getType());
             if (resTabel.getDiscount() > 0) {
-                tableRecord.setTotalDiscountPrice(
-                    ((double) Math.round((100 - resTabel.getDiscount())) * tableRecord.getNetTotalPrice() / 100)
-                );
+                tableRecord.setTotalDiscountPrice((tableRecord.getNetTotalPrice() * resTabel.getDiscount()) / 100);
             }
 
             TableRecord SavedTableRecord = recordRepository.save(tableRecord);

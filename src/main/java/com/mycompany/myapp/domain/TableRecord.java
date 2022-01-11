@@ -33,10 +33,7 @@ public class TableRecord extends AbstractAuditingEntity implements Serializable 
     private Double totalDiscountPrice = 0.0;
 
     public Double getTotalDiscountPrice() {
-        if (discount > 0) {
-            return ((double) Math.round((100 - discount)) * netTotalPrice / 100);
-        }
-        return 0.0;
+        return totalDiscountPrice;
     }
 
     public void setTotalDiscountPrice(Double totalDiscountPrice) {
