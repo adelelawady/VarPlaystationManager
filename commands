@@ -1,0 +1,2 @@
+mongodump --forceTableScan -d er -o /Users/mymac/Documents/db_dumb
+mongorestore /Users/mymac/Documents/db_dumb/er
