@@ -32,16 +32,16 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     private Instant end;
 
     @Field("total_price")
-    private Double totalPrice;
+    private Double totalPrice = 0.0;
 
     @Field("total_price_time")
-    private Double totalPriceTime;
+    private Double totalPriceTime = 0.0;
 
     @Field("total_price_orders")
-    private Double totalPriceOrders;
+    private Double totalPriceOrders = 0.0;
 
     @Field("total_price_user")
-    private Double totalPriceUser;
+    private Double totalPriceUser = 0.0;
 
     @Field("duration")
     private Duration duration;

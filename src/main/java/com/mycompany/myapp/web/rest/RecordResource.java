@@ -1,7 +1,10 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Product;
+import com.mycompany.myapp.domain.Record;
 import com.mycompany.myapp.repository.RecordRepository;
 import com.mycompany.myapp.service.PrinterSupport;
+import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.ReceiptPrint;
 import com.mycompany.myapp.service.RecordService;
 import com.mycompany.myapp.service.dto.RecordDTO;
@@ -16,6 +19,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.validation.Valid;
@@ -52,9 +57,12 @@ public class RecordResource {
 
     private final RecordRepository recordRepository;
 
-    public RecordResource(RecordService recordService, RecordRepository recordRepository) {
+    private final ProductService productService;
+
+    public RecordResource(RecordService recordService, RecordRepository recordRepository, ProductService productService) {
         this.recordService = recordService;
         this.recordRepository = recordRepository;
+        this.productService = productService;
     }
 
     /**

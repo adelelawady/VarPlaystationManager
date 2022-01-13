@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, OnInit, ChangeDetectorRef, EventEmitter, Output, AfterViewInit } from '@angular/core';
 import { DevicesSessionsService } from 'app/home/devicesSessions.service';
-import { async } from 'rxjs';
 import { DevicePricePipe } from './price.pipe';
 
 declare const $: any;
@@ -131,7 +130,7 @@ export class DeviceComponentComponent implements OnInit, AfterViewInit {
     this.getDevicePrice();
     this.deviceCheckOut.emit(this);
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    $('#modal' + this.device.id).modal();
+    //$('#modal' + this.device.id).modal();
     this.cd.markForCheck();
   }
   getDevicePrice(): void {

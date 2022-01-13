@@ -71,6 +71,17 @@ import { MainReportPageComponent } from '../pages/main-report-page/main-report-p
         data: { pageTitle: 'erApp.tableRecord.home.title' },
         loadChildren: () => import('./table-record/table-record.module').then(m => m.TableRecordModule),
       },
+      {
+        path: 'shefts',
+        data: { pageTitle: 'erApp.tableRecord.home.title' },
+        loadChildren: () => import('./sheft/sheft.module').then(m => m.SheftModule),
+      },
+      {
+        path: 'product-stats',
+        data: { pageTitle: 'erApp.tableRecord.home.title' },
+        loadChildren: () => import('./product-stats/product-stats.module').then(m => m.ProductStatsModule),
+      },
+
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

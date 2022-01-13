@@ -2,6 +2,7 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.service.dto.ProductDTO;
+import com.mycompany.myapp.service.dto.ProductStaticsDTO;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -55,4 +56,6 @@ public interface ProductService {
     Optional<Product> findOneDomain(String id);
 
     List<ProductDTO> findAllByCategory(String categoryId);
+
+    ProductStaticsDTO getProductTotalUses(String productId);
 }

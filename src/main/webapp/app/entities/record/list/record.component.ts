@@ -37,23 +37,6 @@ export class RecordComponent implements OnInit {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
 
-    /* this.recordService
-       .query({
-         page: pageToLoad - 1,
-         size: this.itemsPerPage,
-         sort: this.sort(),
-       })
-       .subscribe(
-         (res: HttpResponse<IRecord[]>) => {
-           this.isLoading = false;
-           this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-         },
-         () => {
-           this.isLoading = false;
-           this.onError();
-         }
-       );*/
-
     this.recordService
       .queryFilterd(
         {

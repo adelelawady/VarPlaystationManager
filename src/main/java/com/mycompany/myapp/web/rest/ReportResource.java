@@ -90,20 +90,12 @@ public class ReportResource {
                     EndOfDayTo.atZone(ZoneId.systemDefault()).toInstant()
                 );
 
-        Double TotalPriceTimeDevices = allDevicesrecords.stream().map(Record::getTotalPriceTime).mapToDouble(Double::doubleValue).sum();
-
-        Double TotalPriceOrdersDevices = allDevicesrecords.stream().map(Record::getTotalPriceOrders).mapToDouble(Double::doubleValue).sum();
-
         Double TotalPriceUserDevices = allDevicesrecords.stream().map(Record::getTotalPriceUser).mapToDouble(Double::doubleValue).sum();
-
-        Double TotalPriceDevices = TotalPriceTimeDevices + TotalPriceOrdersDevices;
-
-        adminReport.setTotalPriceTimeDevices(TotalPriceTimeDevices);
-
-        adminReport.setTotalPriceOrdersDevices(TotalPriceOrdersDevices);
+        Double TotalPriceDevices = allDevicesrecords.stream().map(Record::getTotalPrice).mapToDouble(Double::doubleValue).sum();
 
         adminReport.setTotalPriceDevices(TotalPriceDevices);
         adminReport.setTotalPriceUserDevices(TotalPriceUserDevices);
+
         List<TableRecord> allTablesrecords =
             this.tableRecordRepository.findAllByCreatedDateBetween(
                     StartOfDayFrom.atZone(ZoneId.systemDefault()).toInstant(),
@@ -111,23 +103,6 @@ public class ReportResource {
                 );
         Double TotalPriceTables = allTablesrecords.stream().map(TableRecord::getTotalPrice).mapToDouble(Double::doubleValue).sum();
         adminReport.setTotalPriceOrdersTables(TotalPriceTables);
-
-        List<ShopsOrders> allTakeAwayrecords =
-            this.shopsOrdersRepository.findAllByCreatedDateBetween(
-                    StartOfDayFrom.atZone(ZoneId.systemDefault()).toInstant(),
-                    EndOfDayTo.atZone(ZoneId.systemDefault()).toInstant()
-                );
-        Double TotalPriceShops = allTakeAwayrecords.stream().map(ShopsOrders::getTotalPrice).mapToDouble(Double::doubleValue).sum();
-        adminReport.setTotalPriceOrdersShops(TotalPriceShops);
-
-        List<Takeaway> allShopsRecords =
-            this.takeawayRepository.findAllByCreatedDateBetween(
-                    StartOfDayFrom.atZone(ZoneId.systemDefault()).toInstant(),
-                    EndOfDayTo.atZone(ZoneId.systemDefault()).toInstant()
-                );
-
-        Double TotalPriceTakeAway = allShopsRecords.stream().map(Takeaway::getTotalPrice).mapToDouble(Double::doubleValue).sum();
-        adminReport.setTotalPriceOrdersTakeAway(TotalPriceTakeAway);
 
         return ResponseEntity.ok(adminReport);
     }

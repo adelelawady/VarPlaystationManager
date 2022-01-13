@@ -1,0 +1,27 @@
+{
+  "erApp": {
+    "tableRecord": {
+      "home": {
+        "title": "سجلات الجدول",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "قم بإنشاء سجل جدول جديد",
+        "createOrEditLabel": "إنشاء أو تحرير سجل الجدول",
+        "notFound": "لم يتم العثور على سجلات جدول"
+      },
+      "created": "يتم إنشاء سجل جدول جديد بالمعرف {{param}}",
+      "updated": "يتم تحديث سجل الجدول بالمعرف {{param}}",
+      "deleted": "يتم حذف سجل الجدول بالمعرف {{param}}",
+      "delete": {
+        "question": "هل تريد بالتأكيد حذف سجل الجدول {{id}}؟"
+      },
+      "detail": {
+        "title": "سجل الجدول"
+      },
+      "id": "بطاقة تعريف",
+      "totalPrice": "السعر الكلي",
+      "totalDiscountPrice": "إجمالي سعر الخصم",
+      "netTotalPrice": "السعر الإجمالي الصافي",
+      "discount": "خصم"
+    }
+  }
+}

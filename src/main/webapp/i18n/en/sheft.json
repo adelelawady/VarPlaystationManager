@@ -1,0 +1,44 @@
+{
+  "erApp": {
+    "sheft": {
+      "home": {
+        "title": "شيفتس",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "قم بإنشاء Sheft جديد",
+        "createOrEditLabel": "قم بإنشاء أو تحرير ملف Sheft",
+        "notFound": "لم يتم العثور على شيفتس"
+      },
+      "created": "تم إنشاء Sheft جديد بالمعرف {{param}}",
+      "updated": "تم تحديث A Sheft بالمعرف {{param}}",
+      "deleted": "تم حذف A Sheft بالمعرف {{param}}",
+      "delete": {
+        "question": "هل أنت متأكد أنك تريد حذف Sheft {{id}}؟"
+      },
+      "detail": {
+        "title": "شفت"
+      },
+      "id": "بطاقة تعريف",
+      "user": "مستخدم",
+      "start": "بدا",
+      "end": "انتهي",
+      "totalNetPrice": "اجمالي السعر قبل الخصم",
+      "totalDiscount": "إجمالي الخصم",
+      "totalNetPriceAfterDiscount": "إجمالي صافي السعر بعد الخصم",
+      "totalNetPriceAfterDiscountSystem": "  إجمالي صافي السعر بعد  الخصم النظام",
+      "totalNetPriceDevices": " إجمالي الاجهزة قبل الخصم النظام",
+      "totalNetUserPriceDevices": "إجمالي الاجهزة قبل الخصم",
+      "totalDiscountPriceDevices": " سعر الخصم للاجهزة",
+      "totalPriceTimeDevices": "السعر الإجمالي للأجهزة الوقت",
+      "totalPriceOrdersDevices": "السعر الإجمالي للاجهزة  طلبات",
+      "totalNetPriceTables": "اجمالي صالات قبل الخصم   ",
+      "totalDiscountPriceTables": " سعر الخصم الإجمالي للصالات",
+      "totalNetPriceAfterDiscountTables": "اجمالي صالات بعد الخصم",
+      "totalNetPriceTakeaway": "اجمالي اودرات قبل الخصم",
+      "totalDiscountPriceTakeaway": "سعر الخصم الإجمالي للاوردرات",
+      "totalNetPriceAfterDiscountTakeaway": "اجمالي اوردرات بعد الخصم",
+      "totalNetPriceShops": "إجمالي محلات قبل الخصم",
+      "totalDiscountPriceShops": " سعر الخصم الإجمالي للامحلات",
+      "totalNetPriceAfterDiscountShops": "اجمالي محلات بعد الخصم"
+    }
+  }
+}

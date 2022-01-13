@@ -9,15 +9,34 @@ import com.mycompany.myapp.repository.SheftRepository;
 import com.mycompany.myapp.repository.ShopsOrdersRepository;
 import com.mycompany.myapp.repository.TableRecordRepository;
 import com.mycompany.myapp.repository.TakeawayRepository;
+import com.mycompany.myapp.service.PrinterSupport;
+import com.mycompany.myapp.service.ReceiptPrint;
+import com.mycompany.myapp.service.ReceiptSheftPrint;
 import com.mycompany.myapp.service.UserService;
+import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Product}.
@@ -43,6 +62,13 @@ public class SheftResource {
 
     @Autowired
     UserService userService;
+
+    private final Logger log = LoggerFactory.getLogger(SheftResource.class);
+
+    private static final String ENTITY_NAME = "sheft";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
     /**
      * {@code POST  /products} : Create a new product.
@@ -105,13 +131,14 @@ public class SheftResource {
     @GetMapping("/sheft/stop")
     public ResponseEntity<Sheft> stop() {
         Sheft activeSheft = null;
-
+        String sheftId = "";
         if (sheftRepository.findAllByEnd(null).isEmpty()) {
             return null;
         } else {
             activeSheft = sheftRepository.findAllByEnd(null).get(0);
             activeSheft.setEnd(Instant.now());
             activeSheft = sheftRepository.save(activeSheft);
+            sheftId = activeSheft.getId();
             stopSheft(activeSheft.getId());
         }
 
@@ -122,6 +149,7 @@ public class SheftResource {
                 sheft.setEnd(Instant.now());
                 sheftRepository.save(sheft);
             });
+        printSheft(sheftId);
         return ResponseEntity.ok(activeSheft);
     }
 
@@ -280,5 +308,119 @@ public class SheftResource {
 
             sheftRepository.save(sheftObj);
         }
+    }
+
+    /**
+     * {@code POST  /shefts} : Create a new sheft.
+     *
+     * @param sheft the sheft to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new sheft, or with status {@code 400 (Bad Request)} if the sheft has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/shefts")
+    public ResponseEntity<Sheft> createSheft(@RequestBody Sheft sheft) throws URISyntaxException {
+        log.debug("REST request to save Sheft : {}", sheft);
+        if (sheft.getId() != null) {
+            throw new BadRequestAlertException("A new sheft cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        Sheft result = sheftRepository.save(sheft);
+        return ResponseEntity
+            .created(new URI("/api/shefts/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
+            .body(result);
+    }
+
+    /**
+     * {@code PUT  /shefts/:id} : Updates an existing sheft.
+     *
+     * @param id the id of the sheft to save.
+     * @param sheft the sheft to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated sheft,
+     * or with status {@code 400 (Bad Request)} if the sheft is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the sheft couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/shefts/{id}")
+    public ResponseEntity<Sheft> updateSheft(@PathVariable(value = "id", required = false) final String id, @RequestBody Sheft sheft)
+        throws URISyntaxException {
+        log.debug("REST request to update Sheft : {}, {}", id, sheft);
+        if (sheft.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, sheft.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!sheftRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Sheft result = sheftRepository.save(sheft);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, sheft.getId()))
+            .body(result);
+    }
+
+    /**
+     * {@code GET  /shefts} : get all the shefts.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of shefts in body.
+     */
+    @GetMapping("/shefts")
+    public ResponseEntity<List<Sheft>> getAllShefts(Pageable pageable) {
+        log.debug("REST request to get a page of Shefts");
+        Page<Sheft> page = sheftRepository.findAllByOrderByCreatedDateDesc(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /shefts/:id} : get the "id" sheft.
+     *
+     * @param id the id of the sheft to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sheft, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/shefts/{id}")
+    public ResponseEntity<Sheft> getSheft(@PathVariable String id) {
+        log.debug("REST request to get Sheft : {}", id);
+        Optional<Sheft> sheft = sheftRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(sheft);
+    }
+
+    /**
+     * {@code DELETE  /shefts/:id} : delete the "id" sheft.
+     *
+     * @param id the id of the sheft to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/shefts/{id}")
+    public ResponseEntity<Void> deleteSheft(@PathVariable String id) {
+        log.debug("REST request to delete Sheft : {}", id);
+        sheftRepository.deleteById(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
+    }
+
+    public void printSheft(String recId) {
+        new Thread(() -> {
+            Optional<com.mycompany.myapp.domain.Sheft> record = sheftRepository.findById(recId);
+
+            if (!record.isPresent()) {
+                return;
+            }
+            Printable printable = new ReceiptSheftPrint(record.get());
+
+            PrinterSupport ps = new PrinterSupport();
+
+            PrinterJob pj = PrinterJob.getPrinterJob();
+            pj.setPrintable(printable, ps.getPageFormat(pj));
+            try {
+                pj.print();
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+            }
+        })
+            .start();
     }
 }

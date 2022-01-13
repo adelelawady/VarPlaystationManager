@@ -31,9 +31,9 @@
       </span>
     </h6>
 
-    <div style="text-align: center" *ngIf="device.session && device.session.active">
+    <div style="text-align: center" *ngIf="device.session && device.session">
       <button
-        *ngIf="device.session && device.session.active"
+        *ngIf="device.session && device.session"
         (click)="showPreviousSessions = false; showOptions = !showOptions"
         class="btn mt-3 col-3 badge-primary shadow-sm border text-center m-auto btn-sm p-0"
       >
@@ -41,7 +41,7 @@
         {{ showOptionsTxt ? 'اعدادات' : '' }}
       </button>
       <button
-        *ngIf="device.session && device.session.active && device.session.previousSessions && device.session.previousSessions.length > 0"
+        *ngIf="device.session && device.session && device.session.previousSessions && device.session.previousSessions.length > 0"
         (click)="selectDevice(device); showPreviousSessions = !showPreviousSessions; showOptions = false"
         class="btn mt-3 col-3 shadow-sm border text-center m-auto btn-sm p-0"
         [ngClass]="{ 'badge-primary': !showPreviousSessions, 'badge-warning': showPreviousSessions && isSelected }"
@@ -50,7 +50,7 @@
         {{ device.session.previousSessions.length }}
       </button>
       <button
-        *ngIf="device.session && device.session.active && showCloseButton"
+        *ngIf="device.session && device.session && showCloseButton"
         (click)="diableClick(); openCheckOut()"
         class="btn mt-3 col-3 badge-danger shadow-sm border text-center m-auto btn-sm p-0"
       >
@@ -89,11 +89,11 @@
       <small style="text-align: right; font-weight: 900">EGP {{ device.session.previousSessionsTotalPrice }} : اجهزة سابقة </small>
     </div>
 
-    <div style="text-align: center" *ngIf="device.session && device.session.active">
+    <div style="text-align: center" *ngIf="device.session && device.session">
       <li
         class="col-sm p-0 pointer my-1 border text-center btn p-2 shadow-sm dropdown px-5"
         (click)="loadAllDevices()"
-        *ngIf="device.session.active && showOptions"
+        *ngIf="device.session && showOptions"
         style="list-style: none"
         ngbDropdown
         display="dynamic"
@@ -125,7 +125,7 @@
       <li
         class="col-sm p-0 pointer my-1 border text-center btn p-2 shadow-sm"
         (click)="moveToDeviceMulti()"
-        *ngIf="device.session.active && showOptions"
+        *ngIf="device.session && showOptions"
         style="list-style: none"
         display="dynamic"
         routerLinkActive="active"
@@ -160,221 +160,5 @@
     <a href="#" class="card-link float-left">
       <label class="badge badge-danger">{{ 'متوقف' }}</label></a
     >
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="modal{{ device.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog rounded-lg border">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="card-body">
-          <h5 class="card-title">
-            <span style="cursor: pointer" data-toggle="modal" [attr.data-target]="'#modal' + device.id">
-              <a href="#" class="card-link"> {{ device.name }}</a></span
-            >
-          </h5>
-          <h6 class="card-subtitle mb-2 text-muted my-3">
-            {{ device.type.name }}
-
-            <span *ngIf="device.session && device.session.multi">
-              -
-              <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
-            </span>
-          </h6>
-        </div>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div *ngIf="device.session" class="form-group row">
-            <div class="col text-left" style="text-align: right">
-              <label class="badge badge-success">{{ (device.session.start | countdowntimer | async) || '0 m' }}</label>
-            </div>
-            <label for="staticEmail" class="col-auto">الوقت</label>
-          </div>
-          <div *ngIf="device.session" class="form-group row">
-            <div class="col text-left" style="text-align: right">
-              <a href="#" class="card-link">{{
-                (device | devicePrice: false:timeDiscount:ordersDiscount:false:false:true | async) || '0 LE'
-              }}</a>
-            </div>
-            <label for="staticEmail" class="col-auto">السعر</label>
-          </div>
-
-          <div *ngIf="device.session && (timeDiscount > 0 || ordersDiscount > 0)" class="form-group row">
-            <div class="col text-left" style="text-align: right">
-              <a href="#" class="text-danger">{{ (device | devicePrice: false:0:0:false:false:true | async) || '0 LE' }}</a>
-            </div>
-            <label for="staticEmail" class="col-auto"> السعر قبل الخصم</label>
-          </div>
-
-          <div *ngIf="device.session" class="form-group row">
-            <div class="col text-left" style="text-align: right">
-              <a href="#" class="card-link">{{ device.session.start | date: 'shortTime' }}</a>
-            </div>
-            <label for="staticEmail" class="col-auto">وقت البدا</label>
-          </div>
-
-          <div
-            *ngIf="device.session"
-            class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm"
-          >
-            <small *ngIf="device && device.session && device.session.ordersPrice" for="staticEmail" class="col text-right"
-              >{{ (device | devicePrice: false:timeDiscount:ordersDiscount:false:true | async) || '0 LE' }} : حساب الطلبات</small
-            >
-
-            <small *ngIf="device && device.session" for="staticEmail" class="col text-right">
-              {{ (device | devicePrice: false:timeDiscount:ordersDiscount:true:false | async) || '0 LE' }} :حساب الوقت</small
-            >
-          </div>
-
-          <div
-            *ngIf="device.session && (timeDiscount > 0 || ordersDiscount > 0)"
-            class="row text-center align-center justify-content-center card-subtitle m-3 rounded border border-2 shadow-sm"
-          >
-            <small *ngIf="device && device.session && device.session.ordersPrice" for="staticEmail" class="col text-right text-danger"
-              >{{ (device | devicePrice: false:0:0:false:true | async) || '0 LE' }} : حساب الطلبات قبل الخصم</small
-            >
-
-            <small *ngIf="device && device.session" for="staticEmail" class="col text-right text-danger">
-              {{ (device | devicePrice: false:0:0:true:false | async) || '0 LE' }} :حساب الوقت قبل الخصم</small
-            >
-          </div>
-
-          <div *ngIf="!device.session" class="form-group row">
-            <div class="col-sm-10 offset-sm-0">
-              <div class="form-check">
-                <input
-                  [(ngModel)]="isMulti"
-                  [ngModelOptions]="{ standalone: true }"
-                  class="form-check-input"
-                  type="checkbox"
-                  id="gridCheck1"
-                />
-                <label class="form-check-label" for="gridCheck1"> multi </label>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div *ngIf="!device.session" class="form-group row">
-            <label class="form-check-label" for="gridCheck1"> اضافة وقت </label>
-            <img
-              (click)="plusMinutes = 5"
-              class="col-auto border rounded mx-1"
-              [ngClass]="{ 'border-secondary border-3': plusMinutes == 5 }"
-              style="width: 90px; cursor: pointer"
-              src="/content/images/clock/5min.jpg"
-            />
-            <img
-              (click)="plusMinutes = 10"
-              class="col-auto border rounded mx-1"
-              [ngClass]="{ 'border-secondary border-3': plusMinutes == 10 }"
-              style="width: 90px; cursor: pointer"
-              src="/content/images/clock/10min.jpg"
-            />
-
-            <img
-              (click)="plusMinutes = 15"
-              class="col-auto border rounded mx-1"
-              [ngClass]="{ 'border-secondary border-3': plusMinutes == 15 }"
-              style="width: 90px; cursor: pointer"
-              src="/content/images/clock/15min.jpg"
-            />
-
-            <img
-              (click)="plusMinutes = 20"
-              class="col-auto border rounded mx-1"
-              [ngClass]="{ 'border-secondary border-3': plusMinutes == 20 }"
-              style="width: 90px; cursor: pointer"
-              src="/content/images/clock/20min.jpg"
-            />
-
-            <img
-              (click)="plusMinutes = 30"
-              class="col-auto border rounded mx-1"
-              [ngClass]="{ 'border-secondary border-3': plusMinutes == 30 }"
-              style="width: 90px; cursor: pointer"
-              src="/content/images/clock/30min.jpg"
-            />
-            <button (click)="plusMinutes = 0" *ngIf="plusMinutes > 0" class="btn btn-danger my-2">الغاء الوقت الاضافي</button>
-          </div>
-          <hr />
-
-          <div *ngIf="device.session" class="form-group row">
-            <div class="col">
-              <div class="input-group mb-3">
-                <input
-                  type="number"
-                  step="1"
-                  min="0"
-                  max="100"
-                  (ngModelChange)="ordersDiscount = $event; getDevicePrice()"
-                  [(ngModel)]="ordersDiscount"
-                  [ngModelOptions]="{ standalone: true }"
-                  [value]="ordersDiscount"
-                  class="form-control form-control-lg"
-                  id="colFormLabelLg1"
-                  placeholder=""
-                />
-                <span class="input-group-text p-0 p-1">% خصم الاوردرات</span>
-              </div>
-            </div>
-            <div class="col">
-              <div class="input-group mb-3">
-                <input
-                  type="number"
-                  step="1"
-                  min="0"
-                  max="100"
-                  (ngModelChange)="timeDiscount = $event; getDevicePrice()"
-                  [(ngModel)]="timeDiscount"
-                  [ngModelOptions]="{ standalone: true }"
-                  [value]="timeDiscount"
-                  class="form-control form-control-lg"
-                  id="colFormLabelLg"
-                  placeholder=""
-                />
-                <span class="input-group-text p-0 p-1">% خصم الوقت</span>
-              </div>
-            </div>
-            <hr />
-
-            <div *ngIf="device.session" class="form-group row">
-              <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">السعر الكلي</label>
-              <div class="col-sm-8">
-                <div class="input-group mb-3">
-                  <input
-                    type="email"
-                    [(ngModel)]="totalPriceUser"
-                    [ngModelOptions]="{ standalone: true }"
-                    [value]="totalPriceUser"
-                    class="form-control form-control-lg"
-                    id="colFormLabelLg"
-                    placeholder=""
-                  />
-                  <span class="input-group-text p-0 p-1">$</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-        <div *ngIf="device.session" class="form-group row">
-          <div class="col-sm-10 offset-sm-0">
-            <div class="form-check">
-              <input [(ngModel)]="print" [ngModelOptions]="{ standalone: true }" class="form-check-input" type="checkbox" id="printBox" />
-              <label class="form-check-label" for="printBox"> طباعة بعد الحفظ </label>
-            </div>
-          </div>
-        </div>
-        <button
-          data-dismiss="modal"
-          aria-label="Close"
-          class="btn btn-primary col"
-          (click)="device.session ? endSession() : startSession()"
-        >
-          {{ device.session ? 'ايقاف التشغيل' : 'بدا التشغيل' }}
-        </button>
-      </div>
-    </div>
   </div>
 </div>

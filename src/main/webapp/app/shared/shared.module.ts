@@ -18,7 +18,7 @@ import { DevicePricePipe } from './device-component/price.pipe';
 import { SidebarAccordionModule } from 'ng-sidebar-accordion';
 import { TableComponentComponent } from './table-component/table-component.component';
 import { TablesTapComponentComponent } from '../pages/components/tables-tap-component/tables-tap-component.component';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { CheckoutComponentComponent } from './checkout-component/checkout-component.component';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -39,6 +39,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     DevicePricePipe,
     TableComponentComponent,
     TablesTapComponentComponent,
+    CheckoutComponentComponent,
   ],
   exports: [
     SharedLibsModule,
@@ -59,6 +60,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     SidebarAccordionModule,
     TableComponentComponent,
     TablesTapComponentComponent,
+    CheckoutComponentComponent,
   ],
   providers: [DevicePricePipe],
 })

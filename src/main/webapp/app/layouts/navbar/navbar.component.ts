@@ -38,6 +38,9 @@ export class NavbarComponent implements OnInit {
     private sheftService: SheftService
   ) {
     if (VERSION) {
+      this.sheftService.current().subscribe((sheft: any) => {
+        this.currentSheft = sheft;
+      });
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
     }
   }

@@ -22,6 +22,7 @@ export class SingleSheftReportComponent implements OnInit {
     this.sheftService.stop().subscribe(() => {
       this.sheftService.current().subscribe((sheft: any) => {
         this.sheft = sheft;
+        location.reload();
       });
     });
   }

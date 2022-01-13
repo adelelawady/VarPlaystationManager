@@ -1,0 +1,104 @@
+<div>
+  <h2 id="page-heading" data-cy="SheftHeading">
+    <span jhiTranslate="erApp.sheft.home.title">Shefts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="erApp.sheft.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="shefts?.length === 0">
+    <span jhiTranslate="erApp.sheft.home.notFound">No shefts found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="shefts && shefts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="erApp.sheft.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="user"><span jhiTranslate="erApp.sheft.user">User</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="start"><span jhiTranslate="erApp.sheft.start">Start</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="end"><span jhiTranslate="erApp.sheft.end">End</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="totalNetPrice">
+            <span jhiTranslate="erApp.sheft.totalNetPrice">Total Net Price</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalDiscount">
+            <span jhiTranslate="erApp.sheft.totalDiscount">Total Discount</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+
+          <th scope="col" jhiSortBy="totalNetPriceAfterDiscountSystem">
+            <span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountSystem">Total Net Price After Discount System</span>
+            <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalNetPriceAfterDiscount">
+            <span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscount">Total Net Price After Discount</span>
+            <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sheft of shefts; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/admin/entities/shefts', sheft.id, 'view']">{{ sheft.id }}</a>
+          </td>
+          <td>{{ sheft.user?.firstName }}</td>
+          <td>{{ sheft.start | formatMediumDatetime }}</td>
+          <td>
+            {{ sheft.end ? (sheft.end | formatMediumDatetime) : '' }}
+
+            <span *ngIf="!sheft.end" class="badge badge-success">يعمل الان</span>
+          </td>
+          <td>{{ sheft.total_net_price }}</td>
+          <td>{{ sheft.total_discount }}</td>
+          <td>{{ sheft.total_net_price_after_discount_system }}</td>
+          <td>{{ sheft.total_net_price_after_discount }}</td>
+
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/admin/entities/shefts', sheft.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" (click)="delete(sheft)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="shefts && shefts.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

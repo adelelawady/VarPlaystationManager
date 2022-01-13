@@ -53,6 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   disablePanelOpen = false;
 
+  showCheckOut = false;
   private readonly destroy$ = new Subject<void>();
   constructor(
     private productService: ProductService,
@@ -88,6 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   selectTap(tabname: any): void {
     this.selectedDevice = null;
     this.selectedTable = null;
+    this.showCheckOut = false;
     switch (tabname) {
       case 'tapDevices':
         this.tapDevices = true;

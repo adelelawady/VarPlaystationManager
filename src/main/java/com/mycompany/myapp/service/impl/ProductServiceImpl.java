@@ -1,9 +1,13 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Product;
+import com.mycompany.myapp.domain.TableRecord;
 import com.mycompany.myapp.repository.ProductRepository;
+import com.mycompany.myapp.repository.RecordRepository;
+import com.mycompany.myapp.repository.TableRecordRepository;
 import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.dto.ProductDTO;
+import com.mycompany.myapp.service.dto.ProductStaticsDTO;
 import com.mycompany.myapp.service.mapper.ProductMapper;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,10 +30,19 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     private final ProductMapper productMapper;
+    private final TableRecordRepository tableRecordRepository;
+    private final RecordRepository recordRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductServiceImpl(
+        ProductRepository productRepository,
+        ProductMapper productMapper,
+        RecordRepository recordRepository,
+        TableRecordRepository tableRecordRepository
+    ) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.tableRecordRepository = tableRecordRepository;
+        this.recordRepository = recordRepository;
     }
 
     @Override
@@ -86,5 +100,51 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<Product> findOneDomain(String id) {
         return productRepository.findById(id);
+    }
+
+    public ProductStaticsDTO getProductTotalUses(String productId) {
+        List<com.mycompany.myapp.domain.Record> recordsList = this.recordRepository.findAllByOrdersDataId(productId);
+
+        List<TableRecord> recordsTableList = this.tableRecordRepository.findAllByOrdersDataId(productId);
+
+        ProductStaticsDTO prodStat = new ProductStaticsDTO();
+        Double totalProductPriceInAll = 0.0;
+        int totalProductCountInAll = 0;
+
+        for (com.mycompany.myapp.domain.Record rec : recordsList) {
+            int count = rec.getOrdersQuantity().get(productId);
+            totalProductCountInAll += count;
+            Product prodx = rec.getOrdersData().stream().filter(prod -> prod.getId().equals(productId)).findFirst().get();
+
+            totalProductPriceInAll += prodx.getPrice();
+        }
+
+        for (TableRecord rec : recordsTableList) {
+            int count = rec.getOrdersQuantity().get(productId);
+            totalProductCountInAll += count;
+            Product prodx = rec.getOrdersData().stream().filter(prod -> prod.getId().equals(productId)).findFirst().get();
+
+            switch (rec.getType()) {
+                case TABLE:
+                    totalProductPriceInAll += prodx.getPrice();
+                    break;
+                case TAKEAWAY:
+                    totalProductPriceInAll += prodx.getTakeawayPrice();
+                    break;
+                case SHOPS:
+                    totalProductPriceInAll += prodx.getShopsPrice();
+                    break;
+                default:
+                    break;
+            }
+        }
+        Optional<Product> prodFound = productRepository.findById(productId);
+        if (prodFound.isPresent()) {
+            prodStat.setId(productId);
+            prodStat.setUseCount(totalProductCountInAll);
+            prodStat.setUsePrice(totalProductPriceInAll);
+            prodStat.setName(prodFound.get().getName());
+        }
+        return prodStat;
     }
 }

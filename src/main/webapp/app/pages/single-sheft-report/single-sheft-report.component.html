@@ -1,5 +1,9 @@
 <div class="card p-4 border shadow-sm m-3">
   <h1 class="car-title">شيفت</h1>
+
+  <table *ngIf="!sheft" class="table">
+    <span class="d-block alert alert-info p-3 text-center" style="font-size: large">جاري التحميل</span>
+  </table>
   <table *ngIf="sheft" class="table">
     <thead>
       <tr>
@@ -24,5 +28,5 @@
     </tbody>
   </table>
 
-  <button class="btn btn-danger" (click)="stopSheft()">انهاء الشيفت</button>
+  <button *ngIf="sheft" class="btn btn-danger" (click)="stopSheft()">انهاء الشيفت</button>
 </div>

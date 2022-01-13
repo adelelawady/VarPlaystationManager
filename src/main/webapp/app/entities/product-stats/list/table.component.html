@@ -1,0 +1,57 @@
+<div>
+  <h2 id="page-heading" data-cy="TableHeading">
+    <span>الطلبات</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="erApp.table.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="tables?.length === 0">
+    <span jhiTranslate="erApp.table.home.notFound">No tables found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="tables && tables.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="erApp.table.name">الاسم</span></th>
+          <th (click)="sortItem = 1; loadPage()" scope="col"><span>العدد</span></th>
+          <th (click)="sortItem = 0; loadPage()" scope="col"><span>السعر الكلي</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let table of tables" data-cy="entityTable">
+          <td>{{ table.name }}</td>
+          <td>{{ table.useCount }}</td>
+          <td>{{ table.usePrice }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="tables && tables.length > 0">
+  <div class="row justify-content-center">
+    <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+  </div>
+
+  <div class="row justify-content-center">
+    <ngb-pagination
+      [collectionSize]="totalItems"
+      [(page)]="ngbPaginationPage"
+      [pageSize]="itemsPerPage"
+      [maxSize]="5"
+      [rotate]="true"
+      [boundaryLinks]="true"
+      (pageChange)="loadPage($event)"
+    ></ngb-pagination>
+  </div>
+</div>

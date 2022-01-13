@@ -108,7 +108,15 @@
       ></jhi-tables-tap-component>
       <div class="row" *ngIf="devices">
         <div class="col-8">
-          <div class="card-body px-1" *ngIf="tapDevices">
+          <jhi-checkout-component
+            (deviceStopped)="selectedDevice = null; closeOrdersPanle(); showCheckOut = false; loadAllDevices()"
+            (deviceStarted)="showCheckOut = false; selectedDevice = $event; loadAllDevices()"
+            (closeCheckOut)="showCheckOut = false"
+            *ngIf="selectedDevice && showCheckOut"
+            [device]="selectedDevice"
+          ></jhi-checkout-component>
+
+          <div class="card-body px-1" *ngIf="tapDevices && !showCheckOut">
             <h5 class="card-title mx-4">الاجهزة</h5>
             <div class="card jh-card m-2 p-4">
               <div class="row justify-content-center align-items-center">
@@ -121,7 +129,7 @@
                     [isSelected]="selectedDevice && selectedDevice.id == device.id"
                     (deviceMoved)="loadAllDevices()"
                     (deviceDoubleClicked)="selectedDevice = $event; openOrdersPanle()"
-                    (deviceCheckOut)="closeOrdersPanle()"
+                    (deviceCheckOut)="selectedDevice = device; closeOrdersPanle(); showCheckOut = true"
                   >
                   </jhi-device-component>
                 </div>

@@ -1,0 +1,104 @@
+{
+  "name": "Sheft",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "user",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "start",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "end",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "totalNetPrice",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalDiscount",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceAfterDiscount",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceAfterDiscountSystem",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceDevices",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetUserPriceDevices",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalDiscountPriceDevices",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalPriceTimeDevices",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalPriceOrdersDevices",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceTables",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalDiscountPriceTables",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceAfterDiscountTables",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceTakeaway",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalDiscountPriceTakeaway",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceAfterDiscountTakeaway",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceShops",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalDiscountPriceShops",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "totalNetPriceAfterDiscountShops",
+      "fieldType": "Double"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "sheft",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20220111235511"
+}

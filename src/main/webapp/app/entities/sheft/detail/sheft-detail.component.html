@@ -1,0 +1,498 @@
+<div class="row justify-content-center" style="direction: rtl">
+  <div class="col-8">
+    <div *ngIf="sheft">
+      <h2 data-cy="sheftDetailsHeading"><span jhiTranslate="erApp.sheft.detail.title">Sheft</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <div class="row">
+        <div class="col-md-6">
+          <dl class="row-md jh-entity-details">
+            <dt><span jhiTranslate="erApp.sheft.id">Id</span></dt>
+            <dd>
+              <span>{{ sheft.id }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.user">User</span></dt>
+            <dd>
+              <span>{{ sheft.user.name }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.start">Start</span></dt>
+            <dd>
+              <span>{{ sheft.start | formatMediumDatetime }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.end">End</span></dt>
+            <dd>
+              <span>{{ sheft.end | formatMediumDatetime }}</span>
+            </dd>
+          </dl>
+        </div>
+        <div class="col-md-6">
+          <dl class="row-md jh-entity-details">
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceDevices">Total Net Price Devices</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_devices }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalNetUserPriceDevices">Total Net User Price Devices</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_user_price_devices }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalDiscountPriceDevices">Total Discount Price Devices</span></dt>
+            <dd>
+              <span>{{ sheft.total_discount_price_devices }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalPriceTimeDevices">Total Price Time Devices</span></dt>
+            <dd>
+              <span>{{ sheft.total_price_time_devices }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalPriceOrdersDevices">Total Price Orders Devices</span></dt>
+            <dd>
+              <span>{{ sheft.total_price_orders_devices }}</span>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <dl class="row-md jh-entity-details">
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceTables">Total Net Price Tables</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_Tables }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalDiscountPriceTables">Total Discount Price Tables</span></dt>
+            <dd>
+              <span>{{ sheft.total_discount_price_Tables }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountTables">Total Net Price After Discount Tables</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_after_discount_Tables }}</span>
+            </dd>
+          </dl>
+        </div>
+
+        <div class="col-md-4">
+          <dl class="row-md jh-entity-details">
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceTakeaway">Total Net Price Takeaway</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_takeaway }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalDiscountPriceTakeaway">Total Discount Price Takeaway</span></dt>
+            <dd>
+              <span>{{ sheft.total_discount_price_takeaway }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountTakeaway">Total Net Price After Discount Takeaway</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_after_discount_takeaway }}</span>
+            </dd>
+          </dl>
+        </div>
+
+        <div class="col-md-4">
+          <dl class="row-md jh-entity-details">
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceShops">Total Net Price Shops</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_shops }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalDiscountPriceShops">Total Discount Price Shops</span></dt>
+            <dd>
+              <span>{{ sheft.total_discount_price_shops }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountShops">Total Net Price After Discount Shops</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_after_discount_shops }}</span>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <dl class="row-md jh-entity-details">
+            <dt><span jhiTranslate="erApp.sheft.totalNetPrice">Total Net Price</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalDiscount">Total Discount</span></dt>
+            <dd>
+              <span>{{ sheft.total_discount }}</span>
+            </dd>
+
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountSystem">Total Net Price After Discount System</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_after_discount_system }}</span>
+            </dd>
+            <dt><span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscount">Total Net Price After Discount</span></dt>
+            <dd>
+              <span>{{ sheft.total_net_price_after_discount }}</span>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div *ngIf="sheft">
+      <div class="accordion" id="accordionExample">
+        <div class="card" *ngIf="this.sheft.records && this.sheft.records.length > 0">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button
+                class="btn btn-link btn-block text-left"
+                type="button"
+                data-toggle="collapse"
+                data-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                <h3>الاجهزة</h3>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <dt><span jhiTranslate="erApp.sheft.totalNetPriceDevices">Total Net Price Devices</span></dt>
+                    <dd>
+                      <span>{{ sheft.total_net_price_devices }}</span>
+                    </dd>
+                  </div>
+                  <div class="col-md-6">
+                    <dt><span jhiTranslate="erApp.sheft.totalNetUserPriceDevices">Total Net User Price Devices</span></dt>
+                    <dd>
+                      <span>{{ sheft.total_net_user_price_devices }}</span>
+                    </dd>
+                  </div>
+                </div>
+              </button>
+            </h2>
+          </div>
+
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="table-responsive" id="entities" *ngIf="this.sheft.records && this.sheft.records.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                  <thead>
+                    <tr>
+                      <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
+
+                      <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                      <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                      <th scope="col"><span>سعر الطلبات</span> <fa-icon icon="sort"></fa-icon></th>
+
+                      <th scope="col"><span>الخصم</span> <fa-icon icon="sort"></fa-icon></th>
+
+                      <th scope="col"><span>السعر الكلي</span> <fa-icon icon="sort"></fa-icon></th>
+
+                      <th scope="col"><span> السعر الكلي قبل الخصم</span> <fa-icon icon="sort"></fa-icon></th>
+
+                      <th scope="col"><span> السعر الكلي المدخل</span> <fa-icon icon="sort"></fa-icon></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let record of this.sheft.records" data-cy="entityTable">
+                      <td>
+                        <a [routerLink]="['/admin/entities/device', record.device?.id, 'view']">{{ record.device?.name }}</a>
+                      </td>
+
+                      <td>{{ record.hours === 0 ? record.minutes + ' m' : record.hours + ' h : ' + record.minutes + ' m' }}</td>
+
+                      <td>{{ formateMoney(record.totalPriceTime) }}</td>
+                      <td>{{ formateMoney(record.totalPriceOrders) }}</td>
+                      <td>{{ record.discount }}%</td>
+                      <td>{{ formateMoney(record.totalPrice) }}</td>
+                      <td>{{ formateMoney(record.totalPriceTime + record.totalPriceOrders) }}</td>
+                      <td>{{ formateMoney(record.totalPriceUser) }}</td>
+
+                      <td class="text-right">
+                        <div class="btn-group">
+                          <button
+                            type="submit"
+                            [routerLink]="['/admin/entities/record', record.id, 'view']"
+                            class="btn btn-info btn-sm"
+                            data-cy="entityDetailsButton"
+                          >
+                            <fa-icon icon="eye"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                          </button>
+
+                          <!--  <button type="submit" [routerLink]="['/admin/entities/record', record.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                          <fa-icon icon="pencil-alt"></fa-icon>
+                          <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>-->
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" *ngIf="this.sheft.tableRecords && this.sheft.tableRecords.length > 0">
+          <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+              <button
+                class="btn btn-link btn-block text-left"
+                type="button"
+                data-toggle="collapse"
+                data-target="#collapseTwo"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <h3>الصالات</h3>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <dt><span jhiTranslate="erApp.sheft.totalNetPriceTables">Total Net Price Tables</span></dt>
+                    <dd>
+                      <span>{{ sheft.total_net_price_Tables }}</span>
+                    </dd>
+                  </div>
+                  <div class="col-md-6">
+                    <dt><span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountTables">Total Net Price After Discount Tables</span></dt>
+                    <dd>
+                      <span>{{ sheft.total_net_price_after_discount_Tables }}</span>
+                    </dd>
+                  </div>
+                </div>
+              </button>
+            </h2>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="table-responsive" id="entities" *ngIf="this.sheft.tableRecords && this.sheft.tableRecords.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                  <thead>
+                    <tr>
+                      <td>الرقم التعريفي</td>
+                      <td>التاريخ</td>
+                      <td>اسم الصالة</td>
+                      <td>السعر الكلي</td>
+                      <td>خصم</td>
+                      <td>اجمالي السيستم</td>
+                      <td>الاجمالي</td>
+                      <td></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let tableRecord of this.sheft.tableRecords" data-cy="entityTable">
+                      <td>
+                        <a [routerLink]="['/admin/entities/table-record/', tableRecord.id, 'view']">{{ tableRecord.id }}</a>
+                      </td>
+                      <td>{{ tableRecord.createdDate | date: 'medium' }}</td>
+                      <td>{{ tableRecord.table.name }}</td>
+                      <td>{{ tableRecord.netTotalPrice }}</td>
+                      <td>
+                        {{ tableRecord.discount }}٪
+                        <small *ngIf="tableRecord.totalDiscountPrice > 0" class="text-muted">
+                          <td>جنيه{{ tableRecord.totalDiscountPrice }}</td></small
+                        >
+                      </td>
+                      <td>{{ tableRecord.netTotalPrice - tableRecord.totalDiscountPrice }}</td>
+                      <td>{{ tableRecord.totalPrice }}</td>
+                      <td class="text-right">
+                        <div class="btn-group">
+                          <button
+                            type="submit"
+                            [routerLink]="['/admin/entities/table-record/', tableRecord.id, 'view']"
+                            class="btn btn-info btn-sm"
+                            data-cy="entityDetailsButton"
+                          >
+                            <fa-icon icon="eye"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" *ngIf="this.sheft.tableTakeAwayRecords && this.sheft.tableTakeAwayRecords.length > 0">
+          <div class="card-header" id="headingThere">
+            <h2 class="mb-0">
+              <button
+                class="btn btn-link btn-block text-left"
+                type="button"
+                data-toggle="collapse"
+                data-target="#collapseThere"
+                aria-expanded="true"
+                aria-controls="collapseThere"
+              >
+                <h3>الاوردرات</h3>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <dt><span jhiTranslate="erApp.sheft.totalNetPriceTakeaway">Total Net Price Takeaway</span></dt>
+                    <dd>
+                      <span>{{ sheft.total_net_price_takeaway }}</span>
+                    </dd>
+                  </div>
+                  <div class="col-md-6">
+                    <dt>
+                      <span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountTakeaway">Total Net Price After Discount Takeaway</span>
+                    </dt>
+                    <dd>
+                      <span>{{ sheft.total_net_price_after_discount_takeaway }}</span>
+                    </dd>
+                  </div>
+                </div>
+              </button>
+            </h2>
+          </div>
+          <div id="collapseThere" class="collapse" aria-labelledby="headingThere" data-parent="#accordionExample">
+            <div class="card-body">
+              <div
+                class="table-responsive"
+                id="entities"
+                *ngIf="this.sheft.tableTakeAwayRecords && this.sheft.tableTakeAwayRecords.length > 0"
+              >
+                <table class="table table-striped" aria-describedby="page-heading">
+                  <thead>
+                    <tr>
+                      <td>الرقم التعريفي</td>
+                      <td>التاريخ</td>
+                      <td>اسم الصالة</td>
+                      <td>السعر الكلي</td>
+                      <td>خصم</td>
+                      <td>اجمالي السيستم</td>
+                      <td>الاجمالي</td>
+                      <td></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let tableRecord of this.sheft.tableTakeAwayRecords" data-cy="entityTable">
+                      <td>
+                        <a [routerLink]="['/admin/entities/table-record/', tableRecord.id, 'view']">{{ tableRecord.id }}</a>
+                      </td>
+                      <td>{{ tableRecord.createdDate | date: 'medium' }}</td>
+                      <td>{{ tableRecord.table.name }}</td>
+                      <td>{{ tableRecord.netTotalPrice }}</td>
+                      <td>
+                        {{ tableRecord.discount }}٪
+                        <small *ngIf="tableRecord.totalDiscountPrice > 0" class="text-muted">
+                          <td>جنيه{{ tableRecord.totalDiscountPrice }}</td></small
+                        >
+                      </td>
+                      <td>{{ tableRecord.netTotalPrice - tableRecord.totalDiscountPrice }}</td>
+                      <td>{{ tableRecord.totalPrice }}</td>
+                      <td class="text-right">
+                        <div class="btn-group">
+                          <button
+                            type="submit"
+                            [routerLink]="['/admin/entities/table-record/', tableRecord.id, 'view']"
+                            class="btn btn-info btn-sm"
+                            data-cy="entityDetailsButton"
+                          >
+                            <fa-icon icon="eye"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" *ngIf="this.sheft.tableShopsRecords && this.sheft.tableShopsRecords.length > 0">
+          <div class="card-header" id="headingFour">
+            <h2 class="mb-0">
+              <button
+                class="btn btn-link btn-block text-left"
+                type="button"
+                data-toggle="collapse"
+                data-target="#collapseFour"
+                aria-expanded="true"
+                aria-controls="collapseFour"
+              >
+                <h3>محلات</h3>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <dt><span jhiTranslate="erApp.sheft.totalNetPriceShops">Total Net Price Shops</span></dt>
+                    <dd>
+                      <span>{{ sheft.total_net_price_shops }}</span>
+                    </dd>
+                  </div>
+                  <div class="col-md-6">
+                    <dt><span jhiTranslate="erApp.sheft.totalNetPriceAfterDiscountShops">Total Net Price After Discount Shops</span></dt>
+                    <dd>
+                      <span>{{ sheft.total_net_price_after_discount_shops }}</span>
+                    </dd>
+                  </div>
+                </div>
+              </button>
+            </h2>
+          </div>
+          <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="table-responsive" id="entities" *ngIf="this.sheft.tableShopsRecords && this.sheft.tableShopsRecords.length > 0">
+                <table class="table table-striped" aria-describedby="page-heading">
+                  <thead>
+                    <tr>
+                      <td>الرقم التعريفي</td>
+                      <td>التاريخ</td>
+                      <td>اسم الصالة</td>
+                      <td>السعر الكلي</td>
+                      <td>خصم</td>
+                      <td>اجمالي السيستم</td>
+                      <td>الاجمالي</td>
+                      <td></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let tableRecord of this.sheft.tableShopsRecords" data-cy="entityTable">
+                      <td>
+                        <a [routerLink]="['/admin/entities/table-record/', tableRecord.id, 'view']">{{ tableRecord.id }}</a>
+                      </td>
+                      <td>{{ tableRecord.createdDate | date: 'medium' }}</td>
+                      <td>{{ tableRecord.table.name }}</td>
+                      <td>{{ tableRecord.netTotalPrice }}</td>
+                      <td>
+                        {{ tableRecord.discount }}٪
+                        <small *ngIf="tableRecord.totalDiscountPrice > 0" class="text-muted">
+                          <td>جنيه{{ tableRecord.totalDiscountPrice }}</td></small
+                        >
+                      </td>
+                      <td>{{ tableRecord.netTotalPrice - tableRecord.totalDiscountPrice }}</td>
+                      <td>{{ tableRecord.totalPrice }}</td>
+                      <td class="text-right">
+                        <div class="btn-group">
+                          <button
+                            type="submit"
+                            [routerLink]="['/admin/entities/table-record/', tableRecord.id, 'view']"
+                            class="btn btn-info btn-sm"
+                            data-cy="entityDetailsButton"
+                          >
+                            <fa-icon icon="eye"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

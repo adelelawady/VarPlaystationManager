@@ -15,7 +15,7 @@
   >
     <fa-icon icon="bars"></fa-icon>
   </a>
-  <a class="nav-link border badge p-2" style="font-size: large">
+  <a *ngIf="account" class="nav-link border badge p-2" style="font-size: large">
     <span>
       <i class="fa fa-clock"></i>
       <span (click)="startSheft()" *ngIf="!currentSheft">Sheft : N/A</span>
@@ -207,6 +207,32 @@
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span>التقرير الاجمالي</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/shefts"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span> تقارير الشيفاتات</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="admin/entities/product-stats"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span> تقارير مبيعات الاصناف</span>
             </a>
           </li>
 

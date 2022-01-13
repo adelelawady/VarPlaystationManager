@@ -111,7 +111,6 @@ public class Sheft extends AbstractAuditingEntity implements Serializable {
     }
 
     @DBRef
-    @JsonIgnore
     List<TableRecord> tableShopsRecords = new ArrayList<>();
 
     public String getId() {

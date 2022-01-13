@@ -2,18 +2,22 @@ package com.mycompany.myapp.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.domain.Product;
+import com.mycompany.myapp.domain.Record;
 import com.mycompany.myapp.repository.ProductRepository;
 import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.dto.ProductDTO;
+import com.mycompany.myapp.service.dto.ProductStaticsDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -256,5 +261,40 @@ public class ProductResource {
         log.debug("REST request to get a page of Products");
         List<ProductDTO> prodList = productService.findAllByCategory(categoryId);
         return ResponseEntity.ok(prodList);
+    }
+
+    @GetMapping("/products/products-stats/{sort}")
+    public ResponseEntity<List<ProductStaticsDTO>> findProduct(Pageable pageable, @PathVariable int sort) {
+        List<ProductStaticsDTO> x = productRepository
+            .findAll()
+            .stream()
+            .map(prod -> {
+                return this.productService.getProductTotalUses(prod.getId());
+            })
+            .collect(Collectors.toList());
+
+        Collections.sort(
+            x,
+            new Comparator<ProductStaticsDTO>() {
+                @Override
+                public int compare(ProductStaticsDTO u1, ProductStaticsDTO u2) {
+                    if (sort == 1) {
+                        return Integer.compare(u1.getUseCount(), u2.getUseCount());
+                    }
+                    if (sort == 0) {
+                        return u1.getUsePrice().compareTo(u2.getUsePrice());
+                    }
+                    return u1.getUsePrice().compareTo(u2.getUsePrice());
+                }
+            }
+                .reversed()
+        );
+
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), x.size());
+        final Page<ProductStaticsDTO> page = new PageImpl<>(x.subList(start, end), pageable, x.size());
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }

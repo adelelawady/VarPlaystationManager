@@ -13,13 +13,14 @@ export class MainReportPageComponent implements OnInit {
   fromAsDate: any;
   toAsDate: any;
   report: any;
-
+  loading = false;
   constructor(public datepipe: DatePipe, private reportApiService: ReportApiService) {}
   formateMoney(r: any): any {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
   today(): void {
+    this.loading = true;
     this.fromAsDate = this.datepipe.transform(Date.now(), 'yyyy-MM-dd');
     this.toAsDate = this.datepipe.transform(Date.now(), 'yyyy-MM-dd');
     this.from = Date.now();
@@ -31,10 +32,12 @@ export class MainReportPageComponent implements OnInit {
     };
     this.reportApiService.getMainReport(fromTo).subscribe(response => {
       this.report = response;
+      this.loading = false;
     });
   }
 
   yesterday(): void {
+    this.loading = true;
     const date = new Date();
 
     date.setDate(date.getDate() - 1);
@@ -49,10 +52,12 @@ export class MainReportPageComponent implements OnInit {
     };
     this.reportApiService.getMainReport(fromTo).subscribe(response => {
       this.report = response;
+      this.loading = false;
     });
   }
 
   lastWeek(): void {
+    this.loading = true;
     const date = new Date();
     const datenow = new Date();
     date.setDate(date.getDate() - 7);
@@ -66,10 +71,12 @@ export class MainReportPageComponent implements OnInit {
     };
     this.reportApiService.getMainReport(fromTo).subscribe(response => {
       this.report = response;
+      this.loading = false;
     });
   }
 
   currentMonth(): void {
+    this.loading = true;
     const daten = new Date();
 
     const firstDay = new Date(daten.getFullYear(), daten.getMonth(), 1);
@@ -90,10 +97,12 @@ export class MainReportPageComponent implements OnInit {
     };
     this.reportApiService.getMainReport(fromTo).subscribe(response => {
       this.report = response;
+      this.loading = false;
     });
   }
 
   pervMonth(): void {
+    this.loading = true;
     const daten = new Date();
 
     const firstDay = new Date(daten.getFullYear(), daten.getMonth() - 1, 1);
@@ -112,8 +121,10 @@ export class MainReportPageComponent implements OnInit {
       from: date,
       to: datenow,
     };
+
     this.reportApiService.getMainReport(fromTo).subscribe(response => {
       this.report = response;
+      this.loading = false;
     });
   }
 
@@ -125,12 +136,15 @@ export class MainReportPageComponent implements OnInit {
   }
 
   reload(): void {
+    this.loading = true;
     const fromTo = {
       from: Date.parse(this.fromAsDate),
-      to: Date.parse(this.fromAsDate),
+      to: Date.parse(this.toAsDate),
     };
+
     this.reportApiService.getMainReport(fromTo).subscribe(response => {
       this.report = response;
+      this.loading = false;
     });
   }
 }
