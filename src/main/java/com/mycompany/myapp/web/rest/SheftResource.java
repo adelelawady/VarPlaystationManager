@@ -403,24 +403,21 @@ public class SheftResource {
     }
 
     public void printSheft(String recId) {
-        new Thread(() -> {
-            Optional<com.mycompany.myapp.domain.Sheft> record = sheftRepository.findById(recId);
+        Optional<com.mycompany.myapp.domain.Sheft> record = sheftRepository.findById(recId);
 
-            if (!record.isPresent()) {
-                return;
-            }
-            Printable printable = new ReceiptSheftPrint(record.get());
+        if (!record.isPresent()) {
+            return;
+        }
+        Printable printable = new ReceiptSheftPrint(record.get());
 
-            PrinterSupport ps = new PrinterSupport();
+        PrinterSupport ps = new PrinterSupport();
 
-            PrinterJob pj = PrinterJob.getPrinterJob();
-            pj.setPrintable(printable, ps.getPageFormat(pj));
-            try {
-                pj.print();
-            } catch (PrinterException ex) {
-                ex.printStackTrace();
-            }
-        })
-            .start();
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setPrintable(printable, ps.getPageFormat(pj));
+        try {
+            pj.print();
+        } catch (PrinterException ex) {
+            ex.printStackTrace();
+        }
     }
 }

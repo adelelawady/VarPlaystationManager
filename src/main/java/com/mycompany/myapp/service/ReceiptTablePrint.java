@@ -86,7 +86,7 @@ public class ReceiptTablePrint implements Printable {
                      * Assume that all parameters are in string data type for this situation All
                      * other premetive data types are accepted.
                      */
-                    String itemid = prod.getEnName().length() > 15 ? prod.getName().substring(0, 13) + ".." : prod.getName();
+                    String itemid = prod.getEnName().length() > 15 ? prod.getName().substring(0, 13) + ".." : prod.getEnName();
                     String itemname = currentRecord.getOrdersQuantity().get(prod.getId()).toString();
                     String price = prod.getPrice().toString();
 

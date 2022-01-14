@@ -219,24 +219,21 @@ public class RecordServiceImpl implements RecordService {
     }
 
     public void printRecord(String recId) {
-        new Thread(() -> {
-            Optional<com.mycompany.myapp.domain.Record> record = findOneDomain(recId);
+        Optional<com.mycompany.myapp.domain.Record> record = findOneDomain(recId);
 
-            if (!record.isPresent()) {
-                return;
-            }
-            Printable printable = new ReceiptPrint(record.get());
+        if (!record.isPresent()) {
+            return;
+        }
+        Printable printable = new ReceiptPrint(record.get());
 
-            PrinterSupport ps = new PrinterSupport();
+        PrinterSupport ps = new PrinterSupport();
 
-            PrinterJob pj = PrinterJob.getPrinterJob();
-            pj.setPrintable(printable, ps.getPageFormat(pj));
-            try {
-                pj.print();
-            } catch (PrinterException ex) {
-                ex.printStackTrace();
-            }
-        })
-            .start();
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setPrintable(printable, ps.getPageFormat(pj));
+        try {
+            pj.print();
+        } catch (PrinterException ex) {
+            ex.printStackTrace();
+        }
     }
 }

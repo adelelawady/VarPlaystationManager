@@ -4,6 +4,7 @@ import com.mycompany.myapp.domain.Device;
 import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Session;
 import com.mycompany.myapp.domain.Table;
+import com.mycompany.myapp.domain.Table.TABLE_TYPE;
 import com.mycompany.myapp.domain.TableRecord;
 import com.mycompany.myapp.repository.DeviceRepository;
 import com.mycompany.myapp.repository.ProductRepository;
@@ -68,6 +69,9 @@ public class TableResource {
 
     @Autowired
     DeviceRepository deviceRepository;
+
+    @Autowired
+    TableRecordRepository tableRecordRepository;
 
     public TableResource(TableRepository tableRepository, ProductRepository productRepository) {
         this.tableRepository = tableRepository;
@@ -197,6 +201,21 @@ public class TableResource {
         return tableRepository.findAllByTypeOrderByIndex(type.toUpperCase());
     }
 
+    @GetMapping("/tables/fixTablesRecords")
+    public ResponseEntity<String> fixTablesRecords() {
+        tableRecordRepository
+            .findAll()
+            .stream()
+            .forEach(tb -> {
+                if (tb.getType() == null) {
+                    tb.setType(TABLE_TYPE.TABLE);
+                    tableRecordRepository.save(tb);
+                }
+            });
+
+        return ResponseEntity.ok("done");
+    }
+
     /**
      * {@code GET  /tables/:id} : get the "id" table.
      *
@@ -258,8 +277,10 @@ public class TableResource {
             tableRecord.setTable(resTabel);
             tableRecord.setNetTotalPrice(calculateNetDeviceSessionOrderesPrice(resTabel));
             tableRecord.setType(resTabel.getType());
-            if (resTabel.getDiscount() > 0) {
+            if (resTabel.getDiscount() != null && resTabel.getDiscount() > 0) {
                 tableRecord.setTotalDiscountPrice((tableRecord.getNetTotalPrice() * resTabel.getDiscount()) / 100);
+            } else {
+                tableRecord.setTotalDiscountPrice(0.0);
             }
 
             TableRecord SavedTableRecord = recordRepository.save(tableRecord);

@@ -58,10 +58,10 @@ public class Table extends AbstractAuditingEntity implements Serializable {
     private String name;
 
     @Field("discount")
-    private Double discount;
+    private Double discount = 0.0;
 
     @Field("total_price")
-    private Double totalPrice;
+    private Double totalPrice = 0.0;
 
     @Field("active")
     private boolean active = false;
