@@ -20,6 +20,7 @@ declare const document: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+  now: Date = new Date();
   formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'EGP',

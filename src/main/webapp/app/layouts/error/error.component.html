@@ -1,15 +1,16 @@
 <div>
-  <div class="row">
+  <div class="row m-5 card">
     <div class="col-md-4">
       <span class="hipster img-fluid rounded"></span>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-12 p-5 rounded shadow-sm">
       <h1 jhiTranslate="error.title">Error Page!</h1>
 
       <div *ngIf="errorMessage">
         <div class="alert alert-danger">{{ errorMessage }}</div>
       </div>
+      <a (click)="previousState()" class="link btn btn-secondary"> عودة الي الخلف</a>
     </div>
   </div>
 </div>

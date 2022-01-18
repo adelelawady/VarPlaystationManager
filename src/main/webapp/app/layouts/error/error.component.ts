@@ -24,6 +24,9 @@ export class ErrorComponent implements OnInit, OnDestroy {
     });
   }
 
+  previousState(): void {
+    window.history.back();
+  }
   ngOnDestroy(): void {
     if (this.langChangeSubscription) {
       this.langChangeSubscription.unsubscribe();

@@ -93,6 +93,8 @@
     "bootstrap": "4.6.0",
     "datejs": "^1.0.0-rc3",
     "dayjs": "1.10.7",
+    "devextreme": "21.2.4",
+    "devextreme-angular": "21.2.4",
     "font-awesome": "^4.7.0",
     "mdb-ui-kit": "^3.10.1",
     "ng-sidebar": "^9.4.3",
