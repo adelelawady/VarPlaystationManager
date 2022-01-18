@@ -19,9 +19,10 @@ export class TableService {
     return this.http.get<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  query(req?: any, sort?: number): Observable<EntityArrayResponseType> {
+  query(req?: any, sort?: number, fromTo?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<any[]>(this.resourceUrl + '/products-stats/' + (sort ? sort.toString() : '0'), {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    return this.http.post<any[]>(this.resourceUrl + '/products-stats/' + (sort ? sort.toString() : '0'), fromTo, {
       params: options,
       observe: 'response',
     });

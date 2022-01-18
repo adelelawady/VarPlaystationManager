@@ -3,6 +3,7 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.service.dto.ProductDTO;
 import com.mycompany.myapp.service.dto.ProductStaticsDTO;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -57,5 +58,5 @@ public interface ProductService {
 
     List<ProductDTO> findAllByCategory(String categoryId);
 
-    ProductStaticsDTO getProductTotalUses(String productId);
+    ProductStaticsDTO getProductTotalUses(String productId, Instant from, Instant to);
 }

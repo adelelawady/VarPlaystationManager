@@ -44,4 +44,6 @@ public interface RecordRepository extends MongoRepository<Record, String> {
     List<Record> findAllByStartBetweenOrEndBetween(Instant startDate, Instant endDate, Instant startDatex, Instant endDatex);
 
     List<Record> findAllByOrdersDataId(String orderId);
+
+    List<Record> findAllByOrdersDataIdAndEndBetween(String orderId, Instant startDatex, Instant endDatex);
 }

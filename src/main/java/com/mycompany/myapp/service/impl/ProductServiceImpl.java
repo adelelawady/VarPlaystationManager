@@ -9,6 +9,8 @@ import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.dto.ProductDTO;
 import com.mycompany.myapp.service.dto.ProductStaticsDTO;
 import com.mycompany.myapp.service.mapper.ProductMapper;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -102,10 +104,18 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id);
     }
 
-    public ProductStaticsDTO getProductTotalUses(String productId) {
-        List<com.mycompany.myapp.domain.Record> recordsList = this.recordRepository.findAllByOrdersDataId(productId);
+    public ProductStaticsDTO getProductTotalUses(String productId, Instant from, Instant to) {
+        List<com.mycompany.myapp.domain.Record> recordsList = new ArrayList<>();
 
-        List<TableRecord> recordsTableList = this.tableRecordRepository.findAllByOrdersDataId(productId);
+        List<TableRecord> recordsTableList = new ArrayList<>();
+
+        if (from != null && to != null) {
+            recordsList = this.recordRepository.findAllByOrdersDataIdAndEndBetween(productId, from, to);
+            recordsTableList = this.tableRecordRepository.findAllByOrdersDataIdAndCreatedDateBetween(productId, from, to);
+        } else {
+            recordsList = this.recordRepository.findAllByOrdersDataId(productId);
+            recordsTableList = this.tableRecordRepository.findAllByOrdersDataId(productId);
+        }
 
         ProductStaticsDTO prodStat = new ProductStaticsDTO();
         Double totalProductPriceInAll = 0.0;

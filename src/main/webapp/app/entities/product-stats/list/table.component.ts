@@ -6,6 +6,7 @@ import { TableService } from '../service/table.service';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { combineLatest } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-table',
@@ -20,6 +21,9 @@ export class TableComponent implements OnInit {
   predicate!: string;
   ngbPaginationPage = 1;
   sortItem = 0;
+  now: Date = new Date();
+  from = dayjs().startOf('day'); // set to 12:00 am today
+  to = dayjs().endOf('day'); // set to 23:59 pm today
   constructor(
     protected tableService: TableService,
     protected activatedRoute: ActivatedRoute,
@@ -27,17 +31,30 @@ export class TableComponent implements OnInit {
     protected modalService: NgbModal
   ) {}
 
+  fromDateChanged(date: any): void {
+    // eslint-disable-next-line no-console
+    this.from = dayjs(date.value);
+    this.loadPage();
+  }
+  toDateChanged(date: any): void {
+    // eslint-disable-next-line no-console
+    this.to = dayjs(date.value);
+    this.loadPage();
+  }
+
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
 
+    // eslint-disable-next-line no-console
     this.tableService
       .query(
         {
           page: pageToLoad - 1,
           size: this.itemsPerPage,
         },
-        this.sortItem
+        this.sortItem,
+        { from: this.from, to: this.to }
       )
       .subscribe(
         (res: HttpResponse<any[]>) => {

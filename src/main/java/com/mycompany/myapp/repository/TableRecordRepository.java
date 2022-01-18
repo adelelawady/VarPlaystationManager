@@ -22,4 +22,6 @@ public interface TableRecordRepository extends MongoRepository<TableRecord, Stri
     Page<TableRecord> findAllByTypeOrderByCreatedDateDesc(Pageable pageable, TABLE_TYPE Type);
 
     List<TableRecord> findAllByOrdersDataId(String orderId);
+
+    List<TableRecord> findAllByOrdersDataIdAndCreatedDateBetween(String orderId, Instant startDate, Instant endDate);
 }

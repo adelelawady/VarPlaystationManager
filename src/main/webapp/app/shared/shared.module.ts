@@ -19,6 +19,7 @@ import { SidebarAccordionModule } from 'ng-sidebar-accordion';
 import { TableComponentComponent } from './table-component/table-component.component';
 import { TablesTapComponentComponent } from '../pages/components/tables-tap-component/tables-tap-component.component';
 import { CheckoutComponentComponent } from './checkout-component/checkout-component.component';
+import { LocalizedDatePipe } from './utils/localized-date.pipe';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -40,6 +41,7 @@ import { CheckoutComponentComponent } from './checkout-component/checkout-compon
     TableComponentComponent,
     TablesTapComponentComponent,
     CheckoutComponentComponent,
+    LocalizedDatePipe,
   ],
   exports: [
     SharedLibsModule,
@@ -61,7 +63,8 @@ import { CheckoutComponentComponent } from './checkout-component/checkout-compon
     TableComponentComponent,
     TablesTapComponentComponent,
     CheckoutComponentComponent,
+    LocalizedDatePipe,
   ],
-  providers: [DevicePricePipe],
+  providers: [DevicePricePipe, LocalizedDatePipe],
 })
 export class SharedModule {}

@@ -5,13 +5,16 @@ import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Record;
 import com.mycompany.myapp.repository.ProductRepository;
 import com.mycompany.myapp.service.ProductService;
+import com.mycompany.myapp.service.dto.FromToDTO;
 import com.mycompany.myapp.service.dto.ProductDTO;
 import com.mycompany.myapp.service.dto.ProductStaticsDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -263,13 +267,24 @@ public class ProductResource {
         return ResponseEntity.ok(prodList);
     }
 
-    @GetMapping("/products/products-stats/{sort}")
-    public ResponseEntity<List<ProductStaticsDTO>> findProduct(Pageable pageable, @PathVariable int sort) {
+    @PostMapping("/products/products-stats/{sort}")
+    public ResponseEntity<List<ProductStaticsDTO>> findProduct(
+        Pageable pageable,
+        @PathVariable int sort,
+        @RequestBody FromToDTO fromToDto
+    ) {
+        System.out.println("from : " + fromToDto.getFrom());
+        System.out.println("to : " + fromToDto.getTo());
+
         List<ProductStaticsDTO> x = productRepository
             .findAll()
             .stream()
             .map(prod -> {
-                return this.productService.getProductTotalUses(prod.getId());
+                return this.productService.getProductTotalUses(
+                        prod.getId(),
+                        fromToDto.getFrom().toInstant(),
+                        fromToDto.getTo().toInstant()
+                    );
             })
             .collect(Collectors.toList());
 

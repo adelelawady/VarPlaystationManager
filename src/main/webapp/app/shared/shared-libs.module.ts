@@ -6,6 +6,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
+import { DxDateBoxModule, DxLoadIndicatorModule } from 'devextreme-angular';
 
 @NgModule({
   exports: [
@@ -17,6 +18,8 @@ import { RouterModule } from '@angular/router';
     FontAwesomeModule,
     ReactiveFormsModule,
     TranslateModule,
+    DxDateBoxModule,
+    DxLoadIndicatorModule,
   ],
 })
 export class SharedLibsModule {}
