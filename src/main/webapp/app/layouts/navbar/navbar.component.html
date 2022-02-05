@@ -27,7 +27,7 @@
   </a>
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li style="display: none" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a
           class="nav-link btn border btn-primary text-white text-center badge px-3"
           (click)="!isFullScreen ? openFullscreen() : closeFullscreen()"

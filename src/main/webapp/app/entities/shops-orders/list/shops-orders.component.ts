@@ -17,7 +17,12 @@ export class ShopsOrdersComponent implements OnInit {
   constructor(protected shopsOrdersService: ShopsOrdersService, protected modalService: NgbModal) {}
   formateMoney(r: any): any {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return (
+      'EGP ' +
+      Number(r)
+        .toFixed(2)
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    );
   }
   loadAll(): void {
     this.isLoading = true;

@@ -169,7 +169,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   formateMoney(r: any): any {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return (
+      'EGP ' +
+      Number(r)
+        .toFixed(2)
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    );
   }
   ngOnDestroy(): void {
     this.destroy$.next();

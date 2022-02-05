@@ -157,15 +157,7 @@ public class DeviceServiceImpl implements DeviceService {
         return this.toDeviceSession(deviceId);
     }
 
-    Record stopSession(Device dev, Session currentActiveSession, SessionEndDTO sessionEndDto, boolean save) {
-        currentActiveSession.setActive(false);
-        sessionService.save(currentActiveSession);
-
-        Record rec = new Record();
-        rec.setDevice(dev);
-        rec.setEnd(Instant.now());
-        rec.setTotalPriceUser(sessionEndDto.getTotalPrice());
-
+    private void calculateRecoredTimePrice(Device dev, Record rec, Session currentActiveSession) {
         Double totalPriceCalculatedTime;
 
         Duration d = Duration.between(currentActiveSession.getStart(), Instant.now());
@@ -181,21 +173,20 @@ public class DeviceServiceImpl implements DeviceService {
 
         totalPriceCalculatedTime = (double) Math.round(totalPriceCalculatedTime);
 
-        // Double totalOrderPriceAfterDiscount
-
         rec.setTotalPriceTime(totalPriceCalculatedTime);
+    }
 
-        rec.setTotalPriceOrders(currentActiveSession.getOrdersPrice());
-        rec.setMulti(currentActiveSession.isMulti());
+    private void calculateRecoredNetPrice(Record rec) {
+        Double totalNetPriceTimeCalculated = rec.getTotalPriceTime() + rec.getTotalPriceOrders() + rec.getPreviousSessionsTotalPrice();
 
+        // RECORED NET PRICE
+        rec.setTotalNetPriceCalculated(totalNetPriceTimeCalculated);
+    }
+
+    private void calculateRecoredTotalPriceDiscount(Record rec, Session currentActiveSession, SessionEndDTO sessionEndDto) {
         Double totalPriceCalculated = 0.0;
         Double totalPriceOrdersCalculated = 0.0;
         Double totalPriceTimeCalculated = 0.0;
-
-        Double totalNetPriceTimeCalculated =
-            totalPriceCalculatedTime + currentActiveSession.getOrdersPrice() + currentActiveSession.getPreviousSessionsTotalPrice();
-
-        rec.setTotalNetPriceCalculated(totalNetPriceTimeCalculated);
 
         if (sessionEndDto.getOrdersDiscount() > 0 && sessionEndDto.getOrdersDiscount() < 100) {
             totalPriceOrdersCalculated = (double) Math.round((100 - sessionEndDto.getOrdersDiscount()) * rec.getTotalPriceOrders() / 100);
@@ -214,30 +205,68 @@ public class DeviceServiceImpl implements DeviceService {
         totalPriceCalculated = totalPriceOrdersCalculated + totalPriceTimeCalculated;
 
         totalPriceCalculated += currentActiveSession.getPreviousSessionsTotalPrice();
+        // RECORED TOTALPRICE
+        rec.setTotalPrice(totalPriceCalculated);
 
+        // RECORED Discount price
         if (
             (sessionEndDto.getOrdersDiscount() > 0 && sessionEndDto.getOrdersDiscount() < 100) ||
             (sessionEndDto.getTimeDiscount() > 0 && sessionEndDto.getTimeDiscount() < 100)
         ) {
-            rec.setTotalDiscountPrice(totalNetPriceTimeCalculated - totalPriceCalculated);
+            rec.setTotalDiscountPrice(rec.getTotalNetPriceCalculated() - rec.getTotalPrice());
         } else {
             rec.setTotalDiscountPrice(0.0);
         }
+    }
 
-        rec.setTotalPrice(totalPriceCalculated);
+    Record stopSession(Device dev, Session currentActiveSession, SessionEndDTO sessionEndDto, boolean save) {
+        // STOP DEVICE ACTIVE SESSION AND SAVE
+        currentActiveSession.setActive(false);
+        sessionService.save(currentActiveSession);
 
+        // CREATE NEW RECORED
+        Record rec = new Record();
+        // RECORED -- DEVICE
+        rec.setDevice(dev);
+        // RECORED -- END
+        rec.setEnd(Instant.now());
+
+        // RECORED -- USER INPUT PRICE
+        rec.setTotalPriceUser(sessionEndDto.getTotalPrice());
+
+        // DEVICE TIME
+        calculateRecoredTimePrice(dev, rec, currentActiveSession);
+
+        // DEVICE ORDERS
+        rec.setTotalPriceOrders(currentActiveSession.getOrdersPrice());
+
+        // DEVICE MULTI
+        rec.setMulti(currentActiveSession.isMulti());
+
+        // RECORED NET PRICE
+        calculateRecoredNetPrice(rec);
+
+        //RECORED TOTALPRICE & DISCOUNT
+        calculateRecoredTotalPriceDiscount(rec, currentActiveSession, sessionEndDto);
+
+        // RECORED DURATION
+        Duration d = Duration.between(currentActiveSession.getStart(), Instant.now());
         rec.setDuration(d);
+
+        // RECORED ORDERS
         if (currentActiveSession.getOrders() != null && !currentActiveSession.getOrders().isEmpty()) {
             rec.setOrdersQuantity(currentActiveSession.getOrdersQuantity());
             rec.setOrdersData(currentActiveSession.getOrders());
         }
-
+        // RECORED START
         rec.setStart(currentActiveSession.getStart());
+
+        // RECORED PreviousSessions
+        if (!currentActiveSession.getPreviousSessions().isEmpty()) {
+            rec.setPreviousSessionsTotalPrice(currentActiveSession.getPreviousSessionsTotalPrice());
+        }
+
         if (save) {
-            if (!currentActiveSession.getPreviousSessions().isEmpty()) {
-                rec.setPreviousSessionsTotalPrice(currentActiveSession.getPreviousSessionsTotalPrice());
-                // rec.setPreviousSessions(currentActiveSession.getPreviousSessions());
-            }
             return recordService.save(rec);
         } else {
             return rec;

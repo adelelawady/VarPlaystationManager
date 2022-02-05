@@ -27,6 +27,7 @@
       </tr>
     </tbody>
   </table>
-
-  <button *ngIf="sheft" class="btn btn-danger" (click)="stopSheft()">انهاء الشيفت</button>
+  <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
+    <button *ngIf="sheft" class="btn btn-danger" (click)="stopSheft()">انهاء الشيفت</button>
+  </div>
 </div>
