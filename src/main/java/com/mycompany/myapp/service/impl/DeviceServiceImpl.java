@@ -230,6 +230,15 @@ public class DeviceServiceImpl implements DeviceService {
         rec.setDevice(dev);
         // RECORED -- END
         rec.setEnd(Instant.now());
+        // RECORED START
+        rec.setStart(currentActiveSession.getStart());
+
+        // RECORED DURATION
+        Duration d = Duration.between(currentActiveSession.getStart(), Instant.now());
+        rec.setDuration(d);
+
+        // DEVICE MULTI
+        rec.setMulti(currentActiveSession.isMulti());
 
         // RECORED -- USER INPUT PRICE
         rec.setTotalPriceUser(sessionEndDto.getTotalPrice());
@@ -240,30 +249,31 @@ public class DeviceServiceImpl implements DeviceService {
         // DEVICE ORDERS
         rec.setTotalPriceOrders(currentActiveSession.getOrdersPrice());
 
-        // DEVICE MULTI
-        rec.setMulti(currentActiveSession.isMulti());
-
         // RECORED NET PRICE
         calculateRecoredNetPrice(rec);
 
-        //RECORED TOTALPRICE & DISCOUNT
+        // RECORED TOTALPRICE & DISCOUNT
         calculateRecoredTotalPriceDiscount(rec, currentActiveSession, sessionEndDto);
-
-        // RECORED DURATION
-        Duration d = Duration.between(currentActiveSession.getStart(), Instant.now());
-        rec.setDuration(d);
 
         // RECORED ORDERS
         if (currentActiveSession.getOrders() != null && !currentActiveSession.getOrders().isEmpty()) {
             rec.setOrdersQuantity(currentActiveSession.getOrdersQuantity());
             rec.setOrdersData(currentActiveSession.getOrders());
         }
-        // RECORED START
-        rec.setStart(currentActiveSession.getStart());
 
         // RECORED PreviousSessions
         if (!currentActiveSession.getPreviousSessions().isEmpty()) {
             rec.setPreviousSessionsTotalPrice(currentActiveSession.getPreviousSessionsTotalPrice());
+            rec.setPreviousSessions(
+                currentActiveSession
+                    .getPreviousSessions()
+                    .stream()
+                    .map(pre -> {
+                        pre.setPreviousSessions(null);
+                        return pre;
+                    })
+                    .collect(Collectors.toList())
+            );
         }
 
         if (save) {
@@ -346,10 +356,16 @@ public class DeviceServiceImpl implements DeviceService {
                     if (sessionHasItem) {
                         int currentvalue = savedSession.getOrdersQuantity().get(productId);
                         if (currentvalue == 0) {
-                            savedSession.removeOrders(product.get());
+                            boolean sessionPaidHasItem = savedSession.getPaidOrdersQuantity().containsKey(productId);
+                            if (!sessionPaidHasItem) {
+                                savedSession.removeOrders(product.get());
+                            }
                         }
                     } else {
-                        savedSession.removeOrders(product.get());
+                        boolean sessionPaidHasItem = savedSession.getPaidOrdersQuantity().containsKey(productId);
+                        if (!sessionPaidHasItem) {
+                            savedSession.removeOrders(product.get());
+                        }
                     }
                 } catch (Exception e) {}
 
@@ -480,5 +496,88 @@ public class DeviceServiceImpl implements DeviceService {
             .map(Optional::get)
             .map(deviceMapper::toDto)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public DeviceSessionDTO payProductfromDeviceSession(String deviceId, String productId) {
+        Optional<Device> devFrom = deviceRepository.findById(deviceId);
+        if (!devFrom.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+        Session sess = getDeviceActiveSession(deviceId);
+
+        if (sess != null) {
+            Optional<Product> product = productService.findOneDomain(productId);
+            if (product.isPresent()) {
+                try {
+                    boolean sessionOrdersHasItem = sess.getOrdersQuantity().containsKey(productId);
+                    boolean sessionPaidOrdersHasItem = sess.getPaidOrdersQuantity().containsKey(productId);
+                    int currentOrdersvalue = sess.getOrdersQuantity().get(productId);
+
+                    if (sessionOrdersHasItem && currentOrdersvalue > 0) {
+                        if (sessionPaidOrdersHasItem) {
+                            // update
+                            int currentPaidOrdersvalue = sess.getPaidOrdersQuantity().get(productId);
+
+                            if (currentOrdersvalue > currentPaidOrdersvalue) {
+                                sess.getPaidOrdersQuantity().put(productId, (currentPaidOrdersvalue + 1));
+                            }
+                        } else {
+                            // add
+
+                            if (currentOrdersvalue >= 1) {
+                                sess.getPaidOrdersQuantity().put(productId, 1);
+                            }
+                        }
+                        Session sessSaved = sessionService.save(sess);
+                        sessionService.calculateDeviceSessionOrderesPrice(sessSaved);
+                        // this.deleteProductFromDeviceSession(deviceId, productId);
+
+                    }
+                } catch (Exception e) {}
+            }
+        }
+        return this.toDeviceSession(deviceId);
+    }
+
+    @Override
+    public DeviceSessionDTO unPayProductFromDeviceSession(String deviceId, String productId) {
+        Optional<Device> devFrom = deviceRepository.findById(deviceId);
+        if (!devFrom.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+        Session sess = getDeviceActiveSession(deviceId);
+
+        if (sess != null) {
+            Optional<Product> product = productService.findOneDomain(productId);
+            if (product.isPresent()) {
+                try {
+                    boolean sessionOrdersHasItem = sess.getOrdersQuantity().containsKey(productId);
+                    boolean sessionPaidOrdersHasItem = sess.getPaidOrdersQuantity().containsKey(productId);
+                    int currentOrdersvalue = sess.getOrdersQuantity().get(productId);
+                    int currentPaidOrdersvalue = sess.getPaidOrdersQuantity().get(productId);
+
+                    if (sessionPaidOrdersHasItem && currentPaidOrdersvalue > 0) {
+                        // update
+
+                        if (currentPaidOrdersvalue <= 1) {
+                            if (currentOrdersvalue >= currentPaidOrdersvalue) {
+                                sess.getPaidOrdersQuantity().remove(productId);
+                            }
+                        } else {
+                            if (currentOrdersvalue >= currentPaidOrdersvalue) {
+                                sess.getPaidOrdersQuantity().put(productId, (currentPaidOrdersvalue - 1));
+                            }
+                        }
+
+                        Session sessSaved = sessionService.save(sess);
+                        //sessionService.calculateDeviceSessionOrderesPrice(sessSaved);
+                        // this.addProductToDeviceSession(deviceId, productId);
+
+                    }
+                } catch (Exception e) {}
+            }
+        }
+        return this.toDeviceSession(deviceId);
     }
 }

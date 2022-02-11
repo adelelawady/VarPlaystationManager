@@ -205,6 +205,7 @@ public class RecordServiceImpl implements RecordService {
                 res.setTotalPriceTime(res.getTotalPriceTime() + reco.getTotalPriceTime());
                 res.setTotalHours(res.getTotalHours() + reco.getDuration().toHoursPart());
                 res.setTotalMinutes(res.getTotalMinutes() + reco.getDuration().toMinutesPart());
+                res.setPreviousSessionsTotalPrice(reco.getPreviousSessionsTotalPrice());
             }
         }
 

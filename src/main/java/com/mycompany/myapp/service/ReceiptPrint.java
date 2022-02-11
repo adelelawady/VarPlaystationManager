@@ -43,7 +43,7 @@ public class ReceiptPrint implements Printable {
             return Printable.NO_SUCH_PAGE;
         }
 
-        g2d.drawString(String.format("%-25s", "	-   VAR  -"), 1, line);
+        g2d.drawString(String.format("%-25s", "	-   VAR   -"), 1, line);
         line += 13;
         int imagewidth = 160;
         int imageheight = 50;
@@ -132,6 +132,18 @@ public class ReceiptPrint implements Printable {
                         );
                         cH += 15;
 
+                        if (currentRecord.getPreviousSessionsTotalPrice() > 0) {
+                            g2d.drawString(
+                                String.format(
+                                    "%-25s",
+                                    "previous devices :        " + currentRecord.getPreviousSessionsTotalPrice().toString() + " LE"
+                                ),
+                                1,
+                                cH
+                            );
+                            cH += 15;
+                        }
+
                         g2d.drawString(
                             String.format("%-25s", "total price :        " + currentRecord.getTotalPriceUser().toString() + " LE"),
                             1,
@@ -148,6 +160,15 @@ public class ReceiptPrint implements Printable {
             if (currentRecord.getDuration().toMinutes() > 0) {
                 g2d.drawString(
                     String.format("%-25s", "Time price :         " + currentRecord.getTotalPriceTime().toString() + " LE"),
+                    1,
+                    line
+                );
+                line += 15;
+            }
+
+            if (currentRecord.getPreviousSessionsTotalPrice() > 0) {
+                g2d.drawString(
+                    String.format("%-25s", "previous devices :        " + currentRecord.getPreviousSessionsTotalPrice().toString() + " LE"),
                     1,
                     line
                 );

@@ -41,6 +41,8 @@ public class RecordsFilterDTO implements Serializable {
 
     private Double timeDiscount = 0.0;
 
+    private Double previousSessionsTotalPrice = 0.0;
+
     public Double getOrdersDiscount() {
         return ordersDiscount;
     }
@@ -113,5 +115,13 @@ public class RecordsFilterDTO implements Serializable {
 
     public void setResultList(Page<RecordDTO> resultList) {
         this.resultList = resultList;
+    }
+
+    public Double getPreviousSessionsTotalPrice() {
+        return previousSessionsTotalPrice;
+    }
+
+    public void setPreviousSessionsTotalPrice(Double previousSessionsTotalPrice) {
+        this.previousSessionsTotalPrice = previousSessionsTotalPrice;
     }
 }

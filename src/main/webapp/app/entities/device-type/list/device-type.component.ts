@@ -99,7 +99,7 @@ export class DeviceTypeComponent implements OnInit {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     if (navigate) {
-      this.router.navigate(['/device-type'], {
+      this.router.navigate(['admin/entities/device-type'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

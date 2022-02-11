@@ -140,12 +140,25 @@
 
         <div class="col-lg-4 py-5 col-sm-12">
           <div class="card p-3" *ngIf="selectedDevice">
-            <h5 class="card-title">
-              {{ selectedDevice.name }}
-            </h5>
+            <h3 class="card-title">
+              <span>
+                <i class="fa fa-tv" aria-hidden="true"></i> <a href="#" class="card-link"> {{ selectedDevice.name }}</a></span
+              >
+            </h3>
 
-            <div class="card-body">
-              <div class="row" *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.orders">
+            <hr />
+
+            <div
+              class="card-body"
+              *ngIf="
+                selectedDevice &&
+                selectedDevice.session &&
+                selectedDevice.session.ordersQuantity &&
+                toObjectKeys(selectedDevice.session.ordersQuantity).length > 0
+              "
+            >
+              <h5 class="card-title">طلبات</h5>
+              <div class="row">
                 <div class="table-responsive" id="entities">
                   <table class="table" aria-describedby="page-heading">
                     <thead>
@@ -160,14 +173,74 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" data-cy="entityTable">
+                        <div style="display: contents" *ngIf="selectedDevice.session.ordersQuantity[prod.id]">
+                          <td style="word-break: break-word" class="text-center">
+                            <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
+                          </td>
+
+                          <td>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                selectedDevice.session.ordersQuantity[prod.id] ? selectedDevice.session.ordersQuantity[prod.id] : '1'
+                              }}</span>
+                            </span>
+                          </td>
+
+                          <td>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                          <td>
+                            <dx-button-group
+                              [items]="ordersButtons"
+                              keyExpr="style"
+                              stylingMode="text"
+                              selectionMode="none"
+                              (onItemClick)="orderItemClick($event, prod.id)"
+                            >
+                            </dx-button-group>
+                          </td>
+                        </div>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!--
+
+
+            <div class="card-body" *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.paidOrdersQuantity
+            && toObjectKeys(selectedDevice.session.paidOrdersQuantity).length > 0">
+              <h5 class="card-title">
+                طلبات مدفوعة
+              </h5>
+              <div class="row" >
+                <div class="table-responsive" id="entities">
+                  <table class="table" aria-describedby="page-heading">
+                    <thead>
+                      <tr style="display: none">
+                        <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
+
+                        <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                        <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr  *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" data-cy="entityTable">
+                        <div style="display: contents" *ngIf="selectedDevice.session.paidOrdersQuantity[prod.id]">
+
+
                         <td style="word-break: break-word" class="text-center">
-                          <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
+                          <h6 style="word-break: keep-all;    text-decoration: line-through;" class="text-primary">{{ prod.name }}</h6>
                         </td>
 
                         <td>
                           <span style="font-size: large" class="float-left text-primary col-xs p-0">
                             <span class="badge badge-primary">{{
-                              selectedDevice.session.ordersQuantity[prod.id] ? selectedDevice.session.ordersQuantity[prod.id] : '1'
+                              selectedDevice.session.paidOrdersQuantity[prod.id] ? selectedDevice.session.paidOrdersQuantity[prod.id] : '1'
                             }}</span>
                           </span>
                         </td>
@@ -176,17 +249,24 @@
                           <small class="text-muted"> {{ prod.price }}LE</small>
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-danger" (click)="deleteProductFromSelectedDevice(prod.id)">
-                            <i class="fa fa-minus"></i>
-                          </button>
-                        </td>
+                        <dx-button-group
+                        [items]="paidOrdersButtons"
+                        keyExpr="style"
+                        stylingMode="text"
+                        selectionMode="none"
+
+                        (onItemClick)="orderItemClick($event,prod.id)"
+                      >
+                      </dx-button-group>
+                    </td>
+                      </div>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
-          </div>
+          --></div>
         </div>
       </div>
     </div>

@@ -47,7 +47,7 @@
           </td>
           <td>{{ takeaway.product.category ? takeaway.product.category.name : '' }}</td>
           <td>{{ formateMoney(takeaway.totalPrice) }}</td>
-          <td>{{ takeaway.createdDate | date: 'short' }}</td>
+          <td>{{ takeaway.createdDate | localizedDate }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button type="submit" (click)="delete(takeaway)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">

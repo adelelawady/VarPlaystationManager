@@ -7,9 +7,10 @@ import { HomeComponent } from './home.component';
 import { DxButtonModule } from 'devextreme-angular';
 import { DxTextBoxModule, DxTextAreaModule } from 'devextreme-angular';
 import { DxDateBoxModule } from 'devextreme-angular';
+import { DxButtonGroupModule } from 'devextreme-angular';
 
 @NgModule({
-  imports: [SharedModule, DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, RouterModule.forChild([HOME_ROUTE])],
+  imports: [SharedModule, DxButtonGroupModule, DxDateBoxModule, DxTextBoxModule, DxTextAreaModule, RouterModule.forChild([HOME_ROUTE])],
   declarations: [HomeComponent],
 })
 export class HomeModule {}

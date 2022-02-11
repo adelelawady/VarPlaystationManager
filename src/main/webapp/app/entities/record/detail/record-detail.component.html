@@ -16,11 +16,11 @@
         </dd>
         <dt><span jhiTranslate="erApp.record.start">Start</span></dt>
         <dd>
-          <span>{{ record.start | date: 'medium' }}</span>
+          <span>{{ record.start | localizedDate }}</span>
         </dd>
         <dt><span jhiTranslate="erApp.record.end">End</span></dt>
         <dd>
-          <span>{{ record.end | date: 'medium' }}</span>
+          <span>{{ record.end | localizedDate }}</span>
         </dd>
         <dt><span>المدة</span></dt>
         <dd>
@@ -51,6 +51,11 @@
         <dd>
           <span>{{ formateMoney(record.totalPriceTime + record.totalPriceOrders) }} </span>
         </dd>
+        <dt><span>حساب اجهزة سابقة</span></dt>
+        <dd>
+          <span>{{ formateMoney(record.previousSessionsTotalPrice) }}</span>
+        </dd>
+
         <dt><span jhiTranslate="erApp.record.totalPrice">Total Price</span></dt>
         <dd>
           <span>{{ formateMoney(record.totalPrice) }}</span>
@@ -74,7 +79,7 @@
     </div>
   </div>
   <div class="col-4">
-    <div class="card-body">
+    <div class="card-body" *ngIf="record.ordersData && record.ordersData.length > 0">
       <div class="row" *ngIf="record">
         <h5 class="card-title my-2">الطلبات</h5>
 
@@ -107,6 +112,34 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body" *ngIf="record.previousSessions && record.previousSessions.length > 0">
+      <div class="row" *ngIf="record">
+        <h5 class="card-title my-2">اجهزة اخري / تحويل اجهزة</h5>
+        <div *ngIf="record.previousSessions && record.previousSessions.length > 0" class="col-12">
+          <div class="my-2 row">
+            <span *ngFor="let sess of record.previousSessions" class="badge my-2 col-12 border pt-2">
+              <h6 style="text-align: left" class="mx-1 col-auto text-black p-0">
+                {{ sess.device.name }}
+              </h6>
+              <span>
+                <label class="badge badge-success col-xs float-left"
+                  >{{ sess.hours + 'h ' + sess.minutes + ' m' }}
+
+                  <span *ngIf="sess.multi">
+                    <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
+                  </span>
+                </label>
+                <a href="#" class="card-link float-right m-0 pr-2 col-auto p-1" style="border: 1px darkblue dotted"
+                  >EGP {{ sess.totalPriceTime }}
+                </a>
+              </span>
+            </span>
+            <small style="text-align: right; font-weight: 900">EGP {{ record.previousSessionsTotalPrice }} : اجهزة سابقة </small>
+          </div>
         </div>
       </div>
     </div>

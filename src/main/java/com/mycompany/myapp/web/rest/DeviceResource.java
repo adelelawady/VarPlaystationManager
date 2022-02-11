@@ -246,4 +246,16 @@ public class DeviceResource {
         DeviceSessionDTO listDevices = deviceService.deleteProductFromDeviceSession(deviceId, productId);
         return ResponseEntity.ok(listDevices);
     }
+
+    @GetMapping("/device/{deviceId}/session/product/{productId}/pay")
+    public ResponseEntity<DeviceSessionDTO> payProductToDeviceSession(@PathVariable String deviceId, @PathVariable String productId) {
+        DeviceSessionDTO listDevices = deviceService.payProductfromDeviceSession(deviceId, productId);
+        return ResponseEntity.ok(listDevices);
+    }
+
+    @GetMapping("/device/{deviceId}/session/product/{productId}/unpay")
+    public ResponseEntity<DeviceSessionDTO> unPayProductToDeviceSession(@PathVariable String deviceId, @PathVariable String productId) {
+        DeviceSessionDTO listDevices = deviceService.unPayProductFromDeviceSession(deviceId, productId);
+        return ResponseEntity.ok(listDevices);
+    }
 }

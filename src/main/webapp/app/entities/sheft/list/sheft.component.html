@@ -50,9 +50,9 @@
             <a [routerLink]="['/admin/entities/shefts', sheft.id, 'view']">{{ sheft.id }}</a>
           </td>
           <td>{{ sheft.user?.firstName }}</td>
-          <td>{{ sheft.start | formatMediumDatetime }}</td>
+          <td>{{ sheft.start | localizedDate }}</td>
           <td>
-            {{ sheft.end ? (sheft.end | formatMediumDatetime) : '' }}
+            {{ sheft.end ? (sheft.end | localizedDate) : '' }}
 
             <span *ngIf="!sheft.end" class="badge badge-success">يعمل الان</span>
           </td>
