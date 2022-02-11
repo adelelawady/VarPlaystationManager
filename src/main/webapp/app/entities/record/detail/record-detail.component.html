@@ -9,64 +9,158 @@
 
       <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="erApp.record.id">Id</span></dt>
-        <dd>
-          <span>{{ record.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="erApp.record.start">Start</span></dt>
-        <dd>
-          <span>{{ record.start | date: 'medium' }}</span>
-        </dd>
-        <dt><span jhiTranslate="erApp.record.end">End</span></dt>
-        <dd>
-          <span>{{ record.end | date: 'medium' }}</span>
-        </dd>
-        <dt><span>المدة</span></dt>
-        <dd>
-          <span>{{ record.hours + ' h ' + record.minutes + ' m' }}</span>
-        </dd>
+      <div class="row">
+        <div class="col-md-12">
+          <div style="direction: rtl; font-size: 27px !important" class="form">
+            <div class="dx-fieldset">
+              <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">اساسي</div>
 
-        <dt><span>سعر الطلبات</span></dt>
-        <dd>
-          <span>{{ formateMoney(record.totalPriceOrders) }}</span>
-        </dd>
+              <div class="dx-field">
+                <div class="dx-field-value-static">
+                  <span jhiTranslate="erApp.record.id">Id</span>
+                </div>
+                <div class="dx-field-label">
+                  <span>{{ record.id }}</span>
+                </div>
+              </div>
 
-        <dt><span>سعر الوقت</span></dt>
-        <dd>
-          <span>{{ formateMoney(record.totalPriceTime) }}</span>
-        </dd>
+              <div class="dx-field">
+                <div class="dx-field-value-static">
+                  <span jhiTranslate="erApp.record.device">Device</span>
+                </div>
+                <div class="dx-field-label">
+                  <a *ngIf="record.device" [routerLink]="['/admin/entities/device', record.device?.id, 'view']">{{
+                    record.device?.name
+                  }}</a>
+                </div>
+              </div>
+              <div class="dx-field">
+                <div class="dx-field-value-static">
+                  <dt><span jhiTranslate="erApp.record.start">Start</span></dt>
+                </div>
+                <div class="dx-field-label">
+                  <span>{{ record.start | localizedDate }}</span>
+                </div>
+              </div>
 
-        <dt><span>خصم الطلبات</span></dt>
-        <dd>
-          <span>{{ record.ordersDiscount }}%</span>
-        </dd>
+              <div class="dx-field">
+                <div class="dx-field-value-static">
+                  <dt><span jhiTranslate="erApp.record.end">End</span></dt>
+                </div>
+                <div class="dx-field-label">
+                  <span>{{ record.end | localizedDate }}</span>
+                </div>
+              </div>
 
-        <dt><span>خصم الوقت</span></dt>
-        <dd>
-          <span>{{ record.timeDiscount }}%</span>
-        </dd>
+              <div class="dx-field">
+                <dx-form id="form" [formData]="record">
+                  <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                    <dxi-item itemType="group">
+                      <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">الوقت</div>
 
-        <dt><span>السعر قبل الخصم</span></dt>
-        <dd>
-          <span>{{ formateMoney(record.totalPriceTime + record.totalPriceOrders) }} </span>
-        </dd>
-        <dt><span jhiTranslate="erApp.record.totalPrice">Total Price</span></dt>
-        <dd>
-          <span>{{ formateMoney(record.totalPrice) }}</span>
-        </dd>
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>المدة</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ record.hours + ' h ' + record.minutes + ' m' }}</span>
+                        </div>
+                      </div>
 
-        <dt><span>سعر المستخدم</span></dt>
-        <dd>
-          <span>{{ formateMoney(record.totalPriceUser) }}</span>
-        </dd>
-        <dt><span jhiTranslate="erApp.record.device">Device</span></dt>
-        <dd>
-          <div *ngIf="record.device">
-            <a [routerLink]="['/admin/entities/device', record.device?.id, 'view']">{{ record.device?.name }}</a>
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>خصم الوقت</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ record.timeDiscount }}%</span>
+                        </div>
+                      </div>
+
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>سعر الوقت</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ formateMoney(record.totalPriceTime) }}</span>
+                        </div>
+                      </div>
+                    </dxi-item>
+                    <dxi-item itemType="group">
+                      <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">الطبات</div>
+
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>خصم الطلبات</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ record.ordersDiscount }}%</span>
+                        </div>
+                      </div>
+
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>سعر الطلبات</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ formateMoney(record.totalPriceOrders) }}</span>
+                        </div>
+                      </div>
+                    </dxi-item>
+                  </dxi-item>
+                </dx-form>
+              </div>
+
+              <div class="dx-field">
+                <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">اجمالي</div>
+
+                <dx-form id="form" [formData]="record">
+                  <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                    <dxi-item itemType="group">
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>السعر قبل الخصم</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ formateMoney(record.totalPriceTime + record.totalPriceOrders) }} </span>
+                        </div>
+                      </div>
+
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>حساب اجهزة سابقة</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ formateMoney(record.previousSessionsTotalPrice) }}</span>
+                        </div>
+                      </div>
+                    </dxi-item>
+
+                    <dxi-item itemType="group">
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span jhiTranslate="erApp.record.totalPrice">Total Price</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ formateMoney(record.totalPrice) }}</span>
+                        </div>
+                      </div>
+
+                      <div class="dx-field">
+                        <div class="dx-field-value-static">
+                          <dt><span>سعر المستخدم</span></dt>
+                        </div>
+                        <div class="dx-field-label">
+                          <span>{{ formateMoney(record.totalPriceUser) }}</span>
+                        </div>
+                      </div>
+                    </dxi-item>
+                  </dxi-item>
+                </dx-form>
+              </div>
+            </div>
           </div>
-        </dd>
-      </dl>
+        </div>
+      </div>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
@@ -74,7 +168,7 @@
     </div>
   </div>
   <div class="col-4">
-    <div class="card-body">
+    <div class="card-body" *ngIf="record.ordersData && record.ordersData.length > 0">
       <div class="row" *ngIf="record">
         <h5 class="card-title my-2">الطلبات</h5>
 
@@ -110,5 +204,39 @@
         </div>
       </div>
     </div>
+
+    <div class="card-body" *ngIf="record.previousSessions && record.previousSessions.length > 0">
+      <div class="row" *ngIf="record">
+        <h5 class="card-title my-2">اجهزة اخري / تحويل اجهزة</h5>
+        <div *ngIf="record.previousSessions && record.previousSessions.length > 0" class="col-12">
+          <div class="my-2 row">
+            <span *ngFor="let sess of record.previousSessions" class="badge my-2 col-12 border pt-2">
+              <h6 style="text-align: left" class="mx-1 col-auto text-black p-0">
+                {{ sess.device.name }}
+              </h6>
+              <span>
+                <label class="badge badge-success col-xs float-left"
+                  >{{ sess.hours + 'h ' + sess.minutes + ' m' }}
+
+                  <span *ngIf="sess.multi">
+                    <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
+                  </span>
+                </label>
+                <a href="#" class="card-link float-right m-0 pr-2 col-auto p-1" style="border: 1px darkblue dotted"
+                  >EGP {{ sess.totalPriceTime }}
+                </a>
+              </span>
+            </span>
+            <small style="text-align: right; font-weight: 900">EGP {{ record.previousSessionsTotalPrice }} : اجهزة سابقة </small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<style>
+  .dx-field-label,
+  .dx-field-value-static {
+    font-size: 20px !important;
+  }
+</style>

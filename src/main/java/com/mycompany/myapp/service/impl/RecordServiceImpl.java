@@ -205,6 +205,7 @@ public class RecordServiceImpl implements RecordService {
                 res.setTotalPriceTime(res.getTotalPriceTime() + reco.getTotalPriceTime());
                 res.setTotalHours(res.getTotalHours() + reco.getDuration().toHoursPart());
                 res.setTotalMinutes(res.getTotalMinutes() + reco.getDuration().toMinutesPart());
+                res.setPreviousSessionsTotalPrice(reco.getPreviousSessionsTotalPrice());
             }
         }
 
@@ -230,6 +231,7 @@ public class RecordServiceImpl implements RecordService {
 
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setPrintable(printable, ps.getPageFormat(pj));
+
         try {
             pj.print();
         } catch (PrinterException ex) {

@@ -46,7 +46,7 @@
           </td>
           <td>{{ shopsOrders.product.category ? shopsOrders.product.category.name : '' }}</td>
           <td>{{ formateMoney(shopsOrders.totalPrice) }}</td>
-          <td>{{ shopsOrders.createdDate | date: 'short' }}</td>
+          <td>{{ shopsOrders.createdDate | localizedDate }}</td>
 
           <td class="text-right">
             <div class="btn-group">

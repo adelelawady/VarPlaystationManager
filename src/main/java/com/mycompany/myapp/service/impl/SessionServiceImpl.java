@@ -152,15 +152,23 @@ public class SessionServiceImpl implements SessionService {
         Double totalCalculationsOfOrders = 0.0;
         for (Product order : session.getOrders()) {
             int prodValue;
+            int paiedProdValue;
             if (session.getOrdersQuantity().containsKey(order.getId())) {
                 prodValue = session.getOrdersQuantity().get(order.getId());
             } else {
-                prodValue = 1;
+                prodValue = 0;
+            }
+
+            if (session.getPaidOrdersQuantity().containsKey(order.getId())) {
+                paiedProdValue = session.getPaidOrdersQuantity().get(order.getId());
+            } else {
+                paiedProdValue = 0;
             }
 
             Double prodPrice = order.getPrice();
             Double totalProdPrice = Double.valueOf(prodValue) * prodPrice;
-            totalCalculationsOfOrders += totalProdPrice;
+            Double totalProdPaiedPrice = Double.valueOf(paiedProdValue) * prodPrice;
+            totalCalculationsOfOrders += (totalProdPrice - totalProdPaiedPrice);
         }
         session.setOrdersPrice(totalCalculationsOfOrders);
         sessionRepository.save(session);

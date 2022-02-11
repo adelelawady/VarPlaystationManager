@@ -8,10 +8,10 @@ const takeawayRoute: Routes = [
   {
     path: '',
     component: SingleSheftReportComponent,
-    canActivate: [UserRouteAccessService],
+    // canActivate: [UserRouteAccessService],
     data: {
       pageTitle: 'global.title',
-      authorities: ['ROLE_ADMIN'],
+      // authorities: ['ROLE_ADMIN'],
     },
   },
 ];

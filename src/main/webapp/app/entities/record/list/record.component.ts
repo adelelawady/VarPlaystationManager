@@ -85,7 +85,12 @@ export class RecordComponent implements OnInit {
   }
   formateMoney(r: any): any {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return (
+      'EGP ' +
+      Number(r)
+        .toFixed(2)
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    );
   }
 
   sort(): string[] {

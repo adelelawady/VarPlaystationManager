@@ -30,7 +30,7 @@
           <td>
             <a [routerLink]="['/admin/entities/table-record/', tableRecord.id, 'view']">{{ tableRecord.id }}</a>
           </td>
-          <td>{{ tableRecord.createdDate | date: 'medium' }}</td>
+          <td>{{ tableRecord.createdDate | localizedDate }}</td>
           <td>{{ tableRecord.table.name }}</td>
           <td>{{ tableRecord.netTotalPrice }}</td>
           <td>

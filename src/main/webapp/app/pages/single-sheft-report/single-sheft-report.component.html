@@ -19,7 +19,7 @@
     <tbody>
       <tr>
         <td>{{ sheft.user.firstName }} جنيه</td>
-        <td>{{ sheft.start | date: 'medium' }}</td>
+        <td>{{ sheft.start | localizedDate }}</td>
         <td align="center">{{ sheft.total_net_price }} جنيه</td>
         <td>{{ sheft.total_discount }} جنيه</td>
         <td align="center">{{ sheft.total_net_price_after_discount_system }} جنيه</td>
@@ -27,6 +27,7 @@
       </tr>
     </tbody>
   </table>
-
-  <button *ngIf="sheft" class="btn btn-danger" (click)="stopSheft()">انهاء الشيفت</button>
+  <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
+    <button *ngIf="sheft" class="btn btn-danger" (click)="stopSheft()">انهاء الشيفت</button>
+  </div>
 </div>

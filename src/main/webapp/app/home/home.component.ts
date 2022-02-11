@@ -55,6 +55,33 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   disablePanelOpen = false;
 
   showCheckOut = false;
+
+  ordersButtons: any[] = [
+    {
+      icon: 'minus',
+      style: 'danger',
+      hint: 'مسح',
+      type: 'danger',
+      action: 'deleteOrderItem',
+    },
+    /* {
+      icon: 'money',
+      style: 'italic',
+      hint: 'حساب',
+      type: 'success',
+      action: 'payOrderItem'
+    }*/
+  ];
+
+  paidOrdersButtons: any[] = [
+    {
+      icon: 'undo',
+      style: 'back',
+      hint: 'الغاء الدفع',
+      type: 'danger',
+      action: 'unPayOrderItem',
+    },
+  ];
   private readonly destroy$ = new Subject<void>();
   constructor(
     private productService: ProductService,
@@ -169,7 +196,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   formateMoney(r: any): any {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    return 'EGP ' + r.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return (
+      'EGP ' +
+      Number(r)
+        .toFixed(2)
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    );
   }
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -262,6 +294,45 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.tableService.deleteProductFromTable(this.selectedTable.id, productId).subscribe(table => {
         this.selectedTable = table;
         this.callReloadTables();
+      });
+    }
+  }
+
+  orderItemClick(e: any, prodId: any): void {
+    // eslint-disable-next-line no-console
+    console.log(e.itemData.action);
+    switch (e.itemData.action) {
+      case 'deleteOrderItem':
+        this.deleteProductFromSelectedDevice(prodId);
+        break;
+      case 'payOrderItem':
+        this.payProductFromSelectedDevice(prodId);
+        break;
+      case 'unPayOrderItem':
+        this.unPayProductFromSelectedDevice(prodId);
+        break;
+      default:
+        break;
+    }
+  }
+
+  toObjectKeys(any: any): any {
+    return Object.keys(any);
+  }
+  payProductFromSelectedDevice(productId: string): void {
+    if (this.selectedDevice) {
+      this.devicesSessionService.payProductToDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
+        this.selectedDevice = deivce;
+        this.loadAllDevices();
+      });
+    }
+  }
+
+  unPayProductFromSelectedDevice(productId: string): void {
+    if (this.selectedDevice) {
+      this.devicesSessionService.unPayProductFromDeviceSession(this.selectedDevice.id, productId).subscribe(deivce => {
+        this.selectedDevice = deivce;
+        this.loadAllDevices();
       });
     }
   }

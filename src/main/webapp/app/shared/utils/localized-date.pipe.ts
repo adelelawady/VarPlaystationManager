@@ -10,9 +10,21 @@ export class LocalizedDatePipe implements PipeTransform {
     null;
   }
 
-  transform(value: any): any {
+  transform(value: any, custom?: any): any {
     const datePipe: DatePipe = new DatePipe('en');
-    return datePipe.transform(value, this.getLocaleDateString('ar-EG'));
+
+    if (custom) {
+      return new Date(value).toLocaleDateString('ar-EG-u-nu-latn', custom);
+    }
+    return new Date(value).toLocaleDateString('ar-EG-u-nu-latn', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    });
+    // return datePipe.transform(value, this.getLocaleDateString('ar-EG'));
   }
   // tslint:disable-next-line:typedef
   getLocaleDateString(lang: string): any {

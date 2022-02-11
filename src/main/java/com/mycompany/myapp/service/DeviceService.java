@@ -74,4 +74,8 @@ public interface DeviceService {
     DeviceSessionDTO moveDeviceMulti(String moveFromDeviceId, boolean multi);
 
     Session getDeviceActiveSession(String deviceId);
+
+    DeviceSessionDTO payProductfromDeviceSession(String deviceId, String productId);
+
+    DeviceSessionDTO unPayProductFromDeviceSession(String deviceId, String productId);
 }

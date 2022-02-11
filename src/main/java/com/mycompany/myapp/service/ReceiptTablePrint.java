@@ -34,8 +34,7 @@ public class ReceiptTablePrint implements Printable {
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
         int line = 10;
 
-        Font font = new Font("Lucida Handwriting", Font.BOLD, 10);
-        // Font font = new Font("MS Gothic", Font.PLAIN, 10);
+        Font font = new Font("Arial", Font.BOLD, 10);
 
         if (pageIndex < 0 || pageIndex >= 1) {
             return Printable.NO_SUCH_PAGE;

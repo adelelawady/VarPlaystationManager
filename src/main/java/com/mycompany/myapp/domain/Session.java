@@ -98,6 +98,17 @@ public class Session implements Serializable {
     @Field("ordersQuantity")
     private HashMap<String, Integer> ordersQuantity = new HashMap<>();
 
+    @Field("paidOrdersQuantity")
+    private HashMap<String, Integer> paidOrdersQuantity = new HashMap<>();
+
+    public HashMap<String, Integer> getPaidOrdersQuantity() {
+        return paidOrdersQuantity;
+    }
+
+    public void setPaidOrdersQuantity(HashMap<String, Integer> paidOrdersQuantity) {
+        this.paidOrdersQuantity = paidOrdersQuantity;
+    }
+
     @Field("previousSessions")
     @JsonIgnoreProperties(
         value = {

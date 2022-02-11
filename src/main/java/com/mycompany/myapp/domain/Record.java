@@ -93,6 +93,37 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         this.previousSessionsTotalPrice = previousSessionsTotalPrice;
     }
 
+    @Field("previousSessions")
+    @JsonIgnoreProperties(
+        value = {
+            "device.session",
+            "device.category",
+            "device.type",
+            "ordersData",
+            "ordersQuantity",
+            "previousSessions",
+            "id",
+            "totalPriceOrders",
+            "totalPriceUser",
+            "ordersDiscount",
+            "timeDiscount",
+            "duration",
+            "createdDate",
+            "totalPrice",
+        },
+        allowSetters = true
+    )
+    @JsonIgnore
+    private List<Record> previousSessions = new ArrayList<>();
+
+    public List<Record> getPreviousSessions() {
+        return previousSessions;
+    }
+
+    public void setPreviousSessions(List<Record> previousSessions) {
+        this.previousSessions = previousSessions;
+    }
+
     private int minutes = 0;
     private int hours = 0;
 
@@ -100,6 +131,7 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         if (this.duration == null) {
             return 0;
         }
+        this.minutes = this.duration.toMinutesPart();
         return this.duration.toMinutesPart();
     }
 
@@ -107,6 +139,7 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         if (this.duration == null) {
             return 0;
         }
+        this.hours = this.duration.toHoursPart();
         return this.duration.toHoursPart();
     }
 

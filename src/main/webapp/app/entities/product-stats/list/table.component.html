@@ -5,9 +5,7 @@
     <div class="dx-fieldset">
       <div class="dx-field">
         <div class="dx-field-label">
-          <span style="font-size: large" class="left float-left badge badge-info">
-            {{ from.toDate() | localizedDate }} - {{ from.toDate() | date: 'shortTime' }}</span
-          >
+          <span style="font-size: large" class="left float-left badge badge-info"> {{ from.toDate() | localizedDate }} </span>
           من
         </div>
         <div class="dx-field-value">
@@ -16,9 +14,7 @@
       </div>
       <div class="dx-field">
         <div class="dx-field-label">
-          <span style="font-size: large" class="left float-left badge badge-info"
-            >{{ to.toDate() | localizedDate }} - {{ to.toDate() | date: 'shortTime' }}
-          </span>
+          <span style="font-size: large" class="left float-left badge badge-info">{{ to.toDate() | localizedDate }} </span>
 
           الي
         </div>
@@ -88,3 +84,8 @@
     ></ngb-pagination>
   </div>
 </div>
+<style>
+  .dx-loadindicator-wrapper {
+    margin: 0px 10px;
+  }
+</style>

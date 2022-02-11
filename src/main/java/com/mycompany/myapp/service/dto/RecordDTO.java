@@ -1,11 +1,15 @@
 package com.mycompany.myapp.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.Product;
+import com.mycompany.myapp.domain.Record;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.*;
@@ -34,7 +38,30 @@ public class RecordDTO implements Serializable {
 
     private Duration duration;
 
-    private Double totalPriceTime;
+    private Double totalPriceTime = 0.0;
+
+    private Double previousSessionsTotalPrice = 0.0;
+
+    @JsonIgnoreProperties(
+        value = {
+            "device.session",
+            "device.category",
+            "device.type",
+            "ordersData",
+            "ordersQuantity",
+            "previousSessions",
+            "id",
+            "totalPriceOrders",
+            "totalPriceUser",
+            "ordersDiscount",
+            "timeDiscount",
+            "duration",
+            "createdDate",
+            "totalPrice",
+        },
+        allowSetters = true
+    )
+    private List<Record> previousSessions = new ArrayList<>();
 
     public Double getOrdersDiscount() {
         return ordersDiscount;
@@ -189,5 +216,21 @@ public class RecordDTO implements Serializable {
             ", totalPrice=" + getTotalPrice() +
             ", device=" + getDevice() +
             "}";
+    }
+
+    public Double getPreviousSessionsTotalPrice() {
+        return previousSessionsTotalPrice;
+    }
+
+    public void setPreviousSessionsTotalPrice(Double previousSessionsTotalPrice) {
+        this.previousSessionsTotalPrice = previousSessionsTotalPrice;
+    }
+
+    public List<Record> getPreviousSessions() {
+        return previousSessions;
+    }
+
+    public void setPreviousSessions(List<Record> previousSessions) {
+        this.previousSessions = previousSessions;
     }
 }
