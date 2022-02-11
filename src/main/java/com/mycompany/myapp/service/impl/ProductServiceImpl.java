@@ -122,30 +122,34 @@ public class ProductServiceImpl implements ProductService {
         int totalProductCountInAll = 0;
 
         for (com.mycompany.myapp.domain.Record rec : recordsList) {
-            int count = rec.getOrdersQuantity().get(productId);
-            totalProductCountInAll += count;
-            Product prodx = rec.getOrdersData().stream().filter(prod -> prod.getId().equals(productId)).findFirst().get();
+            if (rec.getOrdersQuantity().containsKey(productId)) {
+                int count = rec.getOrdersQuantity().get(productId);
+                totalProductCountInAll += count;
+                Product prodx = rec.getOrdersData().stream().filter(prod -> prod.getId().equals(productId)).findFirst().get();
 
-            totalProductPriceInAll += prodx.getPrice();
+                totalProductPriceInAll += prodx.getPrice();
+            }
         }
 
         for (TableRecord rec : recordsTableList) {
-            int count = rec.getOrdersQuantity().get(productId);
-            totalProductCountInAll += count;
-            Product prodx = rec.getOrdersData().stream().filter(prod -> prod.getId().equals(productId)).findFirst().get();
+            if (rec.getOrdersQuantity().containsKey(productId)) {
+                int count = rec.getOrdersQuantity().get(productId);
+                totalProductCountInAll += count;
+                Product prodx = rec.getOrdersData().stream().filter(prod -> prod.getId().equals(productId)).findFirst().get();
 
-            switch (rec.getType()) {
-                case TABLE:
-                    totalProductPriceInAll += prodx.getPrice();
-                    break;
-                case TAKEAWAY:
-                    totalProductPriceInAll += prodx.getTakeawayPrice();
-                    break;
-                case SHOPS:
-                    totalProductPriceInAll += prodx.getShopsPrice();
-                    break;
-                default:
-                    break;
+                switch (rec.getType()) {
+                    case TABLE:
+                        totalProductPriceInAll += prodx.getPrice();
+                        break;
+                    case TAKEAWAY:
+                        totalProductPriceInAll += prodx.getTakeawayPrice();
+                        break;
+                    case SHOPS:
+                        totalProductPriceInAll += prodx.getShopsPrice();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         Optional<Product> prodFound = productRepository.findById(productId);
