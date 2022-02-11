@@ -1,13 +1,13 @@
 {
   "settings": {
-    "title": "إعدادات المستخدم لـ [<strong> {{اسم المستخدم}} </ strong>]",
+    "title": "إعدادات المستخدم لـ [<strong> {{username }} </ strong>]",
     "form": {
       "firstname": "الاسم الاول",
       "firstname.placeholder": "اسمك الأول",
       "lastname": "اسم العائلة",
       "lastname.placeholder": "اسمك الاخير",
       "language": "لغة",
-      "button": "يحفظ"
+      "button": "حفظ"
     },
     "messages": {
       "error": {
