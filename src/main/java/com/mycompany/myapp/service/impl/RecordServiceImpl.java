@@ -231,6 +231,7 @@ public class RecordServiceImpl implements RecordService {
 
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setPrintable(printable, ps.getPageFormat(pj));
+
         try {
             pj.print();
         } catch (PrinterException ex) {
