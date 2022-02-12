@@ -113,7 +113,7 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         },
         allowSetters = true
     )
-    @JsonIgnore
+    //@JsonIgnore
     private List<Record> previousSessions = new ArrayList<>();
 
     public List<Record> getPreviousSessions() {

@@ -3,7 +3,12 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.domain.Table.TABLE_TYPE;
 import com.mycompany.myapp.domain.TableRecord;
 import com.mycompany.myapp.repository.TableRecordRepository;
+import com.mycompany.myapp.service.PrinterSupport;
+import com.mycompany.myapp.service.ReceiptTablePrint;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -189,5 +194,25 @@ public class TableRecordResource {
         log.debug("REST request to delete TableRecord : {}", id);
         tableRecordRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
+    }
+
+    @GetMapping("/table-records/print/{tebleId}")
+    public ResponseEntity<Void> printTableRecord(@PathVariable String tebleId) {
+        Optional<TableRecord> rec = tableRecordRepository.findById(tebleId);
+        if (rec.isPresent()) {
+            Printable printable = new ReceiptTablePrint(rec.get());
+
+            PrinterSupport ps = new PrinterSupport();
+
+            PrinterJob pj = PrinterJob.getPrinterJob();
+            pj.setPrintable(printable, ps.getPageFormat(pj));
+            try {
+                pj.print();
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -23,4 +23,12 @@ export class SheftService {
   stop(): Observable<any[]> {
     return this.http.get<any[]>(`${this.resourceUrl}/sheft/stop`, { observe: 'body' });
   }
+
+  printDeviceRecored(id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/records/print/${id}`, { observe: 'body' });
+  }
+
+  printTableRecored(id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/table-records/print/${id}`, { observe: 'body' });
+  }
 }

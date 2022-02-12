@@ -6,7 +6,19 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
-import { DxLoadIndicatorModule, DxSelectBoxModule, DxTextAreaModule, DxDateBoxModule, DxFormModule } from 'devextreme-angular';
+import {
+  DxLoadIndicatorModule,
+  DxSelectBoxModule,
+  DxTextAreaModule,
+  DxDateBoxModule,
+  DxFormModule,
+  DxAccordionModule,
+  DxCheckBoxModule,
+  DxSliderModule,
+  DxTagBoxModule,
+  DxTemplateModule,
+} from 'devextreme-angular';
+
 @NgModule({
   exports: [
     FormsModule,
@@ -22,6 +34,11 @@ import { DxLoadIndicatorModule, DxSelectBoxModule, DxTextAreaModule, DxDateBoxMo
     DxSelectBoxModule,
     DxTextAreaModule,
     DxFormModule,
+    DxAccordionModule,
+    DxCheckBoxModule,
+    DxSliderModule,
+    DxTagBoxModule,
+    DxTemplateModule,
   ],
 })
 export class SharedLibsModule {}

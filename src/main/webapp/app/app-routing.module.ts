@@ -31,6 +31,14 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./pages/single-sheft-report/single-sheft-report.module').then(m => m.SingleSheftReportModule),
         },
         {
+          path: 'last/records',
+          data: {
+            authorities: [Authority.USER],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () => import('./pages/last-records-page/last-records-page.module').then(m => m.LastRecordsPageModule),
+        },
+        {
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },
