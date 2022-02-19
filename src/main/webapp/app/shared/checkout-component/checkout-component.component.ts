@@ -15,6 +15,7 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
   totalPriceUser: any;
   totalDiscountPrice = 0.0;
 
+  isSaving = false;
   isMulti = false;
   plusMinutes = 0;
   @Input() device: any;
@@ -65,32 +66,46 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
     this.closeCheckOut.emit();
   }
   startSession(): void {
+    this.isSaving = true;
     const sessionStart = {
       multi: this.isMulti,
       reserved: 0,
       plusMinutes: this.plusMinutes,
     };
 
-    this.devicesSessionsService.startDeviceSession(this.device.id, sessionStart).subscribe(dev => {
-      this.device = dev;
+    this.devicesSessionsService.startDeviceSession(this.device.id, sessionStart).subscribe(
+      dev => {
+        this.device = dev;
 
-      this.cd.markForCheck();
-      this.deviceStarted.emit(this.device);
-    });
+        this.cd.markForCheck();
+        this.deviceStarted.emit(this.device);
+        this.isSaving = false;
+      },
+      () => {
+        this.isSaving = false;
+      }
+    );
   }
 
   endSession(): void {
     this.isMulti = false;
+    this.isSaving = true;
     const sessionEnd = {
       totalPrice: this.totalPriceUser,
       print: this.print,
       ordersDiscount: this.ordersDiscount,
       timeDiscount: this.timeDiscount,
     };
-    this.devicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(dev => {
-      this.device = dev;
-      this.cd.markForCheck();
-      this.deviceStopped.emit(this);
-    });
+    this.devicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(
+      dev => {
+        this.device = dev;
+        this.cd.markForCheck();
+        this.deviceStopped.emit(this);
+        this.isSaving = false;
+      },
+      () => {
+        this.isSaving = false;
+      }
+    );
   }
 }

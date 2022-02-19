@@ -62,13 +62,7 @@ public class ReceiptTablePrint implements Printable {
 
         if (currentRecord.getDiscount() != null && currentRecord.getDiscount() > 0) {
             line += 13;
-            g2d.drawString(
-                String.format("%-25s", "DISCOUNT : " + currentRecord.getDiscount().toString() + " %") +
-                "   " +
-                String.format("%-25s", "DISCOUNT : " + currentRecord.getTotalDiscountPrice().toString()),
-                1,
-                line
-            );
+            g2d.drawString(String.format("%-25s", "DISCOUNT : " + currentRecord.getDiscount().toString() + " %  "), 1, line);
         }
 
         if (currentRecord.getOrdersData() != null && !currentRecord.getOrdersData().isEmpty()) {

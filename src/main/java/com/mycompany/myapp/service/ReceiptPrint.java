@@ -96,7 +96,17 @@ public class ReceiptPrint implements Printable {
 
         if (currentRecord.getTimeDiscount() > 0 || currentRecord.getOrdersDiscount() > 0) {
             line += 13;
-            g2d.drawString(String.format("%-25s", "DISCOUNT : " + currentRecord.getTotalDiscountPrice().toString() + " LE"), 1, line);
+            g2d.drawString(
+                String.format(
+                    "%-25s",
+                    "DISCOUNT : " +
+                    (currentRecord.getOrdersDiscount() > 0 ? currentRecord.getOrdersDiscount() + " % " : "") +
+                    ((currentRecord.getOrdersDiscount() > 0 && currentRecord.getTimeDiscount() > 0) ? " + " : "") +
+                    (currentRecord.getTimeDiscount() > 0 ? currentRecord.getTimeDiscount() + " %" : "")
+                ),
+                1,
+                line
+            );
         }
 
         if (!currentRecord.getPreviousSessions().isEmpty()) {

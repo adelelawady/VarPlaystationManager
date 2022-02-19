@@ -230,8 +230,18 @@
               <label class="form-check-label" for="printBox"> طباعة بعد الحفظ </label>
             </div>
           </div>
-          <button (click)="cancel()" data-dismiss="modal" aria-label="Close" class="btn btn-secondary col my-2 p-2">الغاء</button>
-          <button (click)="endSession()" data-dismiss="modal" aria-label="Close" class="btn btn-primary col">ايقاف التشغيل</button>
+          <button
+            [disabled]="this.isSaving"
+            (click)="cancel()"
+            data-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-secondary col my-2 p-2"
+          >
+            الغاء
+          </button>
+          <button [disabled]="this.isSaving" (click)="endSession()" data-dismiss="modal" aria-label="Close" class="btn btn-primary col">
+            ايقاف التشغيل
+          </button>
         </div>
       </div>
 
@@ -288,10 +298,24 @@
       </div>
       <hr *ngIf="!device.session" />
 
-      <button *ngIf="!device.session" (click)="cancel()" data-dismiss="modal" aria-label="Close" class="btn btn-secondary col my-2 p-2">
+      <button
+        [disabled]="this.isSaving"
+        *ngIf="!device.session"
+        (click)="cancel()"
+        data-dismiss="modal"
+        aria-label="Close"
+        class="btn btn-secondary col my-2 p-2"
+      >
         الغاء
       </button>
-      <button *ngIf="!device.session" (click)="startSession()" data-dismiss="modal" aria-label="Close" class="btn btn-primary col">
+      <button
+        [disabled]="this.isSaving"
+        *ngIf="!device.session"
+        (click)="startSession()"
+        data-dismiss="modal"
+        aria-label="Close"
+        class="btn btn-primary col"
+      >
         بدآ التشغيل
       </button>
     </div>
