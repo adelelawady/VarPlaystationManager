@@ -45,6 +45,7 @@ public class ReceiptTablePrint implements Printable {
         int imagewidth = 160;
         int imageheight = 50;
         BufferedImage read;
+
         try {
             read = ImageIO.read(getClass().getResource("/image/img.jpeg"));
             g2d.drawImage(read, 5, line, imagewidth, imageheight, null); // draw image
@@ -59,9 +60,15 @@ public class ReceiptTablePrint implements Printable {
 
         g2d.drawString(String.format("%-25s", "TABLE :  " + currentRecord.getTable().getName()), 1, line);
 
-        if (currentRecord.getDiscount() > 0) {
+        if (currentRecord.getDiscount() != null && currentRecord.getDiscount() > 0) {
             line += 13;
-            g2d.drawString(String.format("%-25s", "DISCOUNT : " + currentRecord.getDiscount() + " %"), 1, line);
+            g2d.drawString(
+                String.format("%-25s", "DISCOUNT : " + currentRecord.getDiscount().toString() + " %") +
+                "   " +
+                String.format("%-25s", "DISCOUNT : " + currentRecord.getTotalDiscountPrice().toString()),
+                1,
+                line
+            );
         }
 
         if (currentRecord.getOrdersData() != null && !currentRecord.getOrdersData().isEmpty()) {
@@ -85,7 +92,7 @@ public class ReceiptTablePrint implements Printable {
                      * Assume that all parameters are in string data type for this situation All
                      * other premetive data types are accepted.
                      */
-                    String itemid = prod.getEnName().length() > 15 ? prod.getName().substring(0, 13) + ".." : prod.getEnName();
+                    String itemid = prod.getEnName().length() > 15 ? prod.getEnName().substring(0, 13) + ".." : prod.getEnName();
                     String itemname = currentRecord.getOrdersQuantity().get(prod.getId()).toString();
                     String price = prod.getPrice().toString();
 

@@ -27,7 +27,7 @@ public class TableRecord extends AbstractAuditingEntity implements Serializable 
     private Table table;
 
     @Field("total_price")
-    private Double totalPrice;
+    private Double totalPrice = 0.0;
 
     @Field("total_discount_price")
     private Double totalDiscountPrice = 0.0;
@@ -41,10 +41,10 @@ public class TableRecord extends AbstractAuditingEntity implements Serializable 
     }
 
     @Field("net_total_price")
-    private Double netTotalPrice;
+    private Double netTotalPrice = 0.0;
 
     @Field("discount")
-    private Double discount;
+    private Double discount = 0.0;
 
     @Field("type")
     private Table.TABLE_TYPE type = TABLE_TYPE.TABLE;

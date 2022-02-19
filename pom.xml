@@ -7,7 +7,7 @@
 
     <groupId>com.mycompany.myapp</groupId>
     <artifactId>er</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>v2</version>
     <packaging>jar</packaging>
     <name>Er</name>
     <description>Description for er</description>
@@ -271,6 +271,34 @@
         	<artifactId>json</artifactId>
         	<version>20211205</version>
         </dependency>
+        <dependency>
+        	<groupId>javax.measure</groupId>
+        	<artifactId>unit-api</artifactId>
+        	<version>1.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>tec.units</groupId>
+        	<artifactId>unit-ri</artifactId>
+        	<version>1.0.3</version>
+        </dependency>
+        
+<dependency>
+    <groupId>de.schlichtherle.truelicense</groupId>
+    <artifactId>truelicense-core</artifactId>
+    <version>1.33</version>
+    <scope>provided</scope>
+</dependency>
+<dependency>
+         <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>3.4.0</version>
+</dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -476,23 +504,7 @@
                         </includeOnlyProperties>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.gaul</groupId>
-                    <artifactId>modernizer-maven-plugin</artifactId>
-                    <version>${modernizer-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>modernizer</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>modernizer</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                      <javaVersion>${java.version}</javaVersion>
-                    </configuration>
-                </plugin>
+
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>

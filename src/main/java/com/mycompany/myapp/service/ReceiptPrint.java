@@ -94,6 +94,11 @@ public class ReceiptPrint implements Printable {
             g2d.drawString(String.format("%-25s", "TIME   : " + time), 1, line);
         }
 
+        if (currentRecord.getTimeDiscount() > 0 || currentRecord.getOrdersDiscount() > 0) {
+            line += 13;
+            g2d.drawString(String.format("%-25s", "DISCOUNT : " + currentRecord.getTotalDiscountPrice().toString() + " LE"), 1, line);
+        }
+
         if (!currentRecord.getPreviousSessions().isEmpty()) {
             line += 5;
             g2d.drawLine(10, line + 10, 10, line + 20);
@@ -153,7 +158,7 @@ public class ReceiptPrint implements Printable {
                      * Assume that all parameters are in string data type for this situation All
                      * other premetive data types are accepted.
                      */
-                    String itemid = prod.getEnName().length() > 15 ? prod.getName().substring(0, 13) + ".." : prod.getEnName();
+                    String itemid = prod.getEnName().length() > 15 ? prod.getEnName().substring(0, 13) + ".." : prod.getEnName();
                     String itemname = currentRecord.getOrdersQuantity().get(prod.getId()).toString();
                     String price = prod.getPrice().toString();
 
