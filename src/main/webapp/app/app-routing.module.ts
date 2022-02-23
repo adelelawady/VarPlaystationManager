@@ -39,6 +39,14 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./pages/last-records-page/last-records-page.module').then(m => m.LastRecordsPageModule),
         },
         {
+          path: 'last/records/sales',
+          data: {
+            authorities: [Authority.SALES],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () => import('./pages/last-records-page-sales/last-records-page.module').then(m => m.LastRecordsPageModule),
+        },
+        {
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },

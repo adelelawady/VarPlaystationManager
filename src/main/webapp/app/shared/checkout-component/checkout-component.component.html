@@ -185,9 +185,10 @@
 
         <div class="col-4">
           <div *ngIf="device.session" class="form-group">
-            <div class="col">
+            <div *ngIf="!isSales" class="col">
               <div class="input-group mb-3">
                 <input
+                  [max]="isSales ? 15 : 100"
                   type="number"
                   step="1"
                   min="0"
@@ -201,11 +202,18 @@
                   placeholder=""
                 />
                 <span class="input-group-text p-0 p-1">% خصم الاوردرات</span>
+                <small
+                  *ngIf="isSales && ordersDiscount"
+                  [ngClass]="{ 'd-none': ordersDiscount <= 15 }"
+                  class="input-group-text p-0 p-1 badge-danger"
+                  >%يجب ان يكون خصم الاوردرات اقل من 15
+                </small>
               </div>
             </div>
             <div class="col">
               <div class="input-group mb-3">
                 <input
+                  [max]="isSales ? 15 : 100"
                   type="number"
                   step="1"
                   min="0"
@@ -219,6 +227,12 @@
                   placeholder=""
                 />
                 <span class="input-group-text p-0 p-1">% خصم الوقت</span>
+                <small
+                  *ngIf="isSales && timeDiscount"
+                  [ngClass]="{ 'd-none': timeDiscount <= 15 }"
+                  class="input-group-text p-0 p-1 badge-danger"
+                  >%يجب ان يكون خصم الوقت اقل من 15
+                </small>
               </div>
             </div>
             <hr />
@@ -239,7 +253,13 @@
           >
             الغاء
           </button>
-          <button [disabled]="this.isSaving" (click)="endSession()" data-dismiss="modal" aria-label="Close" class="btn btn-primary col">
+          <button
+            [disabled]="this.isSaving || (isSales && (timeDiscount > 15 || ordersDiscount > 15))"
+            (click)="endSession()"
+            data-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary col"
+          >
             ايقاف التشغيل
           </button>
         </div>

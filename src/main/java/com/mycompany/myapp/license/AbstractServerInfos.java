@@ -45,7 +45,7 @@ public class AbstractServerInfos {
 
             String vendor = operatingSystem.getManufacturer();
             String processorSerialNumber = computerSystem.getSerialNumber();
-            String processorIdentifier = centralProcessor.getIdentifier();
+            String processorIdentifier = centralProcessor.getProcessorIdentifier().getIdentifier();
             int processors = centralProcessor.getLogicalProcessorCount();
 
             result.setVendor(vendor);

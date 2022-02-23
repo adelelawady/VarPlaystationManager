@@ -63,6 +63,19 @@
         </a>
       </li>
 
+      <li
+        *jhiHasAnyAuthority="['ROLE_SALES']"
+        class="nav-item float-left"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="/last/records/sales" (click)="collapseNavbar()">
+          <span>
+            <i class="fa fa-server" aria-hidden="true"></i>
+            <span>اخر سجلات</span>
+          </span>
+        </a>
+      </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         *jhiHasAnyAuthority="'ROLE_ADMIN'"

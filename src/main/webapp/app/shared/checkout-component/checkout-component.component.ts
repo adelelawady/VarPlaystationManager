@@ -1,6 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
 import { DevicesSessionsService } from 'app/home/devicesSessions.service';
 import { DevicePricePipe } from '../device-component/price.pipe';
+import { Authority } from '../../config/authority.constants';
 declare const $: any;
 @Component({
   selector: 'jhi-checkout-component',
@@ -14,10 +17,11 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
   ordersDiscount = 0.0;
   totalPriceUser: any;
   totalDiscountPrice = 0.0;
-
+  account: Account | null = null;
   isSaving = false;
   isMulti = false;
   plusMinutes = 0;
+  isSales = false;
   @Input() device: any;
 
   @Output() closeCheckOut = new EventEmitter();
@@ -27,14 +31,23 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
   constructor(
     private devicePricePipe: DevicePricePipe,
     private cd: ChangeDetectorRef,
-    private devicesSessionsService: DevicesSessionsService
+    private devicesSessionsService: DevicesSessionsService,
+    private accountService: AccountService
   ) {}
   ngAfterViewInit(): void {
     this.getDevicePrice();
   }
   ngOnInit(): void {
+    this.accountService.getAuthenticationState().subscribe(account => {
+      if (account?.authorities.includes(Authority.SALES)) {
+        this.isSales = true;
+      }
+      this.account = account;
+    });
+
     this.getDevicePrice();
   }
+
   getDevicePrice(): void {
     if (this.device?.session) {
       this.totalPriceUser = this.devicePricePipe.transform(this.device, true, this.timeDiscount, this.ordersDiscount, false, false);

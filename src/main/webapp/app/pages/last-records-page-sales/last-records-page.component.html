@@ -1,0 +1,615 @@
+<div style="direction: rtl" class="card p-4 border shadow-sm m-3">
+  <h1 class="card-title">اخر سجلات</h1>
+
+  <dx-load-indicator
+    *ngIf="isloading"
+    id="large-indicator"
+    height="60"
+    width="60"
+    class="dx-loadindicator dx-widget d-block row text-center m-auto"
+  ></dx-load-indicator>
+
+  <div class="row">
+    <div class="col-6 p-4">
+      <div *ngIf="sheft && sheft.records && sheft.records.reverse()" id="accordion">
+        <h6 style="font-size: large" class="alert alert-info text-center p-2">اجهزة</h6>
+        <dx-accordion
+          #accordion
+          [selectedIndex]="-1"
+          [dataSource]="sheft.records.slice(0, sliceCount)"
+          [collapsible]="true"
+          [multiple]="false"
+          [animationDuration]="300"
+        >
+          <div *dxTemplate="let rec of 'title'">
+            <div class="row">
+              <div class="col-auto">
+                <i class="fa fa-tv" aria-hidden="true"></i> <a onclick="return ;" class="card-link"> {{ rec.device.name }}</a>
+              </div>
+              <div class="col-auto text-muted">
+                {{ rec.device.type?.name }}
+              </div>
+
+              <div style="direction: ltr" class="col-auto">
+                <div class="badge badge-success">
+                  <i class="fa fa-hourglass"></i>
+                  {{ rec.hours === 0 ? rec.minutes + ' m' : rec.hours + ' h : ' + rec.minutes + ' m' }}
+                </div>
+              </div>
+
+              <div *ngIf="rec.multi" style="direction: ltr" class="col-auto">
+                <div class="badge bg-dark text-success">MULTI</div>
+              </div>
+
+              <div style="direction: ltr" class="col-auto">
+                <i (click)="printDeviceRecored(rec.id)" class="fa fa-print card border p-1 btn"></i>
+              </div>
+              <div style="direction: ltr" class="col">
+                <div class="">
+                  {{ formateMoney(rec.totalPriceUser) }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *dxTemplate="let record of 'item'">
+            <div class="col-12">
+              <div class="card-body" *ngIf="record.ordersData && record.ordersData.length > 0">
+                <div class="row" *ngIf="record">
+                  <h5 class="card-title my-2">الطلبات</h5>
+
+                  <div class="table-responsive" id="entities">
+                    <table class="table" aria-describedby="page-heading">
+                      <thead>
+                        <tr style="display: none">
+                          <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let prod of record.ordersData.slice().reverse()" data-cy="entityTable">
+                          <td style="word-break: break-word" class="text-center">
+                            <h6 class="text-primary">{{ prod.name }}</h6>
+                          </td>
+
+                          <td>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                record.ordersQuantity[prod.id] ? record.ordersQuantity[prod.id] : '1'
+                              }}</span>
+                            </span>
+                          </td>
+
+                          <td>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body" *ngIf="record.previousSessions && record.previousSessions.length > 0">
+                <div class="row" *ngIf="record">
+                  <h5 class="card-title my-2">اجهزة اخري / تحويل اجهزة</h5>
+                  <div *ngIf="record.previousSessions && record.previousSessions.length > 0" class="col-12">
+                    <div class="my-2 row">
+                      <span *ngFor="let sess of record.previousSessions" class="badge my-2 col-12 border pt-2">
+                        <h6 style="text-align: left" class="mx-1 col-auto text-black p-0">
+                          {{ sess.device.name }}
+                        </h6>
+                        <span>
+                          <label class="badge badge-success col-xs float-left"
+                            >{{ sess.hours + 'h ' + sess.minutes + ' m' }}
+
+                            <span *ngIf="sess.multi">
+                              <small class="border bg-light text-danger p-1 rounded">
+                                <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small
+                              >
+                            </span>
+                          </label>
+                          <a href="#" class="card-link float-right m-0 pr-2 col-auto p-1" style="border: 1px darkblue dotted"
+                            >EGP {{ sess.totalPriceTime }}
+                          </a>
+                        </span>
+                      </span>
+                      <small style="text-align: right; font-weight: 900">EGP {{ record.previousSessionsTotalPrice }} : اجهزة سابقة </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div *ngIf="record">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div style="direction: rtl; font-size: 27px !important" class="form">
+                      <div class="dx-fieldset">
+                        <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">اساسي</div>
+
+                        <div class="dx-field">
+                          <div class="dx-field-value-static">
+                            <dt><span jhiTranslate="erApp.record.start">Start</span></dt>
+                          </div>
+                          <div class="dx-field-label">
+                            <span>{{ record.start | localizedDate }}</span>
+                          </div>
+                        </div>
+
+                        <div class="dx-field">
+                          <div class="dx-field-value-static">
+                            <dt><span jhiTranslate="erApp.record.end">End</span></dt>
+                          </div>
+                          <div class="dx-field-label">
+                            <span>{{ record.end | localizedDate }}</span>
+                          </div>
+                        </div>
+
+                        <div class="dx-field">
+                          <dx-form id="form" [formData]="record">
+                            <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                              <dxi-item itemType="group">
+                                <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">الوقت</div>
+
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>المدة</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ record.hours + ' h ' + record.minutes + ' m' }}</span>
+                                  </div>
+                                </div>
+
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>خصم الوقت</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ record.timeDiscount }}%</span>
+                                  </div>
+                                </div>
+
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>سعر الوقت</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ formateMoney(record.totalPriceTime) }}</span>
+                                  </div>
+                                </div>
+                              </dxi-item>
+                              <dxi-item itemType="group">
+                                <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">الطلبات</div>
+
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>خصم الطلبات</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ record.ordersDiscount }}%</span>
+                                  </div>
+                                </div>
+
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>سعر الطلبات</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ formateMoney(record.totalPriceOrders) }}</span>
+                                  </div>
+                                </div>
+                              </dxi-item>
+                            </dxi-item>
+                          </dx-form>
+                        </div>
+
+                        <div class="dx-field">
+                          <div class="dx-fieldset-header text-muted shadow-sm border p-1 rounded text-center">اجمالي</div>
+
+                          <dx-form id="form" [formData]="record">
+                            <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                              <dxi-item itemType="group">
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>السعر قبل الخصم</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ formateMoney(record.totalPriceTime + record.totalPriceOrders) }} </span>
+                                  </div>
+                                </div>
+
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>حساب اجهزة سابقة</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ formateMoney(record.previousSessionsTotalPrice) }}</span>
+                                  </div>
+                                </div>
+                              </dxi-item>
+
+                              <dxi-item itemType="group">
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span jhiTranslate="erApp.record.totalPrice">Total Price</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ formateMoney(record.totalPrice) }}</span>
+                                  </div>
+                                </div>
+
+                                <div class="dx-field">
+                                  <div class="dx-field-value-static">
+                                    <dt><span>سعر المستخدم</span></dt>
+                                  </div>
+                                  <div class="dx-field-label">
+                                    <span>{{ formateMoney(record.totalPriceUser) }}</span>
+                                  </div>
+                                </div>
+                              </dxi-item>
+                            </dxi-item>
+                          </dx-form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dx-accordion>
+      </div>
+    </div>
+
+    <div class="col-6 p-4" *ngIf="sheft && sheft.tableRecords && sheft.tableRecords.reverse()">
+      <h6 style="font-size: large" class="alert alert-info text-center p-2">الصالات</h6>
+      <dx-accordion
+        #accordion
+        [selectedIndex]="-1"
+        [dataSource]="sheft.tableRecords.slice(0, sliceCount)"
+        [collapsible]="true"
+        [multiple]="false"
+        [animationDuration]="300"
+      >
+        <div *dxTemplate="let table of 'title'">
+          <div class="row">
+            <div class="col-auto">
+              <i class="fa fa-bitbucket mx-1" aria-hidden="true"></i> <a onclick="return ;" class="card-link"> {{ table.table.name }}</a>
+            </div>
+
+            <div style="direction: ltr" class="col-auto">
+              <div class="">
+                {{ formateMoney(table.netTotalPrice) }}
+              </div>
+            </div>
+
+            <div style="direction: ltr" class="col">
+              <div class="">
+                <i class="fa fa-percent mx-1" aria-hidden="true"></i>
+                {{ table.discount }}<span class="text-danger"> -</span>
+              </div>
+            </div>
+            <div style="direction: ltr" class="col-auto">
+              <i (click)="printTableRecored(table.id)" class="fa fa-print card border p-1 btn"></i>
+            </div>
+            <div style="direction: ltr" class="col">
+              <div class="">
+                {{ formateMoney(table.totalPrice) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *dxTemplate="let tableRecord of 'item'">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="card-body">
+                <div class="row" *ngIf="tableRecord">
+                  <h5 class="card-title my-2">الطلبات</h5>
+
+                  <div class="table-responsive" id="entities">
+                    <table class="table" aria-describedby="page-heading">
+                      <thead>
+                        <tr style="display: none">
+                          <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let prod of tableRecord.ordersData.slice().reverse()" data-cy="entityTable">
+                          <td style="word-break: break-word" class="text-center">
+                            <h6 class="text-primary">{{ prod.name }}</h6>
+                          </td>
+
+                          <td>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                tableRecord.ordersQuantity[prod.id] ? tableRecord.ordersQuantity[prod.id] : '1'
+                              }}</span>
+                            </span>
+                          </td>
+
+                          <td>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div *ngIf="tableRecord" style="direction: rtl">
+                <dl class="row-md jh-entity-details">
+                  <dt><span>الصالة</span></dt>
+                  <dd>
+                    <span>
+                      <a [routerLink]="['/admin/entities/table/', tableRecord.table.id, 'view']">{{ tableRecord.table.name }} </a></span
+                    >
+                  </dd>
+                  <dt><span>السعر قبل الخصم</span></dt>
+                  <dd>
+                    <span> {{ tableRecord.netTotalPrice }}</span>
+                  </dd>
+                  <dt><span>الخصم</span></dt>
+                  <dd>
+                    <span
+                      >{{ tableRecord.discount }}٪
+
+                      <small *ngIf="tableRecord.totalDiscountPrice > 0" class="text-muted">
+                        <td>جنيه {{ tableRecord.totalDiscountPrice }}</td></small
+                      >
+                    </span>
+                  </dd>
+                  <dt><span>الاجمالي</span></dt>
+                  <dd>
+                    <span>{{ tableRecord.totalPrice }}</span>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dx-accordion>
+    </div>
+
+    <div class="col-6 p-4" *ngIf="sheft && sheft.tableRecords && sheft.tableShopsRecords.reverse()">
+      <h6 style="font-size: large" class="alert alert-info text-center p-2">محلات</h6>
+
+      <dx-accordion
+        #accordion
+        [selectedIndex]="-1"
+        [dataSource]="sheft.tableShopsRecords.slice(0, sliceCount)"
+        [collapsible]="true"
+        [multiple]="false"
+        [animationDuration]="300"
+      >
+        <div *dxTemplate="let table of 'title'">
+          <div class="row">
+            <div class="col-auto">
+              <i class="fa fa-bitbucket mx-1" aria-hidden="true"></i> <a onclick="return ;" class="card-link"> {{ table.table.name }}</a>
+            </div>
+
+            <div style="direction: ltr" class="col-auto">
+              <div class="">
+                {{ formateMoney(table.netTotalPrice) }}
+              </div>
+            </div>
+
+            <div style="direction: ltr" class="col">
+              <div class="">
+                <i class="fa fa-percent mx-1" aria-hidden="true"></i>
+                {{ table.discount }}<span class="text-danger"> -</span>
+              </div>
+            </div>
+            <div style="direction: ltr" class="col-auto">
+              <i (click)="printTableRecored(table.id)" class="fa fa-print card border p-1 btn"></i>
+            </div>
+            <div style="direction: ltr" class="col">
+              <div class="">
+                {{ formateMoney(table.totalPrice) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *dxTemplate="let tableRecord of 'item'">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="card-body">
+                <div class="row" *ngIf="tableRecord">
+                  <h5 class="card-title my-2">الطلبات</h5>
+
+                  <div class="table-responsive" id="entities">
+                    <table class="table" aria-describedby="page-heading">
+                      <thead>
+                        <tr style="display: none">
+                          <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let prod of tableRecord.ordersData.slice().reverse()" data-cy="entityTable">
+                          <td style="word-break: break-word" class="text-center">
+                            <h6 class="text-primary">{{ prod.name }}</h6>
+                          </td>
+
+                          <td>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                tableRecord.ordersQuantity[prod.id] ? tableRecord.ordersQuantity[prod.id] : '1'
+                              }}</span>
+                            </span>
+                          </td>
+
+                          <td>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div *ngIf="tableRecord" style="direction: rtl">
+                <dl class="row-md jh-entity-details">
+                  <dt><span>الصالة</span></dt>
+                  <dd>
+                    <span>
+                      <a [routerLink]="['/admin/entities/table/', tableRecord.table.id, 'view']">{{ tableRecord.table.name }} </a></span
+                    >
+                  </dd>
+                  <dt><span>السعر قبل الخصم</span></dt>
+                  <dd>
+                    <span> {{ tableRecord.netTotalPrice }}</span>
+                  </dd>
+                  <dt><span>الخصم</span></dt>
+                  <dd>
+                    <span
+                      >{{ tableRecord.discount }}٪
+
+                      <small *ngIf="tableRecord.totalDiscountPrice > 0" class="text-muted">
+                        <td>جنيه {{ tableRecord.totalDiscountPrice }}</td></small
+                      >
+                    </span>
+                  </dd>
+                  <dt><span>الاجمالي</span></dt>
+                  <dd>
+                    <span>{{ tableRecord.totalPrice }}</span>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dx-accordion>
+    </div>
+
+    <div class="col-6 p-4" *ngIf="sheft && sheft.tableRecords && sheft.tableTakeAwayRecords.reverse()">
+      <h6 style="font-size: large" class="alert alert-info text-center p-2">takeaway</h6>
+
+      <dx-accordion
+        #accordion
+        [selectedIndex]="-1"
+        [dataSource]="sheft.tableTakeAwayRecords.slice(0, sliceCount)"
+        [collapsible]="true"
+        [multiple]="false"
+        [animationDuration]="300"
+      >
+        <div *dxTemplate="let table of 'title'">
+          <div class="row">
+            <div class="col-auto">
+              <i class="fa fa-bitbucket mx-1" aria-hidden="true"></i> <a onclick="return ;" class="card-link"> {{ table.table.name }}</a>
+            </div>
+
+            <div style="direction: ltr" class="col-auto">
+              <div class="">
+                {{ formateMoney(table.netTotalPrice) }}
+              </div>
+            </div>
+
+            <div style="direction: ltr" class="col">
+              <div class="">
+                <i class="fa fa-percent mx-1" aria-hidden="true"></i>
+                {{ table.discount }}<span class="text-danger"> -</span>
+              </div>
+            </div>
+            <div style="direction: ltr" class="col-auto">
+              <i (click)="printTableRecored(table.id)" class="fa fa-print card border p-1 btn"></i>
+            </div>
+            <div style="direction: ltr" class="col">
+              <div class="">
+                {{ formateMoney(table.totalPrice) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *dxTemplate="let tableRecord of 'item'">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="card-body">
+                <div class="row" *ngIf="tableRecord">
+                  <h5 class="card-title my-2">الطلبات</h5>
+
+                  <div class="table-responsive" id="entities">
+                    <table class="table" aria-describedby="page-heading">
+                      <thead>
+                        <tr style="display: none">
+                          <th scope="col"><span>اسم الجهاز</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+
+                          <th scope="col"><span>سعر الوقت</span> <fa-icon icon="sort"></fa-icon></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let prod of tableRecord.ordersData.slice().reverse()" data-cy="entityTable">
+                          <td style="word-break: break-word" class="text-center">
+                            <h6 class="text-primary">{{ prod.name }}</h6>
+                          </td>
+
+                          <td>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                tableRecord.ordersQuantity[prod.id] ? tableRecord.ordersQuantity[prod.id] : '1'
+                              }}</span>
+                            </span>
+                          </td>
+
+                          <td>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div *ngIf="tableRecord" style="direction: rtl">
+                <dl class="row-md jh-entity-details">
+                  <dt><span>الصالة</span></dt>
+                  <dd>
+                    <span>
+                      <a [routerLink]="['/admin/entities/table/', tableRecord.table.id, 'view']">{{ tableRecord.table.name }} </a></span
+                    >
+                  </dd>
+                  <dt><span>السعر قبل الخصم</span></dt>
+                  <dd>
+                    <span> {{ tableRecord.netTotalPrice }}</span>
+                  </dd>
+                  <dt><span>الخصم</span></dt>
+                  <dd>
+                    <span
+                      >{{ tableRecord.discount }}٪
+
+                      <small *ngIf="tableRecord.totalDiscountPrice > 0" class="text-muted">
+                        <td>جنيه {{ tableRecord.totalDiscountPrice }}</td></small
+                      >
+                    </span>
+                  </dd>
+                  <dt><span>الاجمالي</span></dt>
+                  <dd>
+                    <span>{{ tableRecord.totalPrice }}</span>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dx-accordion>
+    </div>
+  </div>
+</div>
