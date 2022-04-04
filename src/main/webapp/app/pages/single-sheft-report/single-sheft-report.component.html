@@ -10,9 +10,6 @@
         <th title="Field #6">اسم المستخدم</th>
 
         <th title="Field #13">وقت البدا</th>
-        <th title="Field #15">اجمالي قبل الخصم</th>
-        <th title="Field #16">اجمالي الخصم</th>
-        <th title="Field #18">اجمالي حساب النظام</th>
         <th title="Field #17">الاجمالي</th>
       </tr>
     </thead>
@@ -21,11 +18,51 @@
         <td>{{ sheft.user.firstName }} جنيه</td>
         <td>{{ sheft.start | localizedDate }}</td>
         <td align="center">{{ sheft.total_net_price }} جنيه</td>
-        <td>{{ sheft.total_discount }} جنيه</td>
-        <td align="center">{{ sheft.total_net_price_after_discount_system }} جنيه</td>
-        <td align="center">{{ sheft.total_net_price_after_discount }} جنيه</td>
       </tr>
     </tbody>
+
+    <div class="row">
+      <div class="col-md-4">
+        <dl class="row-md jh-entity-details">
+          <dt><span>صالات</span></dt>
+          <dd>
+            <span>{{ sheft.total_net_price_Tables }}</span>
+          </dd>
+        </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span>ماركت</span></dt>
+          <dd>
+            <span>{{ sheft.total_net_price_market }}</span>
+          </dd>
+        </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span>مطعم</span></dt>
+          <dd>
+            <span>{{ sheft.total_net_price_res }}</span>
+          </dd>
+        </dl>
+      </div>
+      <div class="col-md-4">
+        <dl class="row-md jh-entity-details">
+          <dt><span>كافيه</span></dt>
+          <dd>
+            <span>{{ sheft.total_net_price_cafe }}</span>
+          </dd>
+        </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span>وقت ملعب</span></dt>
+          <dd>
+            <span>{{ sheft.total_net_price_playground }}</span>
+          </dd>
+        </dl>
+        <dl class="row-md jh-entity-details">
+          <dt><span>بلايستيشن وقت</span></dt>
+          <dd>
+            <span>{{ sheft.total_net_price_devices }}</span>
+          </dd>
+        </dl>
+      </div>
+    </div>
   </table>
   <div *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">
     <button *ngIf="sheft" class="btn btn-danger" (click)="stopSheft()">انهاء الشيفت</button>

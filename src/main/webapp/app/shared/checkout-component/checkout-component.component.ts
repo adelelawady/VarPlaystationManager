@@ -4,6 +4,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { DevicesSessionsService } from 'app/home/devicesSessions.service';
 import { DevicePricePipe } from '../device-component/price.pipe';
 import { Authority } from '../../config/authority.constants';
+import { PlaygroundDevicesSessionsService } from '../../home/playgrounddevicesSessions.service';
 declare const $: any;
 @Component({
   selector: 'jhi-checkout-component',
@@ -23,6 +24,7 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
   plusMinutes = 0;
   isSales = false;
   @Input() device: any;
+  @Input() selectedType = 'device';
 
   @Output() closeCheckOut = new EventEmitter();
   @Output() deviceStopped = new EventEmitter();
@@ -32,6 +34,7 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
     private devicePricePipe: DevicePricePipe,
     private cd: ChangeDetectorRef,
     private devicesSessionsService: DevicesSessionsService,
+    private playgroundDevicesSessionsService: PlaygroundDevicesSessionsService,
     private accountService: AccountService
   ) {}
   ngAfterViewInit(): void {
@@ -86,18 +89,33 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
       plusMinutes: this.plusMinutes,
     };
 
-    this.devicesSessionsService.startDeviceSession(this.device.id, sessionStart).subscribe(
-      dev => {
-        this.device = dev;
+    if (this.selectedType === 'device') {
+      this.devicesSessionsService.startDeviceSession(this.device.id, sessionStart).subscribe(
+        dev => {
+          this.device = dev;
 
-        this.cd.markForCheck();
-        this.deviceStarted.emit(this.device);
-        this.isSaving = false;
-      },
-      () => {
-        this.isSaving = false;
-      }
-    );
+          this.cd.markForCheck();
+          this.deviceStarted.emit(this.device);
+          this.isSaving = false;
+        },
+        () => {
+          this.isSaving = false;
+        }
+      );
+    } else {
+      this.playgroundDevicesSessionsService.startDeviceSession(this.device.id, sessionStart).subscribe(
+        dev => {
+          this.device = dev;
+
+          this.cd.markForCheck();
+          this.deviceStarted.emit(this.device);
+          this.isSaving = false;
+        },
+        () => {
+          this.isSaving = false;
+        }
+      );
+    }
   }
 
   endSession(): void {
@@ -109,16 +127,30 @@ export class CheckoutComponentComponent implements OnInit, AfterViewInit {
       ordersDiscount: this.ordersDiscount,
       timeDiscount: this.timeDiscount,
     };
-    this.devicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(
-      dev => {
-        this.device = dev;
-        this.cd.markForCheck();
-        this.deviceStopped.emit(this);
-        this.isSaving = false;
-      },
-      () => {
-        this.isSaving = false;
-      }
-    );
+    if (this.selectedType === 'device') {
+      this.devicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(
+        dev => {
+          this.device = dev;
+          this.cd.markForCheck();
+          this.deviceStopped.emit(this);
+          this.isSaving = false;
+        },
+        () => {
+          this.isSaving = false;
+        }
+      );
+    } else {
+      this.playgroundDevicesSessionsService.stopDeviceSession(this.device.id, sessionEnd).subscribe(
+        dev => {
+          this.device = dev;
+          this.cd.markForCheck();
+          this.deviceStopped.emit(this);
+          this.isSaving = false;
+        },
+        () => {
+          this.isSaving = false;
+        }
+      );
+    }
   }
 }

@@ -26,20 +26,20 @@
     'border-danger': !table.active
   }"
 >
-  <div class="card-body">
+  <div class="card-body p-2">
     <h5 class="card-title row">
       <span class="col-10">
         <i class="fa fa-bitbucket mx-1" aria-hidden="true"></i><a *ngIf="table" href="#" class="card-link"> {{ table.name }}</a>
       </span>
 
       <div style="text-align: center" *ngIf="tableType == 'table'">
-        <button
+        <!-- <button
           *ngIf="table.active"
           (click)="diableClick(); showOptions = !showOptions; deviceClicked()"
           class="btn mt-3 col-3 badge-primary shadow-sm border text-center m-auto btn-sm p-0"
         >
           <i style="font-size: large" class="fa fa-cog m-auto mx-0 mt-1" aria-hidden="true"></i>
-        </button>
+        </button> -->
         <li
           class="col-sm p-0 pointer my-1 border text-center btn p-2 shadow-sm dropdown px-5"
           (click)="diableClick(); loadAllDevices()"
@@ -165,7 +165,7 @@
         <hr />
 
         <form>
-          <div *ngIf="table.active" class="form-group row">
+          <div [hidden]="true" *ngIf="table.active" class="form-group row">
             <label for="colFormLabelLg" class="col-sm-4 col-form-label col-form-label-lg">الخصم</label>
             <div class="col-sm-8">
               <div class="input-group mb-3">

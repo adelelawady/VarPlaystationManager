@@ -1,10 +1,7 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.domain.Product;
-import com.mycompany.myapp.domain.Record;
 import com.mycompany.myapp.domain.Sheft;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -12,12 +9,9 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
-import javax.swing.table.TableModel;
 
 public class ReceiptSheftPrint implements Printable {
 
@@ -45,14 +39,14 @@ public class ReceiptSheftPrint implements Printable {
             return Printable.NO_SUCH_PAGE;
         }
 
-        g2d.drawString(String.format("%-25s", "	-   VAR   Sheft-"), 1, line);
+        g2d.drawString(String.format("%-25s", "	-   حكاوي   Sheft-"), 1, line);
         line += 13;
         int imagewidth = 160;
         int imageheight = 50;
         BufferedImage read;
 
         try {
-            read = ImageIO.read(getClass().getResource("/image/img.jpeg"));
+            read = ImageIO.read(getClass().getResource("/image/img1.png"));
             g2d.drawImage(read, 5, line, imagewidth, imageheight, null); // draw image
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -62,7 +56,20 @@ public class ReceiptSheftPrint implements Printable {
         line += 70;
         // font = new Font("Arial", Font.PLAIN, 9);
         // g2d.setFont(font);
+        g2d.drawString(
+            String.format(
+                "%-25s",
+                "ID :  " + currentSheft.getId().substring(0, 4) + "..." + currentSheft.getId().substring(currentSheft.getId().length() - 4)
+            ),
+            1,
+            line
+        );
 
+        line += 13;
+        g2d.drawString(String.format("%-25s", "DATE : " + currentSheft.getCreatedDate().toString()), 1, line);
+        line += 13;
+        g2d.drawString(String.format("%-25s", "CASHER : " + currentSheft.getCreatedBy()), 1, line);
+        line += 13;
         g2d.drawString(String.format("%-25s", "SHEFT  :  " + currentSheft.getUser().getFirstName()), 1, line);
         line += 13;
         g2d.drawString(String.format("%-25s", "START : " + currentSheft.getStart().toString()), 1, line);
@@ -72,20 +79,7 @@ public class ReceiptSheftPrint implements Printable {
 
         font = new Font("Arial", Font.BOLD, 12);
         line += 13;
-        g2d.drawString(String.format("%-25s", "SUBTOTAL : " + currentSheft.getTotal_net_price().toString()), 1, line);
-
-        line += 13;
-        g2d.drawString(String.format("%-25s", "DISCOUNT : " + currentSheft.getTotal_discount().toString()), 1, line);
-
-        line += 13;
-        g2d.drawString(
-            String.format("%-25s", "SYSTEM TOTAL : " + currentSheft.getTotal_net_price_after_discount_system().toString()),
-            1,
-            line
-        );
-
-        line += 13;
-        g2d.drawString(String.format("%-25s", " TOTAL : " + currentSheft.getTotal_net_price_after_discount().toString()), 1, line);
+        g2d.drawString(String.format("%-25s", "TOTAL : " + currentSheft.getTotal_net_price().toString()), 1, line);
 
         return Printable.PAGE_EXISTS;
     }

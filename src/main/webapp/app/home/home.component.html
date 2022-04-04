@@ -1,13 +1,17 @@
 <ng-sidebar-accordion #accordion style="left: 0; bottom: unset" class="ng-sidebar-accordion__bottom-pane_over">
   <!-- A sidebar -->
   <ng-sidebar *ngIf="account" class="classtest" sidebarResizable="true" position="bottom" mode="over" [opened]="false">
-    <ng-sidebar-header>
+    <ng-sidebar-header [ngClass]="{ 'd-none': !showProducts }">
       <div>
         <div><h3 class="m-0 pt-2">الطلبات</h3></div>
       </div>
+
+      <div style="position: absolute; top: 0; left: 0; padding: 6px" *ngIf="selectedDevice" class="float-right">
+        {{ selectedDevice.name }}
+      </div>
     </ng-sidebar-header>
 
-    <ng-sidebar-content class="classtest" style="overflow: scroll">
+    <ng-sidebar-content [ngClass]="{ 'd-none': !showProducts }" class="classtest" style="overflow: scroll">
       <div class="row mx-1">
         <div class="col-md-5">
           <h5 class="card-title mx-0 text-center bg-dark text-white rounded p-1 pl-2">الاصناف</h5>
@@ -28,23 +32,34 @@
           <div *ngIf="products" class="row mx-1" style="overflow: scroll; max-height: 250px">
             <button
               *ngFor="let prod of products"
-              (click)="addProductToSelectedDevice(prod.id)"
+              (click)="
+                !prod.subProducts || (prod.subProducts && prod.subProducts.length === 0) ? addProductToSelectedDevice(prod.id) : null
+              "
               style="padding: 25px; cursor: pointer"
               type="button"
               class="col-auto border rounded m-1 text-center"
             >
               {{ prod.name }}
-              <small *ngIf="tapDevices || (tapTables && !tapTakeaway)" class="d-block badge badge-warning text-center"
-                >{{ prod.price }} LE</small
-              >
+              <small class="d-block badge badge-warning text-center">{{ prod.price }} LE</small>
 
-              <small *ngIf="!tapDevices && !tapTables && !tapShops && tapTakeaway" class="d-block badge badge-warning text-center"
-                >{{ prod.takeawayPrice }} LE</small
-              >
-
-              <small *ngIf="!tapDevices && !tapTables && !tapTakeaway && tapShops" class="d-block badge badge-warning text-center"
-                >{{ prod.shopsPrice }} LE</small
-              >
+              <div *ngIf="prod.subProducts && prod.subProducts.length > 0" class="dropdown">
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  حجم
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a (click)="addProductToSelectedDevice(prod.id)" class="dropdown-item" href="#">{{ prod.name }} - {{ prod.price }}</a>
+                  <a (click)="addProductToSelectedDevice(proi.id)" *ngFor="let proi of prod.subProducts" class="dropdown-item" href="#"
+                    >{{ proi.name }} - {{ proi.price }}</a
+                  >
+                </div>
+              </div>
             </button>
           </div>
         </div>
@@ -71,17 +86,40 @@
             >الاجهزة</a
           >
         </li>
+
         <li class="nav-item">
-          <a class="nav-link mainTabTxt" (click)="selectTap('tapTables')" [ngClass]="{ active: tapTables }" href="#">الصالات</a>
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapTables')" [ngClass]="{ active: tapTables }" href="#">صالات</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapPlayGround')" [ngClass]="{ active: tapPlayGround }" href="#">الملعب</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapGames')" [ngClass]="{ active: tapGames }" href="#">الالعاب</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapMarket')" [ngClass]="{ active: tapMarket }" href="#">الماركت</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapRes')" [ngClass]="{ active: tapRes }" href="#">المطعم</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link mainTabTxt" (click)="selectTap('tapCafe')" [ngClass]="{ active: tapCafe }" href="#">الكافية</a>
+        </li>
+        <!--  <li class="nav-item">
           <a class="nav-link mainTabTxt" (click)="selectTap('tapTakeaway')" [ngClass]="{ active: tapTakeaway }" href="#">اوردارت</a>
         </li>
 
         <li class="nav-item">
           <a class="nav-link mainTabTxt" (click)="selectTap('tapShops')" [ngClass]="{ active: tapShops }" href="#">محلات</a>
-        </li>
+        </li>-->
       </ul>
+
+      <!--
+
 
       <jhi-tables-tap-component
         [tableType]="'shops'"
@@ -98,6 +136,19 @@
         (tableSelected)="onTableSelectionChange($event)"
         *ngIf="tapTakeaway"
       ></jhi-tables-tap-component>
+-->
+
+      <div *ngIf="tapCafe">
+        <jhi-pos-component [tableType]="'cafe'"></jhi-pos-component>
+      </div>
+
+      <div *ngIf="tapRes">
+        <jhi-pos-component [tableType]="'res'"></jhi-pos-component>
+      </div>
+
+      <div *ngIf="tapMarket">
+        <jhi-pos-component [tableType]="'market'"></jhi-pos-component>
+      </div>
 
       <jhi-tables-tap-component
         [tableType]="'table'"
@@ -107,10 +158,11 @@
         *ngIf="tapTables"
       ></jhi-tables-tap-component>
       <div class="row" *ngIf="devices">
-        <div class="col-8">
+        <div class="col-lg-8 col-md-12">
           <jhi-checkout-component
-            (deviceStopped)="selectedDevice = null; closeOrdersPanle(); showCheckOut = false; loadAllDevices()"
-            (deviceStarted)="showCheckOut = false; selectedDevice = $event; loadAllDevices()"
+            [selectedType]="tapDevices ? 'device' : 'playground'"
+            (deviceStopped)="deviceCheckoutStopped()"
+            (deviceStarted)="deviceCheckoutStarted($event)"
             (closeCheckOut)="showCheckOut = false"
             *ngIf="selectedDevice && showCheckOut"
             [device]="selectedDevice"
@@ -132,6 +184,27 @@
                     (deviceCheckOut)="selectedDevice = device; closeOrdersPanle(); showCheckOut = true"
                   >
                   </jhi-device-component>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="tapPlayGround && !showCheckOut" class="card-body px-1">
+            <h5 class="card-title mx-4">الملعب</h5>
+            <div class="card jh-card m-2 p-4">
+              <div class="row justify-content-center align-items-center">
+                <div class="col-md-12 p-1" *ngFor="let device of playGrounds">
+                  <jhi-playground-component
+                    (deviceClicked)="selectedDevice = $event"
+                    (deviceSelected)="selectedDevice = $event"
+                    (deviceStopped)="selectedDevice = null; closeOrdersPanle()"
+                    [device]="device"
+                    [isSelected]="selectedDevice && selectedDevice.id == device.id"
+                    (deviceMoved)="loadAllDevices()"
+                    (deviceDoubleClicked)="selectedDevice = $event; openOrdersPanle()"
+                    (deviceCheckOut)="selectedDevice = device; closeOrdersPanle(); showCheckOut = true"
+                  >
+                  </jhi-playground-component>
                 </div>
               </div>
             </div>
@@ -158,6 +231,14 @@
               "
             >
               <h5 class="card-title">طلبات</h5>
+              <div *ngIf="selectedDevice && selectedDevice.session.containsNewOrders" class="col-12 p-1">
+                <button class="btn btn-primary" (click)="sendFlushOrders()">ابعت الطلبات الجديدة</button>
+
+                <span class="float-right">
+                  <label class="text-muted">طباعة</label>
+                  <input type="checkbox" [(ngModel)]="printFlushOrders" />
+                </span>
+              </div>
               <div class="row">
                 <div class="table-responsive" id="entities">
                   <table class="table" aria-describedby="page-heading">
@@ -175,7 +256,13 @@
                       <tr *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" data-cy="entityTable">
                         <div style="display: contents" *ngIf="selectedDevice.session.ordersQuantity[prod.id]">
                           <td style="word-break: break-word" class="text-center">
-                            <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
+                            <h6
+                              [ngClass]="{ 'text-warning': selectedDevice.session.productOrderRecord[prod.id] }"
+                              style="word-break: keep-all"
+                              class="text-primary"
+                            >
+                              {{ prod.name }}
+                            </h6>
                           </td>
 
                           <td>

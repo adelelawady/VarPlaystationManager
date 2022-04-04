@@ -33,12 +33,15 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="name"><span jhiTranslate="erApp.category.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="type"><span>type</span> <fa-icon icon="sort"></fa-icon></th>
+
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let category of categories; trackBy: trackId" data-cy="entityTable">
           <td>{{ category.name }}</td>
+          <td>{{ selectType(category.type) }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

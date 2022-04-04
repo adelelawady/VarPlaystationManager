@@ -62,6 +62,7 @@ public interface SessionService {
      */
     void delete(String id);
 
+    void flushOrderSessionUnOrderdProducts(String name, String sessId, boolean print);
     void stopAllDeviceActiveSessions(String deviceId);
 
     void calculateDeviceSessionOrderesPrice(Session session);

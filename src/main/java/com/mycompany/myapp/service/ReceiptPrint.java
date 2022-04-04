@@ -3,8 +3,6 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.domain.Product;
 import com.mycompany.myapp.domain.Record;
 import java.awt.BasicStroke;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
@@ -13,12 +11,9 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
-import javax.swing.table.TableModel;
 
 public class ReceiptPrint implements Printable {
 
@@ -52,32 +47,44 @@ public class ReceiptPrint implements Printable {
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
-        Font font = new Font("Arial", Font.BOLD, 10);
-
         int line = 10;
 
         if (pageIndex < 0 || pageIndex >= 1) {
             return Printable.NO_SUCH_PAGE;
         }
 
-        g2d.drawString(String.format("%-25s", "	-   VAR   -"), 1, line);
+        g2d.drawString(String.format("%-25s", "	-   حكاوي   -"), 1, line);
         line += 13;
         int imagewidth = 160;
         int imageheight = 50;
         BufferedImage read;
 
         try {
-            read = ImageIO.read(getClass().getResource("/image/img.jpeg"));
+            read = ImageIO.read(getClass().getResource("/image/img1.png"));
             g2d.drawImage(read, 5, line, imagewidth, imageheight, null); // draw image
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        g2d.setFont(font);
         line += 70;
-        //font = new Font("Arial", Font.PLAIN, 9);
-        // g2d.setFont(font);
 
+        g2d.drawString(
+            String.format(
+                "%-25s",
+                "ID :  " +
+                currentRecord.getId().substring(0, 4) +
+                "..." +
+                currentRecord.getId().substring(currentRecord.getId().length() - 4)
+            ),
+            1,
+            line
+        );
+
+        line += 13;
+        g2d.drawString(String.format("%-25s", "DATE : " + currentRecord.getCreatedDate().toString()), 1, line);
+        line += 13;
+        g2d.drawString(String.format("%-25s", "CASHER : " + currentRecord.getCreatedBy()), 1, line);
+        line += 13;
         g2d.drawString(String.format("%-25s", "DEVICE :  " + currentRecord.getDevice().getName()), 1, line);
         line += 13;
         g2d.drawString(
@@ -154,8 +161,8 @@ public class ReceiptPrint implements Printable {
                 /* Draw Colums */
                 g2d.drawLine(10, y + 40, 180, y + 40);
 
-                g2d.drawString("NAME", 10, y + 50);
-                g2d.drawString("QTY", 100, y + 50);
+                g2d.drawString("NAME", 2, y + 50);
+                g2d.drawString("Q", 110, y + 50);
                 g2d.drawString("PRICE", 140, y + 50);
                 g2d.drawLine(10, y + 60, 180, y + 60);
 
@@ -168,14 +175,14 @@ public class ReceiptPrint implements Printable {
                      * Assume that all parameters are in string data type for this situation All
                      * other premetive data types are accepted.
                      */
-                    String itemid = prod.getEnName().length() > 15 ? prod.getEnName().substring(0, 13) + ".." : prod.getEnName();
+                    String itemid = prod.getEnName().length() > 30 ? prod.getEnName().substring(0, 30) + ".." : prod.getEnName();
                     String itemname = currentRecord.getOrdersQuantity().get(prod.getId()).toString();
                     String price = prod.getPrice().toString();
 
                     cH = (y + 70) + (10 * i); // shifting drawing line
 
-                    g2d.drawString(toCodedString(itemid), 15, cH);
-                    g2d.drawString(itemname, 100, cH);
+                    g2d.drawString(toCodedString(itemid), 2, cH);
+                    g2d.drawString(itemname, 120, cH);
                     g2d.drawString(price + " LE", 140, cH);
                     i++;
 
@@ -183,8 +190,6 @@ public class ReceiptPrint implements Printable {
                         cH = cH + 10;
                         g2d.drawLine(10, cH, 180, cH);
                         cH = cH + 20;
-                        //font = new Font("Arial", Font.BOLD, 11); // changed font size
-                        g2d.setFont(font);
 
                         if (currentRecord.getDuration().toMinutes() > 0) {
                             g2d.drawString(

@@ -41,6 +41,50 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     @Field("enName")
     private String enName;
 
+    @Field("subProducts")
+    private Set<Product> subProducts = new HashSet<>();
+
+    @Field("hasParent")
+    private Boolean hasParent = false;
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    @Field("parent")
+    private String parent;
+
+    public Set<Product> getSubProducts() {
+        return subProducts;
+    }
+
+    public void setSubProducts(Set<Product> subProducts) {
+        this.subProducts = subProducts;
+    }
+
+    public Boolean getHasParent() {
+        return hasParent;
+    }
+
+    public void setHasParent(Boolean hasParent) {
+        this.hasParent = hasParent;
+    }
+
+    @Field("ordered")
+    private boolean ordered = false;
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
     public String getEnName() {
         if (enName == null || enName.isBlank()) {
             return name;
@@ -53,9 +97,6 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     }
 
     public Double getTakeawayPrice() {
-        if (shopsPrice <= 0) {
-            return price;
-        }
         return takeawayPrice;
     }
 
@@ -64,9 +105,6 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     }
 
     public Double getShopsPrice() {
-        if (shopsPrice <= 0) {
-            return price;
-        }
         return shopsPrice;
     }
 

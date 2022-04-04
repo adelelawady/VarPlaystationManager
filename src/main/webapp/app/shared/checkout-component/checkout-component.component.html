@@ -13,7 +13,7 @@
                     <i class="fa fa-tv" aria-hidden="true"></i> <a href="#" class="card-link"> {{ device.name }}</a></span
                   >
                 </h1>
-                <h6 class="card-subtitle mb-2 text-muted my-3">
+                <h6 *ngIf="device.type" class="card-subtitle mb-2 text-muted my-3">
                   {{ device.type.name }}
                   <span *ngIf="device.session && device.session.multi">
                     <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }} </small>
@@ -105,7 +105,7 @@
           </div>
         </div>
 
-        <div *ngIf="device.session && device.session.previousSessions && device.session.previousSessions.length > 0" class="col-12">
+        <!--   <div *ngIf="device.session && device.session.previousSessions && device.session.previousSessions.length > 0" class="col-12">
           <div class="my-2 row">
             <span *ngFor="let sess of device.session.previousSessions" class="badge my-2 col-12 border pt-2">
               <h6 style="text-align: left" class="mx-1 col-auto text-black p-0">
@@ -126,7 +126,7 @@
             </span>
             <small style="text-align: right; font-weight: 900">EGP {{ device.session.previousSessionsTotalPrice }} : اجهزة سابقة </small>
           </div>
-        </div>
+        </div>-->
       </div>
       <div *ngIf="device && device.session" class="row">
         <div class="col-8">
@@ -184,7 +184,7 @@
         </div>
 
         <div class="col-4">
-          <div *ngIf="device.session" class="form-group">
+          <!--  <div *ngIf="device.session" class="form-group">
             <div *ngIf="!isSales" class="col">
               <div class="input-group mb-3">
                 <input
@@ -236,7 +236,7 @@
               </div>
             </div>
             <hr />
-          </div>
+          </div>-->
 
           <div class="col-sm-10 offset-sm-0">
             <div class="form-check">
@@ -265,7 +265,7 @@
         </div>
       </div>
 
-      <div *ngIf="!device.session" class="form-group row">
+      <div *ngIf="!device.session && device.type" class="form-group row">
         <div class="col-sm-10 offset-sm-0">
           <div class="form-check">
             <input [(ngModel)]="isMulti" [ngModelOptions]="{ standalone: true }" class="form-check-input" type="checkbox" id="gridCheck1" />
@@ -274,7 +274,7 @@
         </div>
       </div>
       <hr />
-      <div *ngIf="!device.session" class="form-group row">
+      <div *ngIf="!device.session && device.type" class="form-group row">
         <label class="form-check-label" for="gridCheck1"> اضافة وقت </label>
         <img
           (click)="plusMinutes = 5"

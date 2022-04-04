@@ -51,4 +51,12 @@ export class DevicesSessionsService {
   unPayProductFromDeviceSession(deviceId: string, productid: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.resourceUrl}/device/${deviceId}/session/product/${productid}/unpay`, { observe: 'body' });
   }
+
+  flushOrders(deviceId: string, type: string, print: boolean): Observable<any[]> {
+    return this.http.post<any[]>(`${this.resourceUrl}/sessions/flush/orders/device/${deviceId}/${type}`, { print }, { observe: 'body' });
+  }
+
+  flushTableOrders(deviceId: string, print: boolean): Observable<any[]> {
+    return this.http.post<any[]>(`${this.resourceUrl}/tables/flush/orders/table/${deviceId}`, { print }, { observe: 'body' });
+  }
 }

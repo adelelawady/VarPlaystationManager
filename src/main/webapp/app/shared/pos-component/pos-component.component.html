@@ -1,0 +1,434 @@
+<div class="card-body px-1">
+  <h5 class="card-title mx-4">الكافية</h5>
+  <div class="card jh-card m-2 p-4">
+    <div class="row">
+      <div class="col-md-7" (click)="selectCheck(null)">
+        <div class="col-md-12">
+          <h5 class="card-title mx-0 text-center bg-dark text-white rounded p-1 pl-2">الاصناف</h5>
+          <div class="row border border-2 border-primary p-2 rounded" style="overflow: scroll">
+            <button
+              *ngFor="let cat of categories"
+              (click)="getAllProductsByCategory(cat.id)"
+              type="button"
+              class="col-auto p-2 py-4 m-1 badge badge-primary"
+              style="font-size: large; min-width: 100px"
+            >
+              <h6 style="font-weight: bold !important">{{ cat.name }}</h6>
+            </button>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h5 class="card-title mx-0 text-center bg-dark text-white rounded p-1 pl-2">الطلبات</h5>
+          <div *ngIf="products" class="row mx-1" style="overflow: scroll">
+            <button
+              *ngFor="let prod of products"
+              (click)="!prod.subProducts || (prod.subProducts && prod.subProducts.length === 0) ? addProductToSelectedDevice(prod) : null"
+              style="padding: 25px; cursor: pointer"
+              type="button"
+              class="col-auto border rounded m-1 text-center"
+            >
+              {{ prod.name }}
+              <small class="d-block badge badge-warning text-center">{{ prod.price }} LE</small>
+              <div *ngIf="prod.subProducts && prod.subProducts.length > 0" class="dropdown">
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  حجم
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a (click)="addProductToSelectedDevice(prod)" class="dropdown-item" onclick="return false;"
+                    >{{ prod.name }} - {{ prod.price }}</a
+                  >
+                  <a
+                    *ngFor="let proi of prod.subProducts"
+                    (click)="addProductToSelectedDevice(proi)"
+                    class="dropdown-item"
+                    onclick="return false;"
+                    >{{ proi.name }} - {{ proi.price }}</a
+                  >
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5" style="overflow: scroll; max-height: 700px">
+        <div
+          *ngIf="tableCreated"
+          class="card border border-3 border-secondary border-active my-1"
+          style="
+            user-select: none; /* supported by chrome and opera */
+            -webkit-user-select: none; /* safari */
+            -khtml-user-select: none; /* konqueror html */
+            -moz-user-select: none; /* firefox */
+            -ms-user-select: none; /* internet explorer/edge */
+            cursor: pointer;
+          "
+          id=""
+          ng-reflect-ng-class="[object Object]"
+        >
+          <div class="card-body p-1">
+            <h5 class="card-title row p-2">
+              <span class="col-10">
+                <i aria-hidden="true" class="fa fa-bitbucket mx-1"></i><a href="#" class="card-link"> {{ tableCreated.name }}</a
+                ><!--bindings={
+      "ng-reflect-ng-if": "[object Object]"
+    }-->
+              </span>
+
+              <div style="text-align: center">
+                <!--bindings={
+      "ng-reflect-ng-if": "false"
+    }-->
+
+                <!--bindings={
+      "ng-reflect-ng-if": "false"
+    }-->
+              </div>
+              <!--bindings={
+      "ng-reflect-ng-if": "true"
+    }-->
+            </h5>
+            <div class="card-body p-1">
+              <div class="row">
+                <div id="entities" class="table-responsive">
+                  <table aria-describedby="page-heading" class="table">
+                    <thead>
+                      <tr style="display: none">
+                        <th scope="col">
+                          <span>اسم الجهاز</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+
+                        <th scope="col">
+                          <span>الوقت</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+
+                        <th scope="col">
+                          <span>سعر الوقت</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+                        <th scope="col">
+                          <span>سعر الوقت</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let prod of tableCreated.ordersData.slice().reverse()" data-cy="entityTable">
+                        <div style="display: contents" *ngIf="tableCreated.ordersQuantity[prod.id]">
+                          <td style="word-break: break-word" class="text-center p-1">
+                            <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
+                          </td>
+
+                          <td class="" p-1>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                tableCreated.ordersQuantity[prod.id] ? tableCreated.ordersQuantity[prod.id] : '1'
+                              }}</span>
+                            </span>
+                          </td>
+
+                          <td class="" p-1>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                          <td class="p-1">
+                            <i
+                              class="text-danger fa fa-minus mx-1"
+                              style="cursor: pointer"
+                              (click)="deleteProductFromSelectedDevice(prod.id)"
+                            ></i>
+                          </td>
+                        </div>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="justify-content-center align-items-center p-1 border-top pt-2">
+            <div class="mx-2">
+              <button type="button" (click)="endSession()" class="btn btn-success">
+                اغلاق <i class="fa fa-check text-white" style="cursor: pointer"></i>
+              </button>
+              <button type="button" (click)="cancelCurrentTableCreated()" class="btn btn-danger">
+                الغاء <i class="fa fa-times text-white" style="cursor: pointer"></i>
+              </button>
+
+              <a
+                href="#"
+                class="card-link float-right"
+                style="
+                  text-align: right;
+                  user-select: none; /* supported by chrome and opera */
+                  -webkit-user-select: none; /* safari */
+                  -khtml-user-select: none; /* konqueror html */
+                  -moz-user-select: none; /* firefox */
+                  -ms-user-select: none;
+                "
+                >{{ tableCreated.totalPrice }} جنيه
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <hr />
+
+        <div
+          *ngFor="let tbPosRec of this.tableRecords"
+          (click)="selectCheck(tbPosRec)"
+          [ngClass]="{ 'border-muted': this.selectedCheck !== tbPosRec, 'border-success': this.selectedCheck === tbPosRec }"
+          class="card border border-3 border-muted border-active my-1"
+          style="
+            user-select: none; /* supported by chrome and opera */
+            -webkit-user-select: none; /* safari */
+            -khtml-user-select: none; /* konqueror html */
+            -moz-user-select: none; /* firefox */
+            -ms-user-select: none; /* internet explorer/edge */
+            cursor: pointer;
+          "
+          id="table-61d60eda50ff8377fe5974a9selector"
+          ng-reflect-ng-class="[object Object]"
+        >
+          <div class="card-body p-1">
+            <small _ngcontent-hep-c488="" class="float-right m-1 border badge badge-light" style="position: absolute; right: 0"
+              >{{ tbPosRec.createdDate | localizedDate: { month: 'short', hour: 'numeric', minute: 'numeric' } }}
+              <i class="fa-solid fa-calendar"></i
+            ></small>
+            <h5 class="card-title row p-2">
+              <span class="col-10">
+                <i aria-hidden="true" class="fa fa-bitbucket mx-1"></i><a href="#" class="card-link"> {{ tbPosRec.table.name }}</a
+                ><!--bindings={
+      "ng-reflect-ng-if": "[object Object]"
+    }-->
+              </span>
+
+              <div style="text-align: center">
+                <!--bindings={
+      "ng-reflect-ng-if": "false"
+    }-->
+
+                <!--bindings={
+      "ng-reflect-ng-if": "false"
+    }-->
+              </div>
+              <!--bindings={
+      "ng-reflect-ng-if": "true"
+    }-->
+            </h5>
+            <div class="card-body p-1">
+              <div class="row">
+                <div id="entities" class="table-responsive">
+                  <table aria-describedby="page-heading" class="table">
+                    <thead>
+                      <tr style="display: none">
+                        <th scope="col">
+                          <span>اسم الجهاز</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+
+                        <th scope="col">
+                          <span>الوقت</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+
+                        <th scope="col">
+                          <span>سعر الوقت</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+                        <th scope="col">
+                          <span>سعر الوقت</span>
+                          <fa-icon icon="sort" class="ng-fa-icon" ng-reflect-icon="sort"
+                            ><svg
+                              role="img"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="sort"
+                              class="svg-inline--fa fa-sort fa-w-10"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 320 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
+                              ></path></svg
+                          ></fa-icon>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let prod of tbPosRec.ordersData.slice().reverse()" data-cy="entityTable">
+                        <div style="display: contents" *ngIf="tbPosRec.ordersQuantity[prod.id]">
+                          <td style="word-break: break-word" class="text-center p-1">
+                            <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
+                          </td>
+
+                          <td class="" p-1>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                tbPosRec.ordersQuantity[prod.id] ? tbPosRec.ordersQuantity[prod.id] : '1'
+                              }}</span>
+                            </span>
+                          </td>
+
+                          <td class="" p-1>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                          <td class="p-1">
+                            <i class="text-danger fa fa-delete mx-1"></i>
+                          </td>
+                        </div>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="justify-content-center align-items-center p-1 border-top pt-2">
+            <div class="mx-2">
+              <button type="button" (click)="printTableRecored(tbPosRec.id)" class="btn btn-primary">
+                طباعة <i class="fa fa-print text-white" style="cursor: pointer"></i>
+              </button>
+
+              <button type="button" (click)="printTableRecored(tbPosRec.id)" class="btn btn-secondary">
+                طباعة تنفيذ <i class="fa fa-print text-white" style="cursor: pointer"></i>
+              </button>
+
+              <a
+                href="#"
+                class="card-link float-right"
+                style="
+                  text-align: right;
+                  user-select: none; /* supported by chrome and opera */
+                  -webkit-user-select: none; /* safari */
+                  -khtml-user-select: none; /* konqueror html */
+                  -moz-user-select: none; /* firefox */
+                  -ms-user-select: none;
+                "
+                >EGP {{ tbPosRec.netTotalPrice }}</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

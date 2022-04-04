@@ -1,0 +1,98 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-device-heading" data-cy="DeviceCreateUpdateHeading" jhiTranslate="erApp.device.home.createOrEditLabel">
+        Create or edit a Device
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="erApp.device.name" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+        <div class="form-group">
+          <label class="form-control-label" for="field_price">السعر للساعة</label>
+          <input type="text" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
+        </div>
+
+        <div *ngIf="device">
+          <div *ngFor="let time of device.playgroundTimeList" class="row align-items-center justify-content-center border border-muted m-3">
+            <div class="col-md-3">
+              <label class="form-control-label" for="field_price">السعر</label>
+              <input disabled type="text" class="form-control" [value]="time.price" name="price" id="P_priceX" data-cy="price" />
+            </div>
+            <div class="col-md-6">
+              <div class="dx-fieldset">
+                <div class="dx-field">
+                  <div class="dx-field-label">من</div>
+                  <div class="dx-field-value">
+                    <dx-date-box [value]="time.from" [disabled]="true" type="time"> </dx-date-box>
+                  </div>
+                </div>
+                <div class="dx-field">
+                  <div class="dx-field-label">الي</div>
+                  <div class="dx-field-value">
+                    <dx-date-box [value]="time.to" [disabled]="true" type="time"> </dx-date-box>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <button (click)="deleteTime(time)" class="btn btn-danger">delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="">
+          <button (click)="showAddTime = !showAddTime" onclick="return false;" class="btn btn-success">
+            add new time <i class="fa fa-plus"></i>
+          </button>
+        </div>
+
+        <div *ngIf="showAddTime" class="row align-items-center justify-content-center border border-muted m-3">
+          <div class="col-md-3">
+            <label class="form-control-label" for="field_price">السعر</label>
+            <input type="text" class="form-control" name="price" id="P_price" data-cy="price" />
+          </div>
+          <div class="col-md-6">
+            <div class="dx-fieldset">
+              <div class="dx-field">
+                <div class="dx-field-label">من</div>
+                <div class="dx-field-value">
+                  <dx-date-box [value]="from.toDate()" (onValueChanged)="fromDateChanged($event)" type="time"> </dx-date-box>
+                </div>
+              </div>
+              <div class="dx-field">
+                <div class="dx-field-label">الي</div>
+                <div class="dx-field-value">
+                  <dx-date-box [value]="to.toDate()" (onValueChanged)="toDateChanged($event)" type="time"> </dx-date-box>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 align-items-center justify-content-center border border-muted m-3">
+            <button (click)="addNewTime()" onclick="return false;" class="btn btn-success">save <i class="fa fa-save"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

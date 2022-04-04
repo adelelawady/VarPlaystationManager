@@ -1,14 +1,8 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.*;
 import com.mycompany.myapp.domain.Record;
-import com.mycompany.myapp.domain.Sheft;
-import com.mycompany.myapp.domain.TableRecord;
-import com.mycompany.myapp.domain.User;
-import com.mycompany.myapp.repository.RecordRepository;
-import com.mycompany.myapp.repository.SheftRepository;
-import com.mycompany.myapp.repository.ShopsOrdersRepository;
-import com.mycompany.myapp.repository.TableRecordRepository;
-import com.mycompany.myapp.repository.TakeawayRepository;
+import com.mycompany.myapp.repository.*;
 import com.mycompany.myapp.service.PrinterSupport;
 import com.mycompany.myapp.service.ReceiptPrint;
 import com.mycompany.myapp.service.ReceiptSheftPrint;
@@ -20,6 +14,7 @@ import java.awt.print.PrinterJob;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -62,6 +57,12 @@ public class SheftResource {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    PosOrderRecoredRepository posOrderRecoredRepository;
+
+    @Autowired
+    PlaygroundRecoredRepository playgroundRepository;
 
     private final Logger log = LoggerFactory.getLogger(SheftResource.class);
 
@@ -170,141 +171,79 @@ public class SheftResource {
                 sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
             );
 
-            List<TableRecord> takeawayRecords = tableRecordRepository.findAllByTypeAndCreatedDateBetween(
-                "TAKEAWAY",
-                sheftFound.get().getStart(),
-                sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
-            );
+            List<PosOrderRecord> allPosOrderRecCafe =
+                this.posOrderRecoredRepository.findAllByTypeAndCreatedDateBetween(
+                        "CAFE",
+                        sheftFound.get().getStart(),
+                        sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
+                    );
 
-            List<TableRecord> shopsRecords = tableRecordRepository.findAllByTypeAndCreatedDateBetween(
-                "SHOPS",
-                sheftFound.get().getStart(),
-                sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
-            );
+            List<PosOrderRecord> allPosOrderRecMarket =
+                this.posOrderRecoredRepository.findAllByTypeAndCreatedDateBetween(
+                        "MARKET",
+                        sheftFound.get().getStart(),
+                        sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
+                    );
+
+            List<PosOrderRecord> allPosOrderRecRes =
+                this.posOrderRecoredRepository.findAllByTypeAndCreatedDateBetween(
+                        "RES",
+                        sheftFound.get().getStart(),
+                        sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
+                    );
+
+            List<PlaygroundRecord> allPlayGroundsrecords =
+                this.playgroundRepository.findAllByStartBetween(
+                        sheftFound.get().getStart(),
+                        sheftFound.get().getEnd() == null ? Instant.now() : sheftFound.get().getEnd()
+                    );
+
+            Double TotalPricePlayGroundTime = allPlayGroundsrecords
+                .stream()
+                .map(PlaygroundRecord::getTotalPriceTime)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+            Double TotalPriceCafe = allPosOrderRecCafe
+                .stream()
+                .map(PosOrderRecord::getNetTotalPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+            Double TotalPriceMarket = allPosOrderRecMarket
+                .stream()
+                .map(PosOrderRecord::getNetTotalPrice)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+            Double TotalPriceRes = allPosOrderRecRes.stream().map(PosOrderRecord::getNetTotalPrice).mapToDouble(Double::doubleValue).sum();
 
             sheftObj.setTableRecords(tableRecords);
-            sheftObj.setTableTakeAwayRecords(takeawayRecords);
-            sheftObj.setTableShopsRecords(shopsRecords);
-
+            sheftObj.setMarketRecords(allPosOrderRecMarket);
+            sheftObj.setResRecords(allPosOrderRecRes);
+            sheftObj.setCafeRecords(allPosOrderRecCafe);
+            sheftObj.setPlaygroundRecords(allPlayGroundsrecords);
             // DEVICES
-
-            Double total_net_price_devices = records
-                .stream()
-                .map(Record::getTotalNetPriceCalculated)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-            Double total_net_user_price_devices = records.stream().map(Record::getTotalPriceUser).mapToDouble(Double::doubleValue).sum();
-
-            Double total_discount_price_devices = records
-                .stream()
-                .map(Record::getTotalDiscountPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
+            Double total_net_price_Tables = tableRecords.stream().map(TableRecord::getNetTotalPrice).mapToDouble(Double::doubleValue).sum();
             Double total_price_time_devices = records.stream().map(Record::getTotalPriceTime).mapToDouble(Double::doubleValue).sum();
 
-            Double total_price_orders_devices = records.stream().map(Record::getTotalPriceOrders).mapToDouble(Double::doubleValue).sum();
-
-            sheftObj.setTotal_net_price_devices(total_net_price_devices);
-
-            sheftObj.setTotal_net_user_price_devices(total_net_user_price_devices);
-
-            sheftObj.setTotal_discount_price_devices(total_discount_price_devices);
-
-            sheftObj.setTotal_price_time_devices(total_price_time_devices);
-
-            sheftObj.setTotal_price_orders_devices(total_price_orders_devices);
+            sheftObj.setTotal_net_price_Tables(total_net_price_Tables);
+            sheftObj.setTotal_net_price_cafe(TotalPriceCafe);
+            sheftObj.setTotal_net_price_market(TotalPriceMarket);
+            sheftObj.setTotal_net_price_res(TotalPriceRes);
+            sheftObj.setTotal_net_price_playground(TotalPricePlayGroundTime);
 
             // TABLES
 
             //totalPrice == user input
             // net price all actualprice
 
-            Double total_net_price_Tables = tableRecords.stream().map(TableRecord::getNetTotalPrice).mapToDouble(Double::doubleValue).sum();
-
-            Double total_discount_price_Tables = tableRecords
-                .stream()
-                .map(TableRecord::getTotalDiscountPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-            Double total_net_price_after_discount_Tables = tableRecords
-                .stream()
-                .map(TableRecord::getTotalPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-            Double total_net_price_after_discount_Tables_System = total_net_price_Tables - total_discount_price_Tables;
-
-            sheftObj.setTotal_net_price_Tables(total_net_price_Tables);
-            sheftObj.setTotal_discount_price_Tables(total_discount_price_Tables);
-            sheftObj.setTotal_net_price_after_discount_Tables(total_net_price_after_discount_Tables);
-            // TakeAway
-            Double total_net_price_takeaway = takeawayRecords
-                .stream()
-                .map(TableRecord::getNetTotalPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-            Double total_discount_price_takeaway = takeawayRecords
-                .stream()
-                .map(TableRecord::getTotalDiscountPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-            Double total_net_price_after_discount_takeaway = takeawayRecords
-                .stream()
-                .map(TableRecord::getTotalPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-            Double total_net_price_after_discount_Tables_TakeAway_System = total_net_price_takeaway - total_discount_price_takeaway;
-
-            sheftObj.setTotal_net_price_takeaway(total_net_price_takeaway);
-            sheftObj.setTotal_discount_price_takeaway(total_discount_price_takeaway);
-            sheftObj.setTotal_net_price_after_discount_takeaway(total_net_price_after_discount_takeaway);
-            // shops
-            Double total_net_price_shops = shopsRecords.stream().map(TableRecord::getNetTotalPrice).mapToDouble(Double::doubleValue).sum();
-            Double total_discount_price_shops = shopsRecords
-                .stream()
-                .map(TableRecord::getTotalDiscountPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-            Double total_net_price_after_discount_shops = shopsRecords
-                .stream()
-                .map(TableRecord::getTotalPrice)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-            Double total_net_price_after_discount_Tables_Shops_System = total_net_price_shops - total_discount_price_shops;
-
-            sheftObj.setTotal_net_price_shops(total_net_price_shops);
-            sheftObj.setTotal_discount_price_shops(total_discount_price_shops);
-            sheftObj.setTotal_net_price_after_discount_shops(total_net_price_after_discount_shops);
-
-            Double total_net_price = total_net_price_shops + total_net_price_takeaway + total_net_price_Tables + total_net_price_devices;
-
-            Double total_discount =
-                total_discount_price_shops + total_discount_price_takeaway + total_discount_price_Tables + total_discount_price_devices;
-
-            Double total_net_price_after_discount =
-                total_net_price_after_discount_shops +
-                total_net_price_after_discount_takeaway +
-                total_net_price_after_discount_Tables +
-                total_net_user_price_devices;
-
-            Double total_net_price_after_discountSystem =
-                (total_net_price_devices - total_discount_price_devices) +
-                total_net_price_after_discount_Tables_System +
-                total_net_price_after_discount_Tables_TakeAway_System +
-                total_net_price_after_discount_Tables_Shops_System;
-
-            sheftObj.setTotal_net_price(total_net_price);
-
-            sheftObj.setTotal_discount(total_discount);
-
-            sheftObj.setTotal_net_price_after_discount(total_net_price_after_discount);
-
-            sheftObj.setTotal_net_price_after_discount_system(total_net_price_after_discountSystem);
+            sheftObj.setTotal_net_price(
+                TotalPricePlayGroundTime +
+                TotalPriceCafe +
+                TotalPriceMarket +
+                TotalPriceRes +
+                //  total_net_price_Tables+
+                total_price_time_devices
+            );
 
             sheftRepository.save(sheftObj);
         }

@@ -1,11 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.Device;
-import com.mycompany.myapp.domain.Product;
-import com.mycompany.myapp.domain.Session;
-import com.mycompany.myapp.domain.Table;
+import com.mycompany.myapp.domain.*;
 import com.mycompany.myapp.domain.Table.TABLE_TYPE;
-import com.mycompany.myapp.domain.TableRecord;
 import com.mycompany.myapp.repository.DeviceRepository;
 import com.mycompany.myapp.repository.ProductRepository;
 import com.mycompany.myapp.repository.TableRecordRepository;
@@ -15,19 +11,17 @@ import com.mycompany.myapp.service.PrinterSupport;
 import com.mycompany.myapp.service.ProductService;
 import com.mycompany.myapp.service.ReceiptTablePrint;
 import com.mycompany.myapp.service.SessionService;
+import com.mycompany.myapp.service.dto.DeviceSessionDTO;
 import com.mycompany.myapp.service.dto.SessionEndDTO;
 import com.mycompany.myapp.service.dto.SessionStartDTO;
+import com.mycompany.myapp.service.impl.PosService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +49,8 @@ public class TableResource {
 
     private final ProductRepository productRepository;
 
+    private final PosService posService;
+
     @Autowired
     ProductService productService;
 
@@ -73,9 +69,10 @@ public class TableResource {
     @Autowired
     TableRecordRepository tableRecordRepository;
 
-    public TableResource(TableRepository tableRepository, ProductRepository productRepository) {
+    public TableResource(TableRepository tableRepository, ProductRepository productRepository, PosService posService) {
         this.tableRepository = tableRepository;
         this.productRepository = productRepository;
+        this.posService = posService;
     }
 
     /**
@@ -306,6 +303,104 @@ public class TableResource {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/tables/flush/orders/table/{tableId}")
+    public ResponseEntity<Table> flushOrders(@PathVariable String tableId, @RequestBody SessionEndDTO sessionend) {
+        Optional<Table> tableOp = tableRepository.findById(tableId);
+        if (!tableOp.isPresent()) {
+            return null;
+        }
+        flushOrderTableUnOrderdProducts("صالة", tableOp.get().getId(), sessionend.isPrint());
+        return ResponseEntity.ok(tableRepository.findById(tableId).orElseGet(null));
+    }
+
+    public void flushOrderTableUnOrderdProducts(String name, String sessId, boolean print) {
+        Optional<Table> sessionOptional = tableRepository.findById(sessId);
+
+        if (!sessionOptional.isPresent()) {
+            return;
+        }
+
+        Table sess = sessionOptional.get();
+        Set<Product> productSetMarket = new HashSet<>();
+        HashMap<String, Integer> productsQuantatiyMarket = new HashMap<>();
+
+        Set<Product> productSetRes = new HashSet<>();
+        HashMap<String, Integer> productsQuantatiyRes = new HashMap<>();
+
+        Set<Product> productSetCafe = new HashSet<>();
+        HashMap<String, Integer> productsQuantatiyCafe = new HashMap<>();
+
+        if (sess.getProductOrderRecord() == null || sess.getProductOrderRecord().isEmpty()) {
+            sess.setContainsNewOrders(false);
+            tableRepository.save(sess);
+            return;
+        }
+
+        Set<String> temp = sess.getProductOrderRecord().keySet();
+
+        for (String productId : temp) {
+            Optional<Product> productOptional = productRepository.findById(productId);
+            if (!productOptional.isPresent()) {
+                continue;
+            }
+            Product prod = productOptional.get();
+
+            switch (prod.getCategory().getType().toLowerCase()) {
+                case "market":
+                    {
+                        productSetMarket.add(prod);
+                        productsQuantatiyMarket.put(prod.getId(), sess.getProductOrderRecord().get(prod.getId()));
+
+                        break;
+                    }
+                case "res":
+                    {
+                        productSetRes.add(prod);
+                        productsQuantatiyRes.put(prod.getId(), sess.getProductOrderRecord().get(prod.getId()));
+                        break;
+                    }
+                case "cafe":
+                    {
+                        productSetCafe.add(prod);
+                        productsQuantatiyCafe.put(prod.getId(), sess.getProductOrderRecord().get(prod.getId()));
+                        break;
+                    }
+                default:
+                    {
+                        productSetCafe.add(prod);
+                        productsQuantatiyCafe.put(prod.getId(), sess.getProductOrderRecord().get(prod.getId()));
+                        break;
+                    }
+            }
+        }
+
+        sess.getProductOrderRecord().clear();
+        sess.setContainsNewOrders(false);
+        tableRepository.save(sess);
+
+        if (!productSetMarket.isEmpty()) {
+            createPosTableWithOrders(name, sess, OrderHandlerDomain.TABLE_TYPE.MARKET, productSetMarket, productsQuantatiyMarket, print);
+        }
+
+        if (!productSetRes.isEmpty()) {
+            createPosTableWithOrders(name, sess, OrderHandlerDomain.TABLE_TYPE.RES, productSetRes, productsQuantatiyRes, print);
+        }
+        if (!productSetCafe.isEmpty()) {
+            createPosTableWithOrders(name, sess, OrderHandlerDomain.TABLE_TYPE.CAFE, productSetCafe, productsQuantatiyCafe, print);
+        }
+    }
+
+    public void createPosTableWithOrders(
+        String name,
+        Table sess,
+        OrderHandlerDomain.TABLE_TYPE type,
+        Set<Product> productSet,
+        HashMap<String, Integer> productsQuantatiy,
+        boolean print
+    ) {
+        posService.createNewPosOrderAction(name + " - " + sess.getName(), type, productSet, productsQuantatiy, print);
+    }
+
     @GetMapping("/tables/{tableId}/products/{productId}/add")
     public ResponseEntity<Table> addProductToDeviceSession(@PathVariable String tableId, @PathVariable String productId) {
         Optional<Table> table = tableRepository.findById(tableId);
@@ -318,8 +413,10 @@ public class TableResource {
                 if (sessionHasItem) {
                     int currentvalue = tableob.getOrdersQuantity().get(productId);
                     tableob.getOrdersQuantity().put(productId, currentvalue + 1);
+                    updateUnOrderdProductsOnInsert(tableob, product.get());
                 } else {
                     tableob.getOrdersQuantity().put(productId, 1);
+                    updateUnOrderdProductsOnInsert(tableob, product.get());
                 }
                 tableob.getOrdersData().add(product.get());
                 tableob.setActive(true);
@@ -330,6 +427,18 @@ public class TableResource {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    public void updateUnOrderdProductsOnInsert(Table sess, Product product) {
+        boolean sessionHasItem = sess.getProductOrderRecord().containsKey(product.getId());
+        if (sessionHasItem) {
+            int currentvalue = sess.getProductOrderRecord().get(product.getId());
+            sess.getProductOrderRecord().put(product.getId(), currentvalue + 1);
+            sess.setContainsNewOrders(true);
+        } else {
+            sess.getProductOrderRecord().put(product.getId(), 1);
+            sess.setContainsNewOrders(true);
+        }
     }
 
     @GetMapping("/tables/{tableId}/products/{productId}/delete")
@@ -345,9 +454,11 @@ public class TableResource {
                     int currentvalue = tableob.getOrdersQuantity().get(productId);
                     if (currentvalue > 1) {
                         tableob.getOrdersQuantity().put(productId, currentvalue - 1);
+                        updateUnOrderdProductsOnDelete(tableob, product.get());
                     } else {
                         tableob.getOrdersQuantity().remove(productId);
                         tableob.getOrdersData().remove(product.get());
+                        updateUnOrderdProductsOnDelete(tableob, product.get());
                     }
                 }
 
@@ -360,6 +471,21 @@ public class TableResource {
             }
         }
         return ResponseEntity.ok().build();
+    }
+
+    public void updateUnOrderdProductsOnDelete(Table sess, Product product) {
+        boolean sessionHasItem = sess.getProductOrderRecord().containsKey(product.getId());
+        if (sessionHasItem) {
+            int currentvalue = sess.getProductOrderRecord().get(product.getId());
+            if (currentvalue > 1) {
+                sess.getProductOrderRecord().put(product.getId(), currentvalue - 1);
+            } else {
+                sess.getProductOrderRecord().remove(product.getId());
+            }
+        }
+        if (sess.getProductOrderRecord().isEmpty()) {
+            sess.setContainsNewOrders(false);
+        }
     }
 
     @GetMapping("/tables/{tableId}/devices/{deviceId}/move")
@@ -426,6 +552,7 @@ public class TableResource {
         table.setTotalPrice(0.0);
         table.setDiscount(0.0);
         table.setOrdersData(new HashSet<>());
+        table.getProductOrderRecord().clear();
         table.setOrdersQuantity(new HashMap<>());
         return tableRepository.save(table);
     }

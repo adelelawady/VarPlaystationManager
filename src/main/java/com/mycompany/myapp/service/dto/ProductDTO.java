@@ -1,7 +1,10 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.Product;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
@@ -13,11 +16,61 @@ public class ProductDTO implements Serializable {
 
     private String name;
 
-    private Double price;
+    private Double price = 0.0;
 
-    private Double takeawayPrice;
+    public Double getMediumPrice() {
+        return mediumPrice;
+    }
+
+    public void setMediumPrice(Double mediumPrice) {
+        this.mediumPrice = mediumPrice;
+    }
+
+    public Double getLargePrice() {
+        return largePrice;
+    }
+
+    public void setLargePrice(Double largePrice) {
+        this.largePrice = largePrice;
+    }
+
+    private Double mediumPrice = 0.0;
+
+    private Double largePrice = 0.0;
+
+    private Double takeawayPrice = 0.0;
 
     private String enName;
+
+    public Set<Product> getSubProducts() {
+        return subProducts;
+    }
+
+    public void setSubProducts(Set<Product> subProducts) {
+        this.subProducts = subProducts;
+    }
+
+    public Boolean getHasParent() {
+        return hasParent;
+    }
+
+    public void setHasParent(Boolean hasParent) {
+        this.hasParent = hasParent;
+    }
+
+    private Set<Product> subProducts = new HashSet<>();
+
+    private Boolean hasParent = false;
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
+    private boolean ordered = false;
 
     public String getEnName() {
         return enName;

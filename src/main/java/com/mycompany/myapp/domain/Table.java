@@ -54,6 +54,28 @@ public class Table extends AbstractAuditingEntity implements Serializable {
     @Id
     private String id;
 
+    public boolean isContainsNewOrders() {
+        return containsNewOrders;
+    }
+
+    public void setContainsNewOrders(boolean containsNewOrders) {
+        this.containsNewOrders = containsNewOrders;
+    }
+
+    public HashMap<String, Integer> getProductOrderRecord() {
+        return productOrderRecord;
+    }
+
+    public void setProductOrderRecord(HashMap<String, Integer> productOrderRecord) {
+        this.productOrderRecord = productOrderRecord;
+    }
+
+    @Field("containsNewOrders")
+    private boolean containsNewOrders = false;
+
+    @Field("productOrderRecord") // already ordered orders [products]
+    private HashMap<String, Integer> productOrderRecord = new HashMap<>();
+
     @Field("name")
     private String name;
 

@@ -28,6 +28,31 @@
             <a [routerLink]="['/admin/entities/category', product.category?.id, 'view']">{{ product.category?.name }}</a>
           </div>
         </dd>
+
+        <div *ngIf="product.subProducts" class="row">
+          <h3>add sub item</h3>
+
+          <jhi-product-update *ngIf="addNew && product.id" [addSub]="true" [addSubParent]="product.id"></jhi-product-update>
+          <div class="">
+            <div class="col-12">
+              <button class="btn btn-success" (click)="addNew = true">add new sub item</button>
+              <div class="row">
+                <button
+                  *ngFor="let subProd of product.subProducts"
+                  style="padding: 25px; cursor: pointer"
+                  type="button"
+                  class="col-auto border rounded m-1 text-center"
+                >
+                  {{ subProd.name }}
+                  <small class="d-block badge badge-warning text-center">{{ subProd.price }} LE</small>
+                  <i class="fa fa-minus text-danger" (click)="removeSub(subProd.id)"></i>
+
+                  <i class="fa fa-edit text-warning mx-2" [routerLink]="['/admin/entities/product', subProd.id, 'edit']"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

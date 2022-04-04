@@ -15,6 +15,12 @@ import { MainReportPageComponent } from '../pages/main-report-page/main-report-p
         data: { pageTitle: 'erApp.device.home.title' },
         loadChildren: () => import('./device/device.module').then(m => m.DeviceModule),
       },
+
+      {
+        path: 'playground',
+        data: { pageTitle: 'erApp.device.home.title' },
+        loadChildren: () => import('./playground/device.module').then(m => m.DeviceModule),
+      },
       {
         path: 'product',
         data: { pageTitle: 'erApp.product.home.title' },
@@ -61,16 +67,13 @@ import { MainReportPageComponent } from '../pages/main-report-page/main-report-p
         data: { pageTitle: 'erApp.tableRecord.home.title' },
         loadChildren: () => import('./table-record/table-record.module').then(m => m.TableRecordModule),
       },
+
       {
-        path: 'table-record',
+        path: 'table-pos-record',
         data: { pageTitle: 'erApp.tableRecord.home.title' },
-        loadChildren: () => import('./table-record/table-record.module').then(m => m.TableRecordModule),
+        loadChildren: () => import('./table-pos-record/table-record.module').then(m => m.TablePosRecordModule),
       },
-      {
-        path: 'table-record',
-        data: { pageTitle: 'erApp.tableRecord.home.title' },
-        loadChildren: () => import('./table-record/table-record.module').then(m => m.TableRecordModule),
-      },
+
       {
         path: 'shefts',
         data: { pageTitle: 'erApp.tableRecord.home.title' },

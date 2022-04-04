@@ -20,6 +20,46 @@ public class AdminReportDTO implements Serializable {
 
     private Double totalPriceUserDevices = 0.0;
 
+    public Double getTotalPlayGround() {
+        return TotalPlayGround;
+    }
+
+    public void setTotalPlayGround(Double totalPlayGround) {
+        TotalPlayGround = totalPlayGround;
+    }
+
+    private Double TotalPlayGround = 0.0;
+
+    private Double TotalMarket = 0.0;
+
+    private Double TotalRes = 0.0;
+
+    public Double getTotalMarket() {
+        return TotalMarket;
+    }
+
+    public void setTotalMarket(Double totalMarket) {
+        TotalMarket = totalMarket;
+    }
+
+    public Double getTotalRes() {
+        return TotalRes;
+    }
+
+    public void setTotalRes(Double totalRes) {
+        TotalRes = totalRes;
+    }
+
+    public Double getTotalCafe() {
+        return TotalCafe;
+    }
+
+    public void setTotalCafe(Double totalCafe) {
+        TotalCafe = totalCafe;
+    }
+
+    private Double TotalCafe = 0.0;
+
     public Double getTotalPriceUserDevices() {
         return totalPriceUserDevices;
     }

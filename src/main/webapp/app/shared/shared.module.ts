@@ -20,6 +20,9 @@ import { TableComponentComponent } from './table-component/table-component.compo
 import { TablesTapComponentComponent } from '../pages/components/tables-tap-component/tables-tap-component.component';
 import { CheckoutComponentComponent } from './checkout-component/checkout-component.component';
 import { LocalizedDatePipe } from './utils/localized-date.pipe';
+import { PosComponentComponent } from './pos-component/pos-component.component';
+import { PlaygroundComponentComponent } from './playground-component/device-component.component';
+import { DevicePlaygroundPricePipe } from './playground-component/price.pipe';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -38,10 +41,13 @@ import { LocalizedDatePipe } from './utils/localized-date.pipe';
     DeviceComponentComponent,
     CountdownPipe,
     DevicePricePipe,
+    DevicePlaygroundPricePipe,
     TableComponentComponent,
     TablesTapComponentComponent,
     CheckoutComponentComponent,
     LocalizedDatePipe,
+    PosComponentComponent,
+    PlaygroundComponentComponent,
   ],
   exports: [
     SharedLibsModule,
@@ -59,12 +65,16 @@ import { LocalizedDatePipe } from './utils/localized-date.pipe';
     DeviceComponentComponent,
     CountdownPipe,
     DevicePricePipe,
+    DevicePlaygroundPricePipe,
     SidebarAccordionModule,
     TableComponentComponent,
     TablesTapComponentComponent,
     CheckoutComponentComponent,
     LocalizedDatePipe,
+    PosComponentComponent,
+    PlaygroundComponentComponent,
   ],
-  providers: [DevicePricePipe, LocalizedDatePipe],
+  entryComponents: [],
+  providers: [DevicePricePipe, LocalizedDatePipe, DevicePlaygroundPricePipe],
 })
 export class SharedModule {}

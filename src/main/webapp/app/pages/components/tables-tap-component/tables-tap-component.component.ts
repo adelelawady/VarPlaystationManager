@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { TableService } from '../../../entities/table/service/table.service';
+import { DevicesSessionsService } from '../../../home/devicesSessions.service';
 declare const $: any;
 @Component({
   selector: 'jhi-tables-tap-component',
@@ -22,6 +23,7 @@ declare const $: any;
 export class TablesTapComponentComponent implements OnInit, OnDestroy {
   selectedTable: any;
   tables: any[] | null = null;
+  printFlushOrders = true;
 
   @Input() tableType = 'table'; // table , takeaway , shops
   @Output() tableSelected = new EventEmitter();
@@ -35,7 +37,7 @@ export class TablesTapComponentComponent implements OnInit, OnDestroy {
   @Input()
   events!: Observable<void>;
 
-  constructor(private cd: ChangeDetectorRef, private tableService: TableService) {}
+  constructor(private cd: ChangeDetectorRef, private tableService: TableService, private devicesSessionService: DevicesSessionsService) {}
 
   ngOnDestroy(): void {
     if (!this.eventsSubscription) {
@@ -50,6 +52,14 @@ export class TablesTapComponentComponent implements OnInit, OnDestroy {
       this.cd.markForCheck();
     });
   }
+
+  sendFlushOrders(): void {
+    this.devicesSessionService.flushTableOrders(this.selectedTable.id, this.printFlushOrders).subscribe(device => {
+      this.selectedTable = device;
+      this.loadAllTables();
+    });
+  }
+
   loadAllTables(): void {
     this.tableService.findAll(this.tableType).subscribe(tables => {
       this.tables = tables.body;

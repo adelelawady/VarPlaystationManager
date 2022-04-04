@@ -53,6 +53,18 @@ export class CategoryComponent implements OnInit {
       );
   }
 
+  selectType(val: any): string {
+    if (val === 'res') {
+      return 'مطعم';
+    }
+    if (val === 'market') {
+      return 'ماركت';
+    }
+    if (val === 'cafe') {
+      return 'كافية';
+    }
+    return 'كافية';
+  }
   ngOnInit(): void {
     this.handleNavigation();
   }

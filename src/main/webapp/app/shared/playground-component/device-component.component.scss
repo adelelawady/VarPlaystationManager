@@ -1,0 +1,14 @@
+.col-md-3 {
+  display: contents;
+}
+.col-4 {
+  display: contents;
+}
+
+.border-active {
+  border-width: 2px;
+}
+
+::ng-deep .card {
+  border-radius: 10px !important;
+}

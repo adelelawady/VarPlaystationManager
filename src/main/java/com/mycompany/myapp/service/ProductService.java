@@ -27,7 +27,6 @@ public interface ProductService {
      * @param productDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<ProductDTO> partialUpdate(ProductDTO productDTO);
 
     /**
      * Get all the products.
@@ -59,4 +58,7 @@ public interface ProductService {
     List<ProductDTO> findAllByCategory(String categoryId);
 
     ProductStaticsDTO getProductTotalUses(String productId, Instant from, Instant to);
+
+    void addSubProduct(String productId, ProductDTO prod);
+    void removeSubProduct(String productId, String subProductId);
 }

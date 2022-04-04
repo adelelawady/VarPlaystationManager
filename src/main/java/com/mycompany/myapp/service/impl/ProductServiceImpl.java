@@ -62,24 +62,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDTO> partialUpdate(ProductDTO productDTO) {
-        log.debug("Request to partially update Product : {}", productDTO);
-
-        return productRepository
-            .findById(productDTO.getId())
-            .map(existingProduct -> {
-                productMapper.partialUpdate(existingProduct, productDTO);
-
-                return existingProduct;
-            })
-            .map(productRepository::save)
-            .map(productMapper::toDto);
-    }
-
-    @Override
     public Page<ProductDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Products");
-        return productRepository.findAll(pageable).map(productMapper::toDto);
+        return productRepository.findByHasParent(pageable, false).map(productMapper::toDto);
     }
 
     @Override
@@ -96,7 +81,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAllByCategory(String categoryId) {
-        return productRepository.findByCategoryId(categoryId).stream().map(productMapper::toDto).collect(Collectors.toList());
+        return productRepository
+            .findByHasParentAndCategoryId(false, categoryId)
+            .stream()
+            .map(productMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -160,5 +149,32 @@ public class ProductServiceImpl implements ProductService {
             prodStat.setName(prodFound.get().getName());
         }
         return prodStat;
+    }
+
+    @Override
+    public void addSubProduct(String productId, ProductDTO prod) {
+        Optional<Product> prodFound = productRepository.findById(productId);
+        if (prodFound.isPresent()) {
+            Product prodCreated = productRepository.save(productMapper.toEntity(prod));
+            prodCreated.setHasParent(true);
+            prodCreated.setParent(productId);
+            Product prodCreatedAfterUpdate = productRepository.save(prodCreated);
+            Product prodToUpdate = prodFound.get();
+            prodToUpdate.getSubProducts().add(prodCreatedAfterUpdate);
+            productRepository.save(prodToUpdate);
+        }
+    }
+
+    @Override
+    public void removeSubProduct(String productId, String subProductId) {
+        Optional<Product> prodFound = productRepository.findById(productId);
+        if (prodFound.isPresent()) {
+            Optional<Product> prodSubFound = productRepository.findById(subProductId);
+            prodFound.get().getSubProducts().remove(prodSubFound.get());
+            Product prodToUpdate = prodFound.get();
+            prodToUpdate.getSubProducts().remove(prodSubFound.get());
+            productRepository.save(prodToUpdate);
+            productRepository.deleteById(subProductId);
+        }
     }
 }

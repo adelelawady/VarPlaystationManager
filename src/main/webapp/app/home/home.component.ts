@@ -1,3 +1,4 @@
+import { PlaygroundDevicesSessionsService } from './playgrounddevicesSessions.service';
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -32,17 +33,33 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   opend = true;
   account: Account | null = null;
   devices: any[] | null = null;
+  playGrounds: any[] | null = null;
   tables: any[] | null = null;
   categories: any = [];
   products: any = [];
   selectedDevice: any;
   selectedTable: any;
 
+  printFlushOrders = true;
+
+  showProducts = true;
+
   currentSheft: any | undefined;
   eventReloadTables: Subject<void> = new Subject<void>();
 
   tapDevices = true;
   tapTables = false;
+
+  tapCafe = false;
+
+  tapRes = false;
+
+  tapMarket = false;
+
+  tapGames = false;
+
+  tapPlayGround = false;
+
   tapTakeaway = false;
   tapShops = false;
 
@@ -91,7 +108,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private takeawayService: TakeawayService,
     private tableService: TableService,
     private shopsOrdersService: ShopsOrdersService,
-    private devicesSessionService: DevicesSessionsService
+    private devicesSessionService: DevicesSessionsService,
+    private playgroundDevicesSessionsService: PlaygroundDevicesSessionsService
   ) {}
   ngAfterViewInit(): void {
     this.closeOrdersPanle();
@@ -120,32 +138,172 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showCheckOut = false;
     switch (tabname) {
       case 'tapDevices':
+        this.getAllCategories();
+        this.showProducts = true;
         this.tapDevices = true;
         this.tapTables = false;
         this.tapTakeaway = false;
         this.tapShops = false;
+        this.tapCafe = false;
+
+        this.tapRes = false;
+
+        this.tapMarket = false;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = false;
         this.loadAllDevices();
         break;
       case 'tapTables':
+        this.getAllCategories();
+        this.showProducts = true;
+
         this.tapDevices = false;
         this.tapTables = true;
         this.tapTakeaway = false;
         this.tapShops = false;
+        this.tapCafe = false;
+
+        this.tapRes = false;
+
+        this.tapMarket = false;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = false;
         this.callReloadTables();
         break;
       case 'tapTakeaway':
+        this.getAllCategories();
+        this.showProducts = true;
+
         this.tapDevices = false;
         this.tapTables = false;
         this.tapTakeaway = true;
         this.tapShops = false;
+        this.tapCafe = false;
+
+        this.tapRes = false;
+
+        this.tapMarket = false;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = false;
         this.callReloadTables();
         break;
 
       case 'tapShops':
+        this.getAllCategories();
+        this.showProducts = true;
+
         this.tapDevices = false;
         this.tapTables = false;
         this.tapTakeaway = false;
         this.tapShops = true;
+        this.tapCafe = false;
+
+        this.tapRes = false;
+
+        this.tapMarket = false;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = false;
+        this.callReloadTables();
+        break;
+      case 'tapCafe':
+        this.getAllCategoriesByType('cafe');
+        this.showProducts = false;
+
+        this.tapDevices = false;
+        this.tapTables = false;
+        this.tapTakeaway = false;
+        this.tapShops = false;
+        this.tapCafe = true;
+
+        this.tapRes = false;
+
+        this.tapMarket = false;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = false;
+        this.callReloadTables();
+        break;
+
+      case 'tapRes':
+        this.getAllCategoriesByType('res');
+        this.showProducts = false;
+        this.tapDevices = false;
+        this.tapTables = false;
+        this.tapTakeaway = false;
+        this.tapShops = false;
+        this.tapCafe = false;
+
+        this.tapRes = true;
+
+        this.tapMarket = false;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = false;
+        this.callReloadTables();
+        break;
+      case 'tapMarket':
+        this.getAllCategoriesByType('market');
+        this.showProducts = false;
+        this.tapDevices = false;
+        this.tapTables = false;
+        this.tapTakeaway = false;
+        this.tapShops = false;
+        this.tapCafe = false;
+
+        this.tapRes = false;
+
+        this.tapMarket = true;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = false;
+        this.callReloadTables();
+        break;
+      case 'tapGames':
+        this.getAllCategories();
+        this.showProducts = true;
+        this.tapDevices = false;
+        this.tapTables = false;
+        this.tapTakeaway = false;
+        this.tapShops = false;
+        this.tapCafe = false;
+
+        this.tapRes = false;
+
+        this.tapMarket = false;
+
+        this.tapGames = true;
+
+        this.tapPlayGround = false;
+        this.callReloadTables();
+        break;
+      case 'tapPlayGround':
+        this.getAllCategories();
+        this.loadAllPlayGrounds();
+        this.showProducts = true;
+        this.tapDevices = false;
+        this.tapTables = false;
+        this.tapTakeaway = false;
+        this.tapShops = false;
+        this.tapCafe = false;
+
+        this.tapRes = false;
+
+        this.tapMarket = false;
+
+        this.tapGames = false;
+
+        this.tapPlayGround = true;
         this.callReloadTables();
         break;
       default:
@@ -160,6 +318,56 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedDevice = devicesFound;
       }
     });
+  }
+
+  loadAllPlayGrounds(): void {
+    this.playgroundDevicesSessionsService.getDevicesSessions().subscribe((devicesFound: any) => {
+      this.playGrounds = devicesFound;
+    });
+  }
+
+  deviceCheckoutStopped(): void {
+    this.selectedDevice = null;
+    this.closeOrdersPanle();
+    this.showCheckOut = false;
+    if (this.tapPlayGround) {
+      this.loadAllPlayGrounds();
+    } else {
+      this.loadAllDevices();
+    }
+  }
+
+  deviceCheckoutStarted(event: any): void {
+    this.showCheckOut = false;
+    this.selectedDevice = event;
+
+    if (this.tapPlayGround) {
+      this.loadAllPlayGrounds();
+    } else {
+      this.loadAllDevices();
+    }
+  }
+
+  sendFlushOrders(): void {
+    if (!this.tapTables) {
+      let type = 'device';
+      if (this.tapDevices) {
+        type = 'device';
+      }
+      if (this.tapPlayGround) {
+        type = 'playground';
+      }
+      this.devicesSessionService.flushOrders(this.selectedDevice.id, type, this.printFlushOrders).subscribe(device => {
+        this.selectedDevice = device;
+        this.loadAllDevices();
+      });
+    } else {
+      this.devicesSessionService.flushTableOrders(this.selectedTable.id, this.printFlushOrders).subscribe(device => {
+        this.selectedTable = device;
+        this.callReloadTables();
+      });
+    }
+    ///tables/flush/orders/table/{tableId}
   }
 
   tableMovedToDevice(device: any): void {
@@ -234,7 +442,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getAllCategories(): void {
     this.products = [];
+    this.categories = [];
     this.categoryService.findAll().subscribe(categories => {
+      this.categories = categories.body;
+    });
+  }
+
+  getAllCategoriesByType(type: string): void {
+    this.products = [];
+    this.categories = [];
+    this.categoryService.findAllByType(type).subscribe(categories => {
       this.categories = categories.body;
     });
   }
@@ -270,6 +487,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
 
+    if (this.tapPlayGround) {
+      this.playgroundDevicesSessionsService.addProductToDeviceSession(this.selectedDevice.id, productId).subscribe(table => {
+        this.selectedDevice = table;
+        // this.loadAllDevices();
+        this.loadAllPlayGrounds();
+      });
+    }
     if (this.tapTakeaway) {
       this.takeawayService.createFromOrderProduct(productId).subscribe(takeaway => {
         this.getAllTakeawayOrders();
@@ -294,6 +518,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.tableService.deleteProductFromTable(this.selectedTable.id, productId).subscribe(table => {
         this.selectedTable = table;
         this.callReloadTables();
+      });
+    }
+
+    if (this.tapPlayGround) {
+      this.playgroundDevicesSessionsService.deleteProductFromDeviceSession(this.selectedDevice.id, productId).subscribe(table => {
+        this.selectedDevice = table;
+        // this.loadAllDevices();
+        this.loadAllPlayGrounds();
       });
     }
   }

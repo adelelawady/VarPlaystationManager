@@ -43,6 +43,10 @@ export class CategoryService {
     return this.http.get<ICategory[]>(`${this.resourceUrl}/all`, { observe: 'response' });
   }
 
+  findAllByType(type: string): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(`${this.resourceUrl}/type/${type}`, { observe: 'response' });
+  }
+
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

@@ -78,9 +78,7 @@ public class PrinterSupport {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
         int nRow = dtm.getRowCount(), nCol = dtm.getColumnCount();
         Object[][] tableData = new Object[nRow][nCol];
-        if (
-            itemcount == nRow
-        ) { // check is there any data loss.
+        if (itemcount == nRow) { // check is there any data loss.
             for (int i = 0; i < nRow; i++) {
                 for (int j = 0; j < nCol; j++) {
                     tableData[i][j] = dtm.getValueAt(i, j); // pass data into object array.
@@ -169,7 +167,7 @@ public class PrinterSupport {
                 try {
                     /* Draw Header */
                     int y = 80;
-                    g2d.drawString(" -  VAR  - ", 40, y);
+                    g2d.drawString(" -  حكاوي  - ", 40, y);
                     g2d.drawString("CopyWrite 2009-2014", 50, y + 10); // shift a line by adding 10 to y value
                     //g2d.drawString(now(), 10, y + 20); // print date
                     g2d.drawString("Cashier : admin", 10, y + 30);

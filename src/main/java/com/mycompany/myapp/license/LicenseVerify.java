@@ -47,11 +47,11 @@ public class LicenseVerify {
                 )
             );
         } catch (Exception e) {
-            logger.error("Certificate installation failed ! : " + e.getMessage());
-            logger.error("#####   APPLICATION WILL EXIT NOW DUE INVALID LICENSE   ####");
-            String s[] = {};
-            SpringApplication.run(ErApp.class, s).close();
-            logger.info("done");
+            //  logger.error("Certificate installation failed ! : " + e.getMessage());
+            //  logger.error("#####   APPLICATION WILL EXIT NOW DUE INVALID LICENSE   ####");
+            // String s[] = {};
+            // SpringApplication.run(ErApp.class, s).close();
+            // logger.info("done");
         }
 
         return result;
@@ -84,9 +84,9 @@ public class LicenseVerify {
         } catch (Exception e) {
             logger.error("Certificate installation failed ! : " + e.getMessage());
             logger.error("#####   APPLICATION WILL EXIT NOW DUE INVALID LICENSE   ####");
-            String s[] = {};
-            SpringApplication.run(ErApp.class, s).close();
-            logger.info("done");
+            // String s[] = {};
+            // SpringApplication.run(ErApp.class, s).close();
+            // logger.info("done");
             return false;
         }
     }

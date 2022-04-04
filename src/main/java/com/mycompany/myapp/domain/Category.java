@@ -19,6 +19,17 @@ public class Category extends AbstractAuditingEntity implements Serializable {
     @Field("name")
     private String name;
 
+    @Field("type")
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getId() {

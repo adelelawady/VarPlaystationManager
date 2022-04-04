@@ -1,8 +1,16 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Device;
+import com.mycompany.myapp.domain.Playground;
+import com.mycompany.myapp.repository.DeviceRepository;
+import com.mycompany.myapp.repository.PlaygroundRepository;
 import com.mycompany.myapp.repository.SessionRepository;
 import com.mycompany.myapp.service.SessionService;
+import com.mycompany.myapp.service.dto.DeviceSessionDTO;
 import com.mycompany.myapp.service.dto.SessionDTO;
+import com.mycompany.myapp.service.dto.SessionEndDTO;
+import com.mycompany.myapp.service.mapper.DeviceMapper;
+import com.mycompany.myapp.service.mapper.PlaygroundMapper;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,7 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,9 +50,28 @@ public class SessionResource {
 
     private final SessionRepository sessionRepository;
 
-    public SessionResource(SessionService sessionService, SessionRepository sessionRepository) {
+    private final DeviceMapper deviceMapper;
+
+    private final PlaygroundMapper playgroundMapper;
+
+    private final DeviceRepository deviceRepository;
+
+    private final PlaygroundRepository playgroundRepository;
+
+    public SessionResource(
+        SessionService sessionService,
+        SessionRepository sessionRepository,
+        DeviceMapper deviceMapper,
+        PlaygroundMapper playgroundMapper,
+        DeviceRepository deviceRepository,
+        PlaygroundRepository playgroundRepository
+    ) {
         this.sessionService = sessionService;
         this.sessionRepository = sessionRepository;
+        this.deviceMapper = deviceMapper;
+        this.playgroundMapper = playgroundMapper;
+        this.deviceRepository = deviceRepository;
+        this.playgroundRepository = playgroundRepository;
     }
 
     /**
@@ -185,5 +211,60 @@ public class SessionResource {
         log.debug("REST request to delete Session : {}", id);
         sessionService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
+    }
+
+    @PostMapping("/sessions/flush/orders/device/{deviceId}/{type}")
+    public ResponseEntity<DeviceSessionDTO> flushOrders(
+        @PathVariable String deviceId,
+        @PathVariable String type,
+        @RequestBody SessionEndDTO sessionend
+    ) {
+        String sessId = "";
+        if (type.equalsIgnoreCase("device")) {
+            Optional<Device> deviceOp = deviceRepository.findById(deviceId);
+            if (!deviceOp.isPresent() || deviceOp.get().getSession() == null) {
+                return null;
+            } else {
+                sessId = deviceOp.get().getSession().getId();
+            }
+            sessionService.flushOrderSessionUnOrderdProducts("بلايستيشن", sessId, sessionend.isPrint());
+            return ResponseEntity.ok(toDeviceSession(deviceId));
+        }
+
+        if (type.equalsIgnoreCase("playground")) {
+            Optional<Playground> playGroundOp = playgroundRepository.findById(deviceId);
+            if (!playGroundOp.isPresent() || playGroundOp.get().getSession() == null) {
+                return null;
+            } else {
+                sessId = playGroundOp.get().getSession().getId();
+            }
+            sessionService.flushOrderSessionUnOrderdProducts("ملعب", sessId, sessionend.isPrint());
+            return ResponseEntity.ok(toPlayGroundSession(deviceId));
+        }
+        return ResponseEntity.ok(toDeviceSession(deviceId));
+    }
+
+    private DeviceSessionDTO toDeviceSession(String deviceId) {
+        Optional<Device> deviceOp = deviceRepository.findById(deviceId);
+
+        if (!deviceOp.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+
+        Device device = deviceOp.get();
+
+        return deviceMapper.toDeviceSessionDTO(device);
+    }
+
+    private DeviceSessionDTO toPlayGroundSession(String playgroundId) {
+        Optional<Playground> deviceOp = playgroundRepository.findById(playgroundId);
+
+        if (!deviceOp.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+
+        Playground device = deviceOp.get();
+
+        return playgroundMapper.toDeviceSessionDTO(device);
     }
 }

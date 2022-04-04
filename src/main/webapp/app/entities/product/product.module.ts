@@ -9,6 +9,6 @@ import { ProductRoutingModule } from './route/product-routing.module';
 @NgModule({
   imports: [SharedModule, ProductRoutingModule],
   declarations: [ProductComponent, ProductDetailComponent, ProductUpdateComponent, ProductDeleteDialogComponent],
-  entryComponents: [ProductDeleteDialogComponent],
+  entryComponents: [ProductDeleteDialogComponent, ProductUpdateComponent],
 })
 export class ProductModule {}

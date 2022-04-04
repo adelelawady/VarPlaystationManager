@@ -36,6 +36,8 @@ public interface CategoryService {
 
     List<CategoryDTO> findAll();
 
+    List<CategoryDTO> findAllByType(String type);
+
     /**
      * Get the "id" category.
      *

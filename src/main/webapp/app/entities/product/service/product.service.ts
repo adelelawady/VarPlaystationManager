@@ -48,6 +48,15 @@ export class ProductService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  addSubItem(prodId: string, item: any): Observable<EntityArrayResponseType> {
+    return this.http.post<IProduct[]>(`${this.resourceUrl}/${prodId}/addsub`, item, { observe: 'response' });
+  }
+  removeSubItem(prodId: string, item: string): Observable<EntityArrayResponseType> {
+    return this.http.get<IProduct[]>(`${this.resourceUrl}/${prodId}/removesub/${item}`, { observe: 'response' });
+  }
+
+  //products/{productId}/addsub
+
   addProductToCollectionIfMissing(productCollection: IProduct[], ...productsToCheck: (IProduct | null | undefined)[]): IProduct[] {
     const products: IProduct[] = productsToCheck.filter(isPresent);
     if (products.length > 0) {

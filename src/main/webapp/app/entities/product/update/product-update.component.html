@@ -14,18 +14,32 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_price">السعر الاساسي</label>
+          <label class="form-control-label" for="field_price"> السعرالاساسي</label>
           <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_price"> take away سعر </label>
-          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="takeawayPrice" />
+          <label class="form-control-label" for="field_price">السعر M</label>
+          <input
+            type="number"
+            class="form-control"
+            name="mediumPrice"
+            id="field_mediumPrice"
+            data-cy="mediumPrice"
+            formControlName="mediumPrice"
+          />
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_price">سعر المطاعم والمحلات</label>
-          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="shopsPrice" />
+          <label class="form-control-label" for="field_price">السعر L</label>
+          <input
+            type="number"
+            class="form-control"
+            name="largePrice"
+            id="field_largePrice"
+            data-cy="largePrice"
+            formControlName="largePrice"
+          />
         </div>
 
         <div class="form-group">
@@ -39,7 +53,7 @@
             <option [ngValue]="null"></option>
             <option
               [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption"
-              *ngFor="let categoryOption of categoriesCollection; trackBy: trackCategoryById"
+              *ngFor="let categoryOption of categories; trackBy: trackCategoryById"
             >
               {{ categoryOption.name }}
             </option>

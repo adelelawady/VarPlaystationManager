@@ -87,6 +87,21 @@ public class ProductResource {
             throw new BadRequestAlertException("A new product cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ProductDTO result = productService.save(productDTO);
+        if (productDTO.getMediumPrice() > 0) {
+            productDTO.setPrice(productDTO.getMediumPrice());
+            productDTO.setName(result.getName() + " M");
+            productDTO.setEnName(result.getEnName() + " M");
+
+            productService.addSubProduct(result.getId(), productDTO);
+        }
+
+        if (productDTO.getLargePrice() > 0) {
+            productDTO.setPrice(productDTO.getLargePrice());
+            productDTO.setName(result.getName() + " L");
+            productDTO.setEnName(result.getEnName() + " L");
+            productService.addSubProduct(result.getId(), productDTO);
+        }
+
         return ResponseEntity
             .created(new URI("/api/products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
@@ -122,50 +137,33 @@ public class ProductResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        Optional<Product> product = productRepository.findById(id);
+
         ProductDTO result = productService.save(productDTO);
+
+        if (product.isPresent() && product.get().getHasParent()) {
+            Optional<Product> productOne = productRepository.findById(id);
+            Product product1 = productOne.get();
+            product1.setHasParent(product.get().getHasParent());
+            product1.setParent(product.get().getParent());
+            productService.save(product1);
+
+            Optional<Product> productUpdatedParent = productRepository.findById(product1.getParent());
+            Product productp = productUpdatedParent.get();
+            productp.getSubProducts().removeIf(productX -> productX.getId().equalsIgnoreCase(product1.getId()));
+            productp.getSubProducts().add(product1);
+            productService.save(productp);
+        } else {
+            Optional<Product> productOne = productRepository.findById(id);
+            Product product1 = productOne.get();
+            product1.setSubProducts(product.get().getSubProducts());
+            productService.save(product1);
+        }
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, productDTO.getId()))
             .body(result);
-    }
-
-    /**
-     * {@code PATCH  /products/:id} : Partial updates given fields of an existing
-     * product, field will ignore if it is null
-     *
-     * @param id         the id of the productDTO to save.
-     * @param productDTO the productDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-     *         the updated productDTO, or with status {@code 400 (Bad Request)} if
-     *         the productDTO is not valid, or with status {@code 404 (Not Found)}
-     *         if the productDTO is not found, or with status
-     *         {@code 500 (Internal Server Error)} if the productDTO couldn't be
-     *         updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/products/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ProductDTO> partialUpdateProduct(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody ProductDTO productDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Product partially : {}, {}", id, productDTO);
-        if (productDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, productDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!productRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<ProductDTO> result = productService.partialUpdate(productDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, productDTO.getId())
-        );
     }
 
     /**
@@ -206,6 +204,25 @@ public class ProductResource {
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         log.debug("REST request to delete Product : {}", id);
+
+        Optional<Product> product = productRepository.findById(id);
+
+        if (product.isPresent()) {
+            product
+                .get()
+                .getSubProducts()
+                .forEach(pro -> {
+                    productService.delete(pro.getId());
+                });
+        }
+
+        if (product.get().getHasParent()) {
+            Optional<Product> productUpdatedParent = productRepository.findById(product.get().getParent());
+
+            Product productp = productUpdatedParent.get();
+            productp.getSubProducts().removeIf(product1 -> product1.getId().equalsIgnoreCase(id));
+            productService.save(productp);
+        }
         productService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
     }
@@ -265,6 +282,20 @@ public class ProductResource {
         log.debug("REST request to get a page of Products");
         List<ProductDTO> prodList = productService.findAllByCategory(categoryId);
         return ResponseEntity.ok(prodList);
+    }
+
+    @PostMapping("/products/{productId}/addsub")
+    public ResponseEntity<Product> addSubItemToProduct(@PathVariable String productId, @RequestBody ProductDTO prod) {
+        log.debug("REST request to get a page of Products");
+        productService.addSubProduct(productId, prod);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/products/{productId}/removesub/{productId2}")
+    public ResponseEntity<Product> removeSubItemToProduct(@PathVariable String productId, @PathVariable String productId2) {
+        log.debug("REST request to get a page of Products");
+        productService.removeSubProduct(productId, productId2);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/products/products-stats/{sort}")

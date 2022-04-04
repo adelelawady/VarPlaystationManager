@@ -34,56 +34,63 @@ public class Sheft extends AbstractAuditingEntity implements Serializable {
     @Field("total_net_price")
     private Double total_net_price = 0.0;
 
-    @Field("total_discount_price")
-    private Double total_discount = 0.0;
-
-    @Field("total_net_price_after_discount")
-    private Double total_net_price_after_discount = 0.0;
-
-    @Field("total_net_price_after_discount_systen")
-    private Double total_net_price_after_discount_system = 0.0;
-
-    @Field("total_net_price_devices")
+    @Field("total_net_price_time_devices")
     private Double total_net_price_devices = 0.0;
-
-    @Field("total_net_user_price_devices")
-    private Double total_net_user_price_devices = 0.0;
-
-    @Field("total_discount_price_devices")
-    private Double total_discount_price_devices = 0.0;
-
-    @Field("total_price_time_devices")
-    private Double total_price_time_devices = 0.0;
-
-    @Field("total_price_orders_devices")
-    private Double total_price_orders_devices = 0.0;
 
     @Field("total_net_price_Tables")
     private Double total_net_price_Tables = 0.0;
 
-    @Field("total_discount_price_Tables")
-    private Double total_discount_price_Tables = 0.0;
+    public Double getTotal_net_price_Tables() {
+        return total_net_price_Tables;
+    }
 
-    @Field("total_net_price_after_discount_Tables")
-    private Double total_net_price_after_discount_Tables = 0.0;
+    public void setTotal_net_price_Tables(Double total_net_price_Tables) {
+        this.total_net_price_Tables = total_net_price_Tables;
+    }
 
-    @Field("total_net_price_takeaway")
-    private Double total_net_price_takeaway = 0.0;
+    public Double getTotal_net_price_playground() {
+        return total_net_price_playground;
+    }
 
-    @Field("total_discount_price_takeaway")
-    private Double total_discount_price_takeaway = 0.0;
+    public void setTotal_net_price_playground(Double total_net_price_playground) {
+        this.total_net_price_playground = total_net_price_playground;
+    }
 
-    @Field("total_net_price_after_discount_takeaway")
-    private Double total_net_price_after_discount_takeaway = 0.0;
+    public Double getTotal_net_price_market() {
+        return total_net_price_market;
+    }
 
-    @Field("total_net_price_shops")
-    private Double total_net_price_shops = 0.0;
+    public void setTotal_net_price_market(Double total_net_price_market) {
+        this.total_net_price_market = total_net_price_market;
+    }
 
-    @Field("total_discount_price_shops")
-    private Double total_discount_price_shops = 0.0;
+    public Double getTotal_net_price_res() {
+        return total_net_price_res;
+    }
 
-    @Field("total_net_price_after_discount_shops")
-    private Double total_net_price_after_discount_shops = 0.0;
+    public void setTotal_net_price_res(Double total_net_price_res) {
+        this.total_net_price_res = total_net_price_res;
+    }
+
+    public Double getTotal_net_price_cafe() {
+        return total_net_price_cafe;
+    }
+
+    public void setTotal_net_price_cafe(Double total_net_price_cafe) {
+        this.total_net_price_cafe = total_net_price_cafe;
+    }
+
+    @Field("total_net_price_playground")
+    private Double total_net_price_playground = 0.0;
+
+    @Field("total_net_price_market")
+    private Double total_net_price_market = 0.0;
+
+    @Field("total_net_price_res")
+    private Double total_net_price_res = 0.0;
+
+    @Field("total_net_price_cafe")
+    private Double total_net_price_cafe = 0.0;
 
     @DBRef
     List<Record> records = new ArrayList<>();
@@ -91,27 +98,49 @@ public class Sheft extends AbstractAuditingEntity implements Serializable {
     @DBRef
     List<TableRecord> tableRecords = new ArrayList<>();
 
+    public List<PlaygroundRecord> getPlaygroundRecords() {
+        return playgroundRecords;
+    }
+
+    public void setPlaygroundRecords(List<PlaygroundRecord> playgroundRecords) {
+        this.playgroundRecords = playgroundRecords;
+    }
+
+    public List<PosOrderRecord> getMarketRecords() {
+        return marketRecords;
+    }
+
+    public void setMarketRecords(List<PosOrderRecord> marketRecords) {
+        this.marketRecords = marketRecords;
+    }
+
+    public List<PosOrderRecord> getResRecords() {
+        return resRecords;
+    }
+
+    public void setResRecords(List<PosOrderRecord> resRecords) {
+        this.resRecords = resRecords;
+    }
+
+    public List<PosOrderRecord> getCafeRecords() {
+        return cafeRecords;
+    }
+
+    public void setCafeRecords(List<PosOrderRecord> cafeRecords) {
+        this.cafeRecords = cafeRecords;
+    }
+
     @DBRef
-    List<TableRecord> tableTakeAwayRecords = new ArrayList<>();
-
-    public List<TableRecord> getTableTakeAwayRecords() {
-        return tableTakeAwayRecords;
-    }
-
-    public void setTableTakeAwayRecords(List<TableRecord> tableTakeAwayRecords) {
-        this.tableTakeAwayRecords = tableTakeAwayRecords;
-    }
-
-    public List<TableRecord> getTableShopsRecords() {
-        return tableShopsRecords;
-    }
-
-    public void setTableShopsRecords(List<TableRecord> tableShopsRecords) {
-        this.tableShopsRecords = tableShopsRecords;
-    }
+    List<PlaygroundRecord> playgroundRecords = new ArrayList<>();
 
     @DBRef
-    List<TableRecord> tableShopsRecords = new ArrayList<>();
+    List<PosOrderRecord> marketRecords = new ArrayList<>();
+
+    @DBRef
+    List<PosOrderRecord> resRecords = new ArrayList<>();
+
+    @DBRef
+    List<PosOrderRecord> cafeRecords = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -153,132 +182,12 @@ public class Sheft extends AbstractAuditingEntity implements Serializable {
         this.total_net_price = total_net_price;
     }
 
-    public Double getTotal_discount() {
-        return total_discount;
-    }
-
-    public void setTotal_discount(Double total_discount) {
-        this.total_discount = total_discount;
-    }
-
-    public Double getTotal_net_price_after_discount() {
-        return total_net_price_after_discount;
-    }
-
-    public void setTotal_net_price_after_discount(Double total_net_price_after_discount) {
-        this.total_net_price_after_discount = total_net_price_after_discount;
-    }
-
     public Double getTotal_net_price_devices() {
         return total_net_price_devices;
     }
 
     public void setTotal_net_price_devices(Double total_net_price_devices) {
         this.total_net_price_devices = total_net_price_devices;
-    }
-
-    public Double getTotal_net_user_price_devices() {
-        return total_net_user_price_devices;
-    }
-
-    public void setTotal_net_user_price_devices(Double total_net_user_price_devices) {
-        this.total_net_user_price_devices = total_net_user_price_devices;
-    }
-
-    public Double getTotal_discount_price_devices() {
-        return total_discount_price_devices;
-    }
-
-    public void setTotal_discount_price_devices(Double total_discount_price_devices) {
-        this.total_discount_price_devices = total_discount_price_devices;
-    }
-
-    public Double getTotal_price_time_devices() {
-        return total_price_time_devices;
-    }
-
-    public void setTotal_price_time_devices(Double total_discount_price_time_devices) {
-        this.total_price_time_devices = total_discount_price_time_devices;
-    }
-
-    public Double getTotal_price_orders_devices() {
-        return total_price_orders_devices;
-    }
-
-    public void setTotal_price_orders_devices(Double total_discount_price_orders_devices) {
-        this.total_price_orders_devices = total_discount_price_orders_devices;
-    }
-
-    public Double getTotal_net_price_Tables() {
-        return total_net_price_Tables;
-    }
-
-    public void setTotal_net_price_Tables(Double total_net_price_Tables) {
-        this.total_net_price_Tables = total_net_price_Tables;
-    }
-
-    public Double getTotal_discount_price_Tables() {
-        return total_discount_price_Tables;
-    }
-
-    public void setTotal_discount_price_Tables(Double total_discount_price_Tables) {
-        this.total_discount_price_Tables = total_discount_price_Tables;
-    }
-
-    public Double getTotal_net_price_after_discount_Tables() {
-        return total_net_price_after_discount_Tables;
-    }
-
-    public void setTotal_net_price_after_discount_Tables(Double total_net_price_after_discount_Tables) {
-        this.total_net_price_after_discount_Tables = total_net_price_after_discount_Tables;
-    }
-
-    public Double getTotal_net_price_takeaway() {
-        return total_net_price_takeaway;
-    }
-
-    public void setTotal_net_price_takeaway(Double total_net_price_takeaway) {
-        this.total_net_price_takeaway = total_net_price_takeaway;
-    }
-
-    public Double getTotal_discount_price_takeaway() {
-        return total_discount_price_takeaway;
-    }
-
-    public void setTotal_discount_price_takeaway(Double total_discount_price_takeaway) {
-        this.total_discount_price_takeaway = total_discount_price_takeaway;
-    }
-
-    public Double getTotal_net_price_after_discount_takeaway() {
-        return total_net_price_after_discount_takeaway;
-    }
-
-    public void setTotal_net_price_after_discount_takeaway(Double total_net_price_after_discount_takeaway) {
-        this.total_net_price_after_discount_takeaway = total_net_price_after_discount_takeaway;
-    }
-
-    public Double getTotal_net_price_shops() {
-        return total_net_price_shops;
-    }
-
-    public void setTotal_net_price_shops(Double total_net_price_shops) {
-        this.total_net_price_shops = total_net_price_shops;
-    }
-
-    public Double getTotal_discount_price_shops() {
-        return total_discount_price_shops;
-    }
-
-    public void setTotal_discount_price_shops(Double total_discount_price_shops) {
-        this.total_discount_price_shops = total_discount_price_shops;
-    }
-
-    public Double getTotal_net_price_after_discount_shops() {
-        return total_net_price_after_discount_shops;
-    }
-
-    public void setTotal_net_price_after_discount_shops(Double total_net_price_after_discount_shops) {
-        this.total_net_price_after_discount_shops = total_net_price_after_discount_shops;
     }
 
     public List<Record> getRecords() {
@@ -295,13 +204,5 @@ public class Sheft extends AbstractAuditingEntity implements Serializable {
 
     public void setTableRecords(List<TableRecord> tableRecords) {
         this.tableRecords = tableRecords;
-    }
-
-    public Double getTotal_net_price_after_discount_system() {
-        return total_net_price_after_discount_system;
-    }
-
-    public void setTotal_net_price_after_discount_system(Double total_net_price_after_discount_system) {
-        this.total_net_price_after_discount_system = total_net_price_after_discount_system;
     }
 }

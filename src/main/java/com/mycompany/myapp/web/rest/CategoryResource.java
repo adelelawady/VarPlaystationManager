@@ -163,6 +163,13 @@ public class CategoryResource {
         return ResponseEntity.ok().body(page);
     }
 
+    @GetMapping("/categories/type/{type}")
+    public ResponseEntity<List<CategoryDTO>> getAllCategoriesByType(@PathVariable String type) {
+        log.debug("REST request to get a page of Categories");
+        List<CategoryDTO> page = categoryService.findAllByType(type);
+        return ResponseEntity.ok().body(page);
+    }
+
     /**
      * {@code GET  /categories/:id} : get the "id" category.
      *

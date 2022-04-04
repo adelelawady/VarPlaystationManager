@@ -44,6 +44,17 @@ public class Session implements Serializable {
     @Field("active")
     private boolean active;
 
+    public boolean isContainsNewOrders() {
+        return containsNewOrders;
+    }
+
+    public void setContainsNewOrders(boolean containsNewOrders) {
+        this.containsNewOrders = containsNewOrders;
+    }
+
+    @Field("containsNewOrders")
+    private boolean containsNewOrders = false;
+
     @Field("multi")
     private boolean multi = false;
 
@@ -95,6 +106,9 @@ public class Session implements Serializable {
     @JsonIgnoreProperties(value = { "category", "sessions", "records" }, allowSetters = true)
     private Set<Product> orders = new HashSet<>();
 
+    @Field("productOrderRecord") // already ordered orders [products]
+    private HashMap<String, Integer> productOrderRecord = new HashMap<>();
+
     @Field("ordersQuantity")
     private HashMap<String, Integer> ordersQuantity = new HashMap<>();
 
@@ -130,6 +144,14 @@ public class Session implements Serializable {
         allowSetters = true
     )
     private List<Record> previousSessions = new ArrayList<>();
+
+    public HashMap<String, Integer> getProductOrderRecord() {
+        return productOrderRecord;
+    }
+
+    public void setProductOrderRecord(HashMap<String, Integer> productOrderRecord) {
+        this.productOrderRecord = productOrderRecord;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

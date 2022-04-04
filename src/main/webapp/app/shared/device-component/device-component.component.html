@@ -39,6 +39,8 @@
     </h6>
 
     <div style="text-align: center" *ngIf="device.session && device.session">
+      <!--
+
       <button
         *ngIf="device.session && device.session"
         (click)="showPreviousSessions = false; showOptions = !showOptions"
@@ -46,8 +48,8 @@
       >
         <i style="font-size: large" class="fa fa-cog m-auto mx-0 mt-1" aria-hidden="true"></i>
         {{ showOptionsTxt ? 'اعدادات' : '' }}
-      </button>
-      <button
+      </button>-->
+      <!-- <button
         *ngIf="device.session && device.session && device.session.previousSessions && device.session.previousSessions.length > 0"
         (click)="selectDevice(device); showPreviousSessions = !showPreviousSessions; showOptions = false"
         class="btn mt-3 col-3 shadow-sm border text-center m-auto btn-sm p-0"
@@ -55,7 +57,7 @@
       >
         <i style="font-size: large" class="fa fa-tv m-auto mx-0 mt-1" aria-hidden="true"></i>
         {{ device.session.previousSessions.length }}
-      </button>
+      </button>-->
       <button
         *ngIf="device.session && device.session && showCloseButton"
         (click)="diableClick(); openCheckOut()"
@@ -165,7 +167,10 @@
   </div>
   <div *ngIf="!device.session" class="card-footer p-2">
     <a href="#" class="card-link float-left">
-      <label class="badge badge-danger">{{ 'متوقف' }}</label></a
-    >
+      <label class="badge badge-danger">{{ 'متوقف' }}</label>
+    </a>
+    <button (click)="openCheckOut()" class="btn btn-sm badge-secondary shadow-sm border text-center float-right">
+      <i style="font-size: large" class="fa fa-check m-auto mx-0 mt-1" aria-hidden="true"></i>
+    </button>
   </div>
 </div>

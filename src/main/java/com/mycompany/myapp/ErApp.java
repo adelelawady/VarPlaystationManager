@@ -98,7 +98,7 @@ public class ErApp {
         logApplicationStartup(env);
     }
 
-    @EventListener({ ApplicationReadyEvent.class })
+    //@EventListener({ ApplicationReadyEvent.class })
     private void applicationReadyEvent() {
         String url = "http://localhost:8080/";
         if (Desktop.isDesktopSupported()) {
