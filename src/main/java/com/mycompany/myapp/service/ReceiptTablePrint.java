@@ -34,7 +34,7 @@ public class ReceiptTablePrint implements Printable {
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
         int line = 10;
 
-        Font font = new Font("Arial", Font.BOLD, 10);
+        Font font = new Font("", Font.BOLD, 10);
 
         if (pageIndex < 0 || pageIndex >= 1) {
             return Printable.NO_SUCH_PAGE;
@@ -55,7 +55,7 @@ public class ReceiptTablePrint implements Printable {
         }
         g2d.setFont(font);
         line += 70;
-        font = new Font("MS Gothic", Font.PLAIN, 9);
+        font = new Font("", Font.PLAIN, 9);
         g2d.setFont(font);
 
         g2d.drawString(String.format("%-25s", "TABLE :  " + currentRecord.getTable().getName()), 1, line);
@@ -101,7 +101,7 @@ public class ReceiptTablePrint implements Printable {
                         cH = cH + 10;
                         g2d.drawLine(10, cH, 180, cH);
                         cH = cH + 20;
-                        font = new Font("Arial", Font.BOLD, 11); // changed font size
+                        font = new Font("", Font.BOLD, 11); // changed font size
                         g2d.setFont(font);
 
                         g2d.drawString(

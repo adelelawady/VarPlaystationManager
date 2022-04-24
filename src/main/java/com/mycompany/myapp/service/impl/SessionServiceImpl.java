@@ -128,6 +128,10 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public void deleteProductOrderFromDeviceSession(Session session, Product product) {
+        if (session.getPaidOrdersPrice() > 0) {
+            return;
+        }
+
         Optional<Session> sessOPt = sessionRepository.findById(session.getId());
         if (!sessOPt.isPresent()) {
             return;
@@ -150,6 +154,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void calculateDeviceSessionOrderesPrice(Session session) {
         Double totalCalculationsOfOrders = 0.0;
+        Double totalCalculationsOfPaiedOrders = 0.0;
         for (Product order : session.getOrders()) {
             int prodValue;
             int paiedProdValue;
@@ -168,8 +173,10 @@ public class SessionServiceImpl implements SessionService {
             Double prodPrice = order.getPrice();
             Double totalProdPrice = Double.valueOf(prodValue) * prodPrice;
             Double totalProdPaiedPrice = Double.valueOf(paiedProdValue) * prodPrice;
+            totalCalculationsOfPaiedOrders += totalProdPaiedPrice;
             totalCalculationsOfOrders += (totalProdPrice - totalProdPaiedPrice);
         }
+        session.setPaidOrdersPrice(totalCalculationsOfPaiedOrders);
         session.setOrdersPrice(totalCalculationsOfOrders);
         sessionRepository.save(session);
     }

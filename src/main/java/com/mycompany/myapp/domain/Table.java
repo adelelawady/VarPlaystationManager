@@ -73,6 +73,12 @@ public class Table extends AbstractAuditingEntity implements Serializable {
     @Field("ordersQuantity")
     private HashMap<String, Integer> ordersQuantity = new HashMap<>();
 
+    @Field("paidOrdersQuantity")
+    private HashMap<String, Integer> paidOrdersQuantity = new HashMap<>();
+
+    @Field("paidOrdersPrice")
+    private Double paidOrdersPrice = 0.0;
+
     @Field("type")
     private TABLE_TYPE type = TABLE_TYPE.TABLE;
 
@@ -104,6 +110,22 @@ public class Table extends AbstractAuditingEntity implements Serializable {
     public Table id(String id) {
         this.setId(id);
         return this;
+    }
+
+    public HashMap<String, Integer> getPaidOrdersQuantity() {
+        return paidOrdersQuantity;
+    }
+
+    public void setPaidOrdersQuantity(HashMap<String, Integer> paidOrdersQuantity) {
+        this.paidOrdersQuantity = paidOrdersQuantity;
+    }
+
+    public Double getPaidOrdersPrice() {
+        return paidOrdersPrice;
+    }
+
+    public void setPaidOrdersPrice(Double paidOrdersPrice) {
+        this.paidOrdersPrice = paidOrdersPrice;
     }
 
     public void setId(String id) {

@@ -34,7 +34,7 @@
     <h6 class="card-subtitle mb-2 text-muted my-3">
       {{ device.type.name }}
       <span *ngIf="device.session && device.session.multi">
-        <small class="border bg-light text-danger p-1 rounded"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
+        <small class="border bg-light text-danger p-1 rounded d-block"> <i class="fa fa-gamepad mr-2"> </i>{{ 'multi' }}</small>
       </span>
     </h6>
 
@@ -57,12 +57,21 @@
         {{ device.session.previousSessions.length }}
       </button>
       <button
-        *ngIf="device.session && device.session && showCloseButton"
+        *ngIf="device.session && device.session && showCloseButton && device.session.paidOrdersPrice === 0"
         (click)="diableClick(); openCheckOut()"
         class="btn mt-3 col-3 badge-danger shadow-sm border text-center m-auto btn-sm p-0"
       >
         <i style="font-size: large" class="fa fa-credit-card m-auto mx-0 mt-1" aria-hidden="true"></i>
         {{ showCloseSessionsTxt ? 'انهاء  ' : '' }}
+      </button>
+      <button
+        [disabled]="true"
+        *ngIf="device.session.paidOrdersPrice > 0 && showCloseButton"
+        (click)="diableClick(); openCheckOut()"
+        class="btn mt-3 col-3 badge-danger shadow-sm border text-center m-auto btn-sm p-0"
+      >
+        <i style="font-size: large" class="fa fa-credit-card m-auto mx-0 mt-1" aria-hidden="true"></i>
+        يجب ازالة حساب طلبات
       </button>
     </div>
 

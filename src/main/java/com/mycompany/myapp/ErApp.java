@@ -100,6 +100,10 @@ public class ErApp {
 
     @EventListener({ ApplicationReadyEvent.class })
     private void applicationReadyEvent() {
+        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+        if (!activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+            return;
+        }
         String url = "http://localhost:8080/";
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();

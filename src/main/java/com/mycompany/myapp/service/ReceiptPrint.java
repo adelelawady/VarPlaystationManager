@@ -52,7 +52,7 @@ public class ReceiptPrint implements Printable {
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
-        Font font = new Font("Arial", Font.BOLD, 10);
+        Font font = new Font("", Font.BOLD, 10);
 
         int line = 10;
 

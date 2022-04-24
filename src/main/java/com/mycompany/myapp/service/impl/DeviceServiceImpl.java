@@ -18,11 +18,7 @@ import com.mycompany.myapp.service.dto.SessionStartDTO;
 import com.mycompany.myapp.service.mapper.DeviceMapper;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.websocket.RemoteEndpoint.Async;
@@ -30,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -283,6 +280,57 @@ public class DeviceServiceImpl implements DeviceService {
         }
     }
 
+    Record createDeviceOrdersRecord(Device dev, List<Product> orders, HashMap<String, Integer> OrdersQuantity, boolean save) {
+        // CREATE NEW RECORED
+        Record rec = new Record();
+        // RECORED -- DEVICE
+        rec.setDevice(dev);
+        // RECORED -- END
+        rec.setEnd(Instant.now());
+        // RECORED START
+        rec.setStart(Instant.now());
+
+        // RECORED DURATION
+        Duration d = Duration.between(Instant.now(), Instant.now().plusSeconds(1));
+        rec.setDuration(d);
+
+        // DEVICE MULTI
+        rec.setMulti(false);
+
+        // DEVICE TIME
+        rec.setTotalPriceTime(0.0);
+
+        Double totalCalculationsOfOrders = 0.0;
+        for (Product order : orders) {
+            int prodValue;
+            prodValue = OrdersQuantity.getOrDefault(order.getId(), 0);
+            Double prodPrice = order.getPrice();
+            Double totalProdPrice = Double.valueOf(prodValue) * prodPrice;
+            totalCalculationsOfOrders += (totalProdPrice);
+        }
+
+        // DEVICE ORDERS
+        rec.setTotalPriceOrders(totalCalculationsOfOrders);
+
+        // RECORED -- USER INPUT PRICE
+        rec.setTotalPriceUser(totalCalculationsOfOrders);
+
+        // RECORED NET PRICE
+        calculateRecoredNetPrice(rec);
+
+        // RECORED ORDERS
+        if (orders != null && !orders.isEmpty()) {
+            rec.setOrdersQuantity(OrdersQuantity);
+            rec.setOrdersData(orders.stream().collect(Collectors.toSet()));
+        }
+
+        if (save) {
+            return recordService.save(rec);
+        } else {
+            return rec;
+        }
+    }
+
     @Override
     public DeviceSessionDTO stopSession(String deviceId, SessionEndDTO sessionEndDto) {
         try {
@@ -292,6 +340,11 @@ public class DeviceServiceImpl implements DeviceService {
             }
             Record savedRecId = null;
             Session currentActiveSession = getDeviceActiveSession(deviceId);
+
+            if (currentActiveSession.getPaidOrdersPrice() > 0) {
+                return this.toDeviceSession(deviceId);
+            }
+
             if (currentActiveSession != null) {
                 savedRecId = stopSession(dev.get(), currentActiveSession, sessionEndDto, true);
                 Device device = dev.get();
@@ -571,11 +624,55 @@ public class DeviceServiceImpl implements DeviceService {
                         }
 
                         Session sessSaved = sessionService.save(sess);
-                        //sessionService.calculateDeviceSessionOrderesPrice(sessSaved);
+                        sessionService.calculateDeviceSessionOrderesPrice(sessSaved);
                         // this.addProductToDeviceSession(deviceId, productId);
 
                     }
                 } catch (Exception e) {}
+            }
+        }
+        return this.toDeviceSession(deviceId);
+    }
+
+    @Override
+    public DeviceSessionDTO completePayDevicePaidOrders(String deviceId, boolean print) {
+        Optional<Device> devFrom = deviceRepository.findById(deviceId);
+        if (!devFrom.isPresent()) {
+            throw new RuntimeException("DeviceNotFound");
+        }
+        Session sess = getDeviceActiveSession(deviceId);
+
+        if (sess != null) {
+            Set<Product> productsList = new HashSet<>();
+            for (String product : sess.getPaidOrdersQuantity().keySet()) {
+                //  boolean sessionPaidOrdersHasItem = sess.getPaidOrdersQuantity().containsKey(product);
+                int currentPaidOrdersvalue = sess.getPaidOrdersQuantity().get(product);
+                for (int i = 0; i < currentPaidOrdersvalue; i++) {
+                    sess.setPaidOrdersPrice(0.0);
+                    Optional<Product> productX = productService.findOneDomain(product);
+                    productsList.add(productX.get());
+                    sessionService.deleteProductOrderFromDeviceSession(sess, productX.get());
+                }
+            }
+
+            Optional<Device> dev = deviceRepository.findById(sess.getDeviceId());
+            if (dev.isPresent()) {
+                SessionEndDTO sessionEndDTO = new SessionEndDTO();
+                sessionEndDTO.setOrdersDiscount(0.0);
+                sessionEndDTO.setTimeDiscount(0.0);
+                sessionEndDTO.setPrint(print);
+
+                Record savedRecId = createDeviceOrdersRecord(dev.get(), new ArrayList<>(productsList), sess.getPaidOrdersQuantity(), true);
+
+                Session sessAfterUpdate = getDeviceActiveSession(deviceId);
+                sessAfterUpdate.setPaidOrdersPrice(0.0);
+                sessAfterUpdate.setPaidOrdersQuantity(new HashMap<>());
+                Session sessSaved = sessionService.save(sessAfterUpdate);
+                sessionService.calculateDeviceSessionOrderesPrice(sessSaved);
+
+                if (sessionEndDTO.isPrint() && savedRecId != null) {
+                    recordService.printRecord(savedRecId.getId());
+                }
             }
         }
         return this.toDeviceSession(deviceId);

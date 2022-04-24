@@ -69,6 +69,18 @@ export class TableService {
     return this.http.get<any[]>(`${this.resourceUrl}/${tableId}/tables/${tableIdToMoveTO}/move`, { observe: 'body' });
   }
 
+  payProductToDeviceSession(deviceId: string, productid: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/${deviceId}/session/product/${productid}/pay`, { observe: 'body' });
+  }
+
+  unPayProductFromDeviceSession(deviceId: string, productid: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/${deviceId}/session/product/${productid}/unpay`, { observe: 'body' });
+  }
+
+  completePaiedSessionOrdersPayment(deviceId: string, print: boolean): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/${deviceId}/session/product/pay/${print.toString()}/complete`, { observe: 'body' });
+  }
+
   addTableToCollectionIfMissing(tableCollection: ITable[], ...tablesToCheck: (ITable | null | undefined)[]): ITable[] {
     const tables: ITable[] = tablesToCheck.filter(isPresent);
     if (tables.length > 0) {

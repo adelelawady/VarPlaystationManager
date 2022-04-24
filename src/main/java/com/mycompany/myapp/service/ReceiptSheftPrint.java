@@ -38,14 +38,14 @@ public class ReceiptSheftPrint implements Printable {
 
         int line = 10;
 
-        Font font = new Font("Arial", Font.BOLD, 10);
+        Font font = new Font("", Font.BOLD, 10);
         // Font font = new Font("MS Gothic", Font.PLAIN, 10);
 
         if (pageIndex < 0 || pageIndex >= 1) {
             return Printable.NO_SUCH_PAGE;
         }
 
-        g2d.drawString(String.format("%-25s", "	-   VAR   Sheft-"), 1, line);
+        g2d.drawString(String.format("%-25s", "	-   VAR   Sheft -"), 1, line);
         line += 13;
         int imagewidth = 160;
         int imageheight = 50;
@@ -70,7 +70,7 @@ public class ReceiptSheftPrint implements Printable {
         line += 13;
         g2d.drawString(String.format("%-25s", "END : " + currentSheft.getEnd().toString()), 1, line);
 
-        font = new Font("Arial", Font.BOLD, 12);
+        font = new Font("", Font.BOLD, 12);
         line += 13;
         g2d.drawString(String.format("%-25s", "SUBTOTAL : " + currentSheft.getTotal_net_price().toString()), 1, line);
 

@@ -276,6 +276,11 @@
       <hr />
       <div *ngIf="!device.session" class="form-group row">
         <label class="form-check-label" for="gridCheck1"> اضافة وقت </label>
+
+        <div class="form-group">
+          <input type="number" class="form-control" [ngModelOptions]="{ standalone: true }" [(ngModel)]="plusMinutes" />
+        </div>
+
         <img
           (click)="plusMinutes = 5"
           class="col-auto border rounded mx-1"

@@ -51,4 +51,10 @@ export class DevicesSessionsService {
   unPayProductFromDeviceSession(deviceId: string, productid: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.resourceUrl}/device/${deviceId}/session/product/${productid}/unpay`, { observe: 'body' });
   }
+
+  completePaiedSessionOrdersPayment(deviceId: string, print: boolean): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourceUrl}/device/${deviceId}/session/product/pay/${print.toString()}/complete`, {
+      observe: 'body',
+    });
+  }
 }

@@ -35,9 +35,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   tables: any[] | null = null;
   categories: any = [];
   products: any = [];
-  selectedDevice: any;
+  selectedDevice: any = undefined;
   selectedTable: any;
-
+  completeBtn = false;
   currentSheft: any | undefined;
   eventReloadTables: Subject<void> = new Subject<void>();
 
@@ -62,15 +62,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       style: 'danger',
       hint: 'مسح',
       type: 'danger',
+      // disabled: (this.selectedDevice ? (this.selectedDevice.session?.paidOrdersPrice>0):false),
       action: 'deleteOrderItem',
     },
-    /* {
+    {
+      icon: 'plus',
+      style: 'italic',
+      hint: 'اضافة',
+      type: 'success',
+      action: 'addOrderItem',
+    },
+    {
       icon: 'money',
       style: 'italic',
       hint: 'حساب',
-      type: 'success',
-      action: 'payOrderItem'
-    }*/
+      type: 'warning',
+      action: 'payOrderItem',
+    },
   ];
 
   paidOrdersButtons: any[] = [
@@ -305,6 +313,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'deleteOrderItem':
         this.deleteProductFromSelectedDevice(prodId);
         break;
+      case 'addOrderItem':
+        this.addProductToSelectedDevice(prodId);
+        break;
       case 'payOrderItem':
         this.payProductFromSelectedDevice(prodId);
         break;
@@ -334,6 +345,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedDevice = deivce;
         this.loadAllDevices();
       });
+    }
+  }
+
+  completeSelectedDevicePaidOrdersPayment(print: boolean): void {
+    if (this.selectedDevice) {
+      this.completeBtn = true;
+      this.devicesSessionService.completePaiedSessionOrdersPayment(this.selectedDevice.id, print).subscribe(
+        deivce => {
+          this.selectedDevice = deivce;
+          this.completeBtn = false;
+          this.loadAllDevices();
+        },
+        () => {
+          this.completeBtn = false;
+        }
+      );
     }
   }
 

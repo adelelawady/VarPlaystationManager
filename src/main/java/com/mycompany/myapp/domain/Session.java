@@ -101,6 +101,9 @@ public class Session implements Serializable {
     @Field("paidOrdersQuantity")
     private HashMap<String, Integer> paidOrdersQuantity = new HashMap<>();
 
+    @Field("paidOrdersPrice")
+    private Double paidOrdersPrice = 0.0;
+
     public HashMap<String, Integer> getPaidOrdersQuantity() {
         return paidOrdersQuantity;
     }
@@ -156,6 +159,14 @@ public class Session implements Serializable {
     public Session id(String id) {
         this.setId(id);
         return this;
+    }
+
+    public Double getPaidOrdersPrice() {
+        return paidOrdersPrice;
+    }
+
+    public void setPaidOrdersPrice(Double paidOrdersPrice) {
+        this.paidOrdersPrice = paidOrdersPrice;
     }
 
     public void setId(String id) {

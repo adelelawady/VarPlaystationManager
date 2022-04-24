@@ -78,4 +78,6 @@ public interface DeviceService {
     DeviceSessionDTO payProductfromDeviceSession(String deviceId, String productId);
 
     DeviceSessionDTO unPayProductFromDeviceSession(String deviceId, String productId);
+
+    DeviceSessionDTO completePayDevicePaidOrders(String deviceId, boolean print);
 }

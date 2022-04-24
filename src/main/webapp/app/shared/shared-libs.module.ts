@@ -6,6 +6,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
+import { DxButtonGroupModule } from 'devextreme-angular';
 import {
   DxLoadIndicatorModule,
   DxSelectBoxModule,
@@ -39,6 +40,7 @@ import {
     DxSliderModule,
     DxTagBoxModule,
     DxTemplateModule,
+    DxButtonGroupModule,
   ],
 })
 export class SharedLibsModule {}

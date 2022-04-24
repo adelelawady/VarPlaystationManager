@@ -27,6 +27,42 @@ export class TablesTapComponentComponent implements OnInit, OnDestroy {
   @Output() tableSelected = new EventEmitter();
   @Output() tableDoubleClicked = new EventEmitter();
   @Output() tableCheckOut = new EventEmitter();
+  completeBtn = false;
+
+  ordersButtons: any[] = [
+    {
+      icon: 'minus',
+      style: 'danger',
+      hint: 'مسح',
+      type: 'danger',
+      // disabled: (this.selectedDevice ? (this.selectedDevice.session?.paidOrdersPrice>0):false),
+      action: 'deleteOrderItem',
+    },
+    {
+      icon: 'plus',
+      style: 'italic',
+      hint: 'اضافة',
+      type: 'success',
+      action: 'addOrderItem',
+    },
+    {
+      icon: 'money',
+      style: 'italic',
+      hint: 'حساب',
+      type: 'warning',
+      action: 'payOrderItem',
+    },
+  ];
+
+  paidOrdersButtons: any[] = [
+    {
+      icon: 'undo',
+      style: 'back',
+      hint: 'الغاء الدفع',
+      type: 'danger',
+      action: 'unPayOrderItem',
+    },
+  ];
 
   private eventsSubscription: Subscription | undefined;
 
@@ -63,6 +99,31 @@ export class TablesTapComponentComponent implements OnInit, OnDestroy {
     this.selectedTable = table;
     this.tableSelected.emit(table);
   }
+
+  toObjectKeys(any: any): any {
+    return Object.keys(any);
+  }
+  orderItemClick(e: any, prodId: any): void {
+    // eslint-disable-next-line no-console
+    console.log(e.itemData.action);
+    switch (e.itemData.action) {
+      case 'deleteOrderItem':
+        this.deleteProductFromSelectedDevice(prodId);
+        break;
+      case 'addOrderItem':
+        this.addProductFromSelectedDevice(prodId);
+        break;
+      case 'payOrderItem':
+        this.payProductFromSelectedDevice(prodId);
+        break;
+      case 'unPayOrderItem':
+        this.unPayProductFromSelectedDevice(prodId);
+        break;
+      default:
+        break;
+    }
+  }
+
   getProductPrice(prod: any): any {
     switch (this.tableType) {
       case 'table':
@@ -89,6 +150,52 @@ export class TablesTapComponentComponent implements OnInit, OnDestroy {
       this.loadAllTables();
       this.cd.markForCheck();
     });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+  addProductFromSelectedDevice(prodId: string): void {
+    this.tableService.addProductToTable(this.selectedTable.id, prodId).subscribe(table => {
+      this.selectedTable = table;
+      this.loadAllTables();
+      this.cd.markForCheck();
+    });
+  }
+
+  payProductFromSelectedDevice(productId: string): void {
+    if (this.selectedTable) {
+      this.tableService.payProductToDeviceSession(this.selectedTable.id, productId).subscribe(deivce => {
+        this.selectedTable = deivce;
+        this.loadAllTables();
+        this.cd.markForCheck();
+      });
+    }
+  }
+
+  unPayProductFromSelectedDevice(productId: string): void {
+    if (this.selectedTable) {
+      this.tableService.unPayProductFromDeviceSession(this.selectedTable.id, productId).subscribe(deivce => {
+        this.selectedTable = deivce;
+        this.loadAllTables();
+        this.cd.markForCheck();
+      });
+    }
+  }
+
+  completeSelectedDevicePaidOrdersPayment(print: boolean): void {
+    if (this.selectedTable) {
+      this.completeBtn = true;
+      this.tableService.completePaiedSessionOrdersPayment(this.selectedTable.id, print).subscribe(
+        deivce => {
+          this.selectedTable = deivce;
+          this.completeBtn = false;
+          this.loadAllTables();
+          this.cd.markForCheck();
+        },
+        () => {
+          this.completeBtn = false;
+        }
+      );
+    }
   }
 
   tableMovedToTable(table: any): void {

@@ -258,4 +258,10 @@ public class DeviceResource {
         DeviceSessionDTO listDevices = deviceService.unPayProductFromDeviceSession(deviceId, productId);
         return ResponseEntity.ok(listDevices);
     }
+
+    @GetMapping("/device/{deviceId}/session/product/pay/{print}/complete")
+    public ResponseEntity<DeviceSessionDTO> completePayDevicePaidOrders(@PathVariable String deviceId, @PathVariable boolean print) {
+        DeviceSessionDTO listDevices = deviceService.completePayDevicePaidOrders(deviceId, print);
+        return ResponseEntity.ok(listDevices);
+    }
 }

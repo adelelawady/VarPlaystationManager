@@ -207,15 +207,17 @@
               </div>
             </div>
 
-            <!--
-
-
-            <div class="card-body" *ngIf="selectedDevice && selectedDevice.session && selectedDevice.session.paidOrdersQuantity
-            && toObjectKeys(selectedDevice.session.paidOrdersQuantity).length > 0">
-              <h5 class="card-title">
-                طلبات مدفوعة
-              </h5>
-              <div class="row" >
+            <div
+              class="card-body pt-0"
+              *ngIf="
+                selectedDevice &&
+                selectedDevice.session &&
+                selectedDevice.session.paidOrdersQuantity &&
+                toObjectKeys(selectedDevice.session.paidOrdersQuantity).length > 0
+              "
+            >
+              <h5 class="card-title">حساب طلبات</h5>
+              <div class="row">
                 <div class="table-responsive" id="entities">
                   <table class="table" aria-describedby="page-heading">
                     <thead>
@@ -229,44 +231,69 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr  *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" data-cy="entityTable">
+                      <tr *ngFor="let prod of selectedDevice.session.orders.slice().reverse()" data-cy="entityTable">
                         <div style="display: contents" *ngIf="selectedDevice.session.paidOrdersQuantity[prod.id]">
+                          <td style="word-break: break-word" class="text-center">
+                            <h6 style="word-break: keep-all" class="text-primary">{{ prod.name }}</h6>
+                          </td>
 
+                          <td>
+                            <span style="font-size: large" class="float-left text-primary col-xs p-0">
+                              <span class="badge badge-primary">{{
+                                selectedDevice.session.paidOrdersQuantity[prod.id]
+                                  ? selectedDevice.session.paidOrdersQuantity[prod.id]
+                                  : '1'
+                              }}</span>
+                            </span>
+                          </td>
 
-                        <td style="word-break: break-word" class="text-center">
-                          <h6 style="word-break: keep-all;    text-decoration: line-through;" class="text-primary">{{ prod.name }}</h6>
-                        </td>
-
-                        <td>
-                          <span style="font-size: large" class="float-left text-primary col-xs p-0">
-                            <span class="badge badge-primary">{{
-                              selectedDevice.session.paidOrdersQuantity[prod.id] ? selectedDevice.session.paidOrdersQuantity[prod.id] : '1'
-                            }}</span>
-                          </span>
-                        </td>
-
-                        <td>
-                          <small class="text-muted"> {{ prod.price }}LE</small>
-                        </td>
-                        <td>
-                        <dx-button-group
-                        [items]="paidOrdersButtons"
-                        keyExpr="style"
-                        stylingMode="text"
-                        selectionMode="none"
-
-                        (onItemClick)="orderItemClick($event,prod.id)"
-                      >
-                      </dx-button-group>
-                    </td>
-                      </div>
+                          <td>
+                            <small class="text-muted"> {{ prod.price }}LE</small>
+                          </td>
+                          <td>
+                            <dx-button-group
+                              [items]="paidOrdersButtons"
+                              keyExpr="style"
+                              stylingMode="text"
+                              selectionMode="none"
+                              (onItemClick)="orderItemClick($event, prod.id)"
+                            >
+                            </dx-button-group>
+                          </td>
+                        </div>
                       </tr>
                     </tbody>
                   </table>
                 </div>
+
+                <div class="col-12">
+                  <span class="">
+                    <a href="#" class="card-link float-right m-0 pr-2 col-auto p-1" style="border: 1px darkblue dotted">
+                      {{ this.selectedDevice.session.paidOrdersPrice }}
+                    </a>
+                  </span>
+                  <span class="">
+                    <button
+                      [disabled]="completeBtn"
+                      (click)="completeSelectedDevicePaidOrdersPayment(false)"
+                      type="button"
+                      class="btn btn-success"
+                    >
+                      <h6><i class="fa fa-credit-card"></i> حساب</h6>
+                    </button>
+                    <button
+                      [disabled]="completeBtn"
+                      (click)="completeSelectedDevicePaidOrdersPayment(true)"
+                      type="button"
+                      class="btn btn-success"
+                    >
+                      <h6><i class="fa fa-print"></i> <i class="fa fa-credit-card"></i> حساب وطباعة</h6>
+                    </button>
+                  </span>
+                </div>
               </div>
             </div>
-          --></div>
+          </div>
         </div>
       </div>
     </div>
