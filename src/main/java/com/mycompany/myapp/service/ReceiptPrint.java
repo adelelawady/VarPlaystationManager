@@ -169,7 +169,7 @@ public class ReceiptPrint implements Printable {
                      * other premetive data types are accepted.
                      */
                     String itemid = prod.getEnName().length() > 15 ? prod.getEnName().substring(0, 13) + ".." : prod.getEnName();
-                    String itemname = currentRecord.getOrdersQuantity().get(prod.getId()).toString();
+                    String itemname = currentRecord.getOrdersQuantity().getOrDefault(prod.getId(), 1).toString();
                     String price = prod.getPrice().toString();
 
                     cH = (y + 70) + (10 * i); // shifting drawing line
