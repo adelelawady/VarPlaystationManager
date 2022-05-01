@@ -48,12 +48,12 @@
     class="dx-loadindicator dx-widget d-block row text-center m-auto"
   ></dx-load-indicator>
   <div class="table-responsive" id="entities" *ngIf="tables && tables.length > 0 && !isLoading">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table datatable [dtOptions]="dtOptions" class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="erApp.table.name">الاسم</span></th>
-          <th (click)="sortItem = 1; loadPage()" scope="col"><span>العدد</span></th>
-          <th (click)="sortItem = 0; loadPage()" scope="col"><span>السعر الكلي</span></th>
+          <th scope="col"><span>العدد</span></th>
+          <th scope="col"><span>السعر الكلي</span></th>
         </tr>
       </thead>
       <tbody>
@@ -72,6 +72,7 @@
     <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
   </div>
 
+  <!--
   <div class="row justify-content-center">
     <ngb-pagination
       [collectionSize]="totalItems"
@@ -83,6 +84,7 @@
       (pageChange)="loadPage($event)"
     ></ngb-pagination>
   </div>
+  -->
 </div>
 <style>
   .dx-loadindicator-wrapper {

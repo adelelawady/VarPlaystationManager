@@ -129,6 +129,7 @@ public class ProductServiceImpl implements ProductService {
 
             totalProductPriceInAll += prodx.getPrice();
             //  }
+
         }
 
         for (TableRecord rec : recordsTableList) {

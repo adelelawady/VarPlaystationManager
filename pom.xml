@@ -7,7 +7,7 @@
 
 	<groupId>com.mycompany.myapp</groupId>
 	<artifactId>er</artifactId>
-	<version>v2.5</version>
+	<version>v2.6</version>
 	<packaging>jar</packaging>
 	<name>Er</name>
 	<description>Description for er</description>

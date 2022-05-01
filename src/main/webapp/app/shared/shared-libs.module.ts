@@ -19,6 +19,7 @@ import {
   DxTagBoxModule,
   DxTemplateModule,
 } from 'devextreme-angular';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   exports: [
@@ -41,6 +42,7 @@ import {
     DxTagBoxModule,
     DxTemplateModule,
     DxButtonGroupModule,
+    DataTablesModule,
   ],
 })
 export class SharedLibsModule {}
