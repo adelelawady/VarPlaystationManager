@@ -63,9 +63,8 @@ management:
         request:
           autotime:
             enabled: true
-
 mongock:
-  change-logs-scan-package:
+  migration-scan-package:
     - com.mycompany.myapp.config.dbmigrations
 
 spring:

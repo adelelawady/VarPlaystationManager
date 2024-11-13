@@ -1,10 +1,11 @@
 package com.mycompany.myapp.config;
 
-import com.github.cloudyrock.spring.v5.EnableMongock;
+import com.mongodb.client.MongoClient;
+import io.mongock.driver.api.driver.ConnectionDriver;
+import io.mongock.driver.mongodb.sync.v4.driver.MongoSync4Driver;
+import io.mongock.runner.springboot.EnableMongock;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,12 @@ public class DatabaseConfiguration {
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener() {
         return new ValidatingMongoEventListener(validator());
+    }
+
+    @Bean
+    // name of Method seems irrelevant
+    public ConnectionDriver mongockConnection(MongoClient mongoClient) {
+        return MongoSync4Driver.withDefaultLock(mongoClient, "er");
     }
 
     @Bean

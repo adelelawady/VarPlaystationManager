@@ -239,9 +239,10 @@ public class ProductResource {
             ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
 
             // check response status code
-            org.json.JSONObject jsonObject;
-            jsonObject = new org.json.JSONObject(response.getBody());
-            return jsonObject.getJSONObject("data").getJSONArray("translations").getJSONObject(0).get("translatedText").toString();
+            // org.json.JSONObject jsonObject;
+            // jsonObject = new org.json.JSONObject(response.getBody());
+            // return jsonObject.getJSONObject("data").getJSONArray("translations").getJSONObject(0).get("translatedText").toString();
+            return null;
         } catch (Exception e) {
             return null;
         }
