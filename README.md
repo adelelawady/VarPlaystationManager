@@ -6,6 +6,12 @@
   <img src="https://github.com/user-attachments/assets/95f13973-b253-48bb-8273-be78191ee652" width="100" />
 </p>
 
+## Download Link
+
+You can download the latest release of the PS.VAR Manager from the following link:
+
+[PS.VAR Manager 2.6 Beta](https://github.com/adelelawady/VarPlaystationManager/releases/download/v2.6-VAR/PS.VAR.Manager.2.6.Beta.exe)
+
 # VarPsManager
 Welcome to the **Cafe PlayStation Management System**! This application is built to streamline management of PlayStation devices, tables, orders, and user shifts in a cafe environment. With an interactive admin panel, you can easily monitor real-time pricing, manage orders, and handle device allocation.
 
