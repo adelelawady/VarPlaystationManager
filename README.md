@@ -1,4 +1,164 @@
-# er
+
+
+🎮 Cafe PlayStation Management System
+=====================================
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/95f13973-b253-48bb-8273-be78191ee652" width="100" />
+</p>
+
+# VarPsManager
+Welcome to the **Cafe PlayStation Management System**! This application is built to streamline management of PlayStation devices, tables, orders, and user shifts in a cafe environment. With an interactive admin panel, you can easily monitor real-time pricing, manage orders, and handle device allocation.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ad31dd7f-f8b0-405f-ab98-23f6c8ad6d4f" width="800" />
+</p>
+
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/1a72dd52-fe16-4f4e-a5a8-2f967a76ec6c" width="800" />
+</p>
+
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/de456a0e-5a8a-4088-8140-363dc20f6bc2" width="800" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/af24a598-b974-4141-b884-006f6faffd42" width="800" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/fc8a1784-8cb1-4454-9fd2-6d7c1c8121c7" width="800" />
+</p>
+
+
+
+
+
+
+
+
+
+
+🚀 Features
+-----------
+
+### 🎲 Device & Table Management
+
+*   **Manage PlayStation Devices**: Track device status, control start/stop times, and assign custom prices for each device type.
+    
+*   **Table Management**: Organize and assign orders to cafe tables, making it simple to coordinate seating and device usage.
+    
+
+### 🧾 Orders & Billing
+
+*   **Live Order Management**: Update orders in real-time with a live price calculator based on the device type and usage duration.
+    
+*   **Print Receipts**: Quickly print bills and order summaries for customers.
+    
+
+### 👤 Admin Panel
+
+*   **User Roles & Permissions**: Centralized admin panel for managing staff shifts and permissions.
+    
+*   **Device Types & Pricing**: Configure custom pricing for each device type (e.g., PlayStation 4, PlayStation 5, VR setups) directly from the admin panel.
+    
+
+### ⏰ Shift Management
+
+*   **User Shift Tracking**: Seamlessly track shift times and changes, allowing for smooth transitions between users.
+    
+*   **Admin Shift Control**: Ensure accountability with shift start and end time logs for each user.
+    
+
+🖥️ Tech Stack
+--------------
+
+*   **Frontend**: Angular for a responsive UI and live updates.
+    
+*   **Backend**: Spring Boot to handle device and order data, and real-time pricing updates.
+    
+*   **Database**: MongoDB for scalable and flexible data storage for orders, devices, and shifts.
+    
+*   **Printing**: Integrated print support for instant billing.
+    
+
+📜 Setup Guide
+--------------
+
+### Prerequisites
+
+*   **Node.js** and **Angular CLI** for frontend development.
+    
+*   **Java (JDK 11+)** for the Spring Boot backend.
+    
+*   **MongoDB** for document-based database management.
+    
+
+### Installation
+
+1.  git clone [https://github.com/adelelawady/VarPlaystationManager)](https://github.com/adelelawady/VarPlaystationManager.git)
+    
+2.  **Start Server and Ui**
+
+    ```
+    cd VarPlaystationManager
+    ./mvnw
+    ```
+        
+3.  **Access Application**
+    
+    *   Open your browser and navigate to http://localhost:4200 for the frontend.
+        
+    *   Access the API documentation at http://localhost:8080/swagger-ui for backend details.
+        
+
+### ⚙️ Initial Setup
+
+*   **Add Devices, Device Types, and Orders**: After installing, go to the admin panel to add your initial devices and define device types with custom prices. Set up at least one order to begin using the system efficiently.
+    
+
+🛠️ Usage
+---------
+
+### 📅 Managing Devices
+
+1.  Go to the Devices tab to assign or release devices for customer use.
+    
+2.  Set a custom price per hour for each device based on type.
+    
+
+### 💰 Order Processing
+
+1.  Create a new order, assign it to a table, and add selected devices.
+    
+2.  Adjust device times in real-time; the app calculates pricing based on duration and device type.
+    
+
+### 🔄 Shift Management
+
+1.  View current shifts and log shift start/end times for each user.
+    
+2.  Admins can monitor shifts, ensuring smooth user transitions.
+    
+
+### STARTING DEVICE 
+    DOUBLE CLICK TO START DEVICE TIME
+
+
+📄 License
+----------
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+DEVELOPMENT
+-----------
+
+
+
+
+
 
 This application was generated using JHipster 7.3.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.3.1](https://www.jhipster.tech/documentation-archive/v7.3.1).
 
