@@ -40,3 +40,61 @@ Logo styles
   background: url('../../../content/images/logo.jpeg') no-repeat center center;
   background-size: contain;
 }
+
+.modalX {
+  display: block !important;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+}
+
+.modal-contentX .card {
+  width: 350px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 3px solid dodgerblue;
+}
+.modal-contentX .card h2 {
+  margin: 0;
+  color: #333;
+}
+.modal-contentX .card p {
+  font-size: 14px;
+  color: #666;
+  margin: 10px 0;
+}
+.modal-contentX .card .icon {
+  font-size: 24px;
+  margin: 10px;
+  color: #007bff;
+}
+.modal-contentX .card a {
+  text-decoration: none;
+  color: #007bff;
+}
+.modal-contentX .card .social-linksX a {
+  margin: 0 10px;
+}
+.modal-contentX .card .ps-manager {
+  margin-top: 20px;
+  text-align: left;
+}
+.modal-contentX .card .ps-manager h3 {
+  color: #007bff;
+  margin: 0;
+  font-size: 16px;
+}
+.modal-contentX .card .ps-manager p {
+  color: #555;
+  margin: 10px 0;
+  font-size: 14px;
+}

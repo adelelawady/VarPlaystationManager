@@ -19,6 +19,8 @@ import { SheftService } from 'app/home/sheft.service';
 })
 export class NavbarComponent implements OnInit {
   inProduction?: boolean;
+
+  showAboutMePopUp = false;
   isNavbarCollapsed = true;
   languages = LANGUAGES;
   openAPIEnabled?: boolean;

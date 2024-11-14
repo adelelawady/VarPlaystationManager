@@ -66,6 +66,10 @@ management:
 mongock:
   migration-scan-package:
     - com.mycompany.myapp.config.dbmigrations
+  mongo-db:
+    read-concern: local
+    write-concern:
+      journal: false
 
 spring:
   application:

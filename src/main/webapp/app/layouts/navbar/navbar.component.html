@@ -1,3 +1,34 @@
+<!-- Modal -->
+
+<div class="modalX" *ngIf="showAboutMePopUp">
+  <div class="modal-contentX">
+    <div class="card">
+      <span class="close" style="text-align: right; cursor: pointer" (click)="showAboutMePopUp = false">&times;</span>
+      <h2>Adel ali</h2>
+      <p>
+        👨‍💻 A passionate programmer with expertise in Java and C#, dedicated to building innovative applications. Recently developed a music
+        download library app and a PlayStation cafe management system to streamline device and order management. 😊
+      </p>
+
+      <!-- Social Icons -->
+      <div class="social-linksX">
+        <a href="mailto:adel50ali50@gmail.com"><i class="fa fa-envelope"></i></a>
+        <a href="https://github.com/adelelawady" target="_blank"><i class="fa fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/adelelawady/" target="_blank"><i class="fa fa-linkedin"></i></a>
+      </div>
+
+      <div class="ps-manager">
+        <h3>PS Manager App:</h3>
+        <p>🎮 Manage PlayStation devices and cafe tables with ease.</p>
+        <p>💵 Real-time pricing and billing for devices based on time and type.</p>
+        <p>🖨️ Print receipts and order summaries directly for customers.</p>
+        <p>👤 Track user shifts and roles for smooth team management.</p>
+        <p>🔧 Customize device types and assign custom hourly rates.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md bg-dark">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
     <span class="logo-img mx-2"></span>
@@ -45,6 +76,15 @@
           <span>
             <fa-icon icon="home"></fa-icon>
             <span jhiTranslate="global.menu.home">Home</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a style="color: gold" class="nav-link" routerLink="/" (click)="showAboutMePopUp = true">
+          <span>
+            <i class="fa fa-code"></i>
+            <span>[About - عن البرنامج]</span>
           </span>
         </a>
       </li>

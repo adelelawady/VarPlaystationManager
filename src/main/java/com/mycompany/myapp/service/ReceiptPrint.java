@@ -25,6 +25,8 @@ public class ReceiptPrint implements Printable {
     public Record currentRecord = new Record();
 
     public ReceiptPrint(Record rec) {
+        System.setProperty("file.encoding", "UTF-8");
+
         currentRecord = rec;
     }
 
@@ -52,7 +54,7 @@ public class ReceiptPrint implements Printable {
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
-        Font font = new Font("", Font.BOLD, 10);
+        Font font = new Font("Tahoma", Font.BOLD, 10);
 
         int line = 10;
 
@@ -75,8 +77,8 @@ public class ReceiptPrint implements Printable {
         }
         g2d.setFont(font);
         line += 70;
-        //font = new Font("Arial", Font.PLAIN, 9);
-        // g2d.setFont(font);
+        font = new Font("Tahoma", Font.PLAIN, 9);
+        g2d.setFont(font);
 
         g2d.drawString(String.format("%-25s", "DEVICE :  " + currentRecord.getDevice().getName()), 1, line);
         line += 13;

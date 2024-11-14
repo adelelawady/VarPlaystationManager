@@ -98,7 +98,7 @@ public class ErApp {
         logApplicationStartup(env);
     }
 
-    @EventListener({ ApplicationReadyEvent.class })
+    //@EventListener({ ApplicationReadyEvent.class })
     private void applicationReadyEvent() {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (!activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
