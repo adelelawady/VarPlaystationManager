@@ -212,7 +212,7 @@ public class ProductResource {
 
     public String tranlateArabicTxt(String txt) {
         try {
-            String url = "https://translation.googleapis.com/language/translate/v2?key=AIzaSyBdWIAk8SVAj98bYitTGwLTh2CgonGZ5bQ";
+            String url = "https://translation.googleapis.com/language/translate/v2?key=";
 
             // create headers
             HttpHeaders headers = new HttpHeaders();
@@ -226,7 +226,7 @@ public class ProductResource {
             );
             // create a map for post parameters
             Map<String, Object> map = new HashMap<>();
-            map.put("key", "AIzaSyBdWIAk8SVAj98bYitTGwLTh2CgonGZ5bQ");
+            map.put("key", "");
             map.put("q", txt);
             map.put("source", "ar");
             map.put("target", "en");
